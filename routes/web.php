@@ -193,22 +193,16 @@ Route::get('/public_storage/{path}', function (string $path) {
 })->where('path', '.*')->name('storage.serve');
 
 /*
-| SSH/terminal yoksa cache temizlemek için tarayıcıdan açın:
-| https://yalovakamera.com/clear-cache?key=CANLIDA_AYARLADIĞINIZ_ANAHTAR
-| .env'e ekleyin: CACHE_CLEAR_KEY=GizliBirAnahtar123
-| Bir kez açtıktan sonra sayfayı kapatın; anahtar olmadan 404 döner.
+| SSH/terminal yoksa cache temizlemek için tarayıcıdan bu linki açın:
+| https://yalovakamera.com/clear-cache
 */
 Route::get('/clear-cache', function () {
-    $key = config('app.cache_clear_key');
-    if (! $key || request()->query('key') !== $key) {
-        abort(404);
-    }
     Artisan::call('view:clear');
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
     return response(
-        "Cache temizlendi.\n\nview, config, cache, route clear çalıştırıldı. Bu sayfayı artık kullanmayın.",
+        "Cache temizlendi.\n\nview, config, cache, route clear çalıştırıldı.",
         200,
         ['Content-Type' => 'text/plain; charset=utf-8']
     );
