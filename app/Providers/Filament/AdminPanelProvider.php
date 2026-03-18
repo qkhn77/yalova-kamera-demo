@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\AyarlarApi;
+use App\Filament\Pages\AyarlarGenel;
+use App\Filament\Pages\AyarlarMail;
 use App\Filament\Pages\Dashboard;
 use App\Models\Setting;
 use Filament\Http\Middleware\Authenticate;
@@ -47,6 +50,9 @@ class AdminPanelProvider extends PanelProvider
             )
             ->pages([
                 Dashboard::class,
+                AyarlarGenel::class,
+                AyarlarApi::class,
+                AyarlarMail::class,
             ])
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,

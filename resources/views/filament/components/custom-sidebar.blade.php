@@ -35,9 +35,9 @@
     use App\Filament\Clusters\Web\Pages\WebProjeKategori;
     use App\Filament\Clusters\Web\Pages\BlogListesi;
     use App\Filament\Clusters\Web\Pages\BlogKategori;
-    use App\Filament\Clusters\Web\Pages\WebGenelAyarlar;
-    use App\Filament\Clusters\Web\Pages\WebApiAyarlar;
-    use App\Filament\Clusters\Web\Pages\WebMailAyarlar;
+    use App\Filament\Pages\AyarlarGenel;
+    use App\Filament\Pages\AyarlarApi;
+    use App\Filament\Pages\AyarlarMail;
 
     use App\Filament\Clusters\Ayarlar\Pages\Kullanicilar;
     use App\Filament\Clusters\Ayarlar\Pages\KullaniciGruplari;
@@ -62,6 +62,10 @@
     $isProjeler = str_starts_with($currentPath, $adminPrefix.'/web/projeler');
     $isBloglar = str_starts_with($currentPath, $adminPrefix.'/web/bloglar');
     $isWebAyarlar = str_starts_with($currentPath, $adminPrefix.'/web/web-ayarlar');
+    $isSiteAyarlarGenel = request()->is($adminPrefix.'/ayarlar/genel');
+    $isSiteAyarlarApi = request()->is($adminPrefix.'/ayarlar/api');
+    $isSiteAyarlarMail = request()->is($adminPrefix.'/ayarlar/mail');
+    $isWebAyarlarOrSiteAyarlar = $isWebAyarlar || $isSiteAyarlarGenel || $isSiteAyarlarApi || $isSiteAyarlarMail;
 
     $isAyarlar = str_starts_with($currentPath, $adminPrefix.'/ayarlar');
     $isKullaniciAyarlari = str_starts_with($currentPath, $adminPrefix.'/ayarlar/kullanici-ayarlari');
@@ -82,7 +86,7 @@
         servislerOpen: @js($isServisler),
         projelerOpen: @js($isProjeler),
         bloglarOpen: @js($isBloglar),
-        webAyarlarOpen: @js($isWebAyarlar),
+        webAyarlarOpen: @js($isWebAyarlarOrSiteAyarlar),
         ayarlarOpen: @js($isAyarlar),
         kullaniciAyarlariOpen: @js($isKullaniciAyarlari),
     }"
@@ -324,13 +328,13 @@
                 <a href="{{ BlogListesi::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/blog-listesi') ? 'is-active' : '' }}"><span>Blog Listesi</span></a>
                 <a href="{{ BlogKategori::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/blog-kategori') ? 'is-active' : '' }}"><span>Blog Kategorileri</span></a>
             </div>
-            <button type="button" class="nav-item {{ $isWebAyarlar ? 'is-active' : '' }}" x-on:click="webAyarlarOpen = !webAyarlarOpen" :aria-expanded="webAyarlarOpen">
+            <button type="button" class="nav-item {{ $isWebAyarlarOrSiteAyarlar ? 'is-active' : '' }}" x-on:click="webAyarlarOpen = !webAyarlarOpen" :aria-expanded="webAyarlarOpen">
                 <span>Site Ayarları</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
             <div x-show="webAyarlarOpen" x-collapse class="nav-group">
-                <a href="{{ WebGenelAyarlar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-ayarlar/web-genel-ayarlar') ? 'is-active' : '' }}"><span>Genel Ayarlar</span></a>
-                <a href="{{ WebApiAyarlar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-ayarlar/web-api-ayarlar') ? 'is-active' : '' }}"><span>Api Ayarları</span></a>
-                <a href="{{ WebMailAyarlar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-ayarlar/web-mail-ayarlar') ? 'is-active' : '' }}"><span>Mail Ayarları</span></a>
+                <a href="{{ AyarlarGenel::getUrl() }}" class="nav-item {{ $isSiteAyarlarGenel ? 'is-active' : '' }}"><span>Genel Ayarlar</span></a>
+                <a href="{{ AyarlarApi::getUrl() }}" class="nav-item {{ $isSiteAyarlarApi ? 'is-active' : '' }}"><span>Api Ayarları</span></a>
+                <a href="{{ AyarlarMail::getUrl() }}" class="nav-item {{ $isSiteAyarlarMail ? 'is-active' : '' }}"><span>Mail Ayarları</span></a>
             </div>
         </div>
 
