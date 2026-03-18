@@ -181,8 +181,8 @@ Route::get('/bilgi/{slug}', function ($slug) {
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
-// storage/* dosyalarını sun (symlink yoksa veya Windows'ta çalışmıyorsa)
-Route::get('/storage/{path}', function (string $path) {
+// public_storage/* dosyalarını sun (symlink yoksa veya Windows'ta çalışmıyorsa)
+Route::get('/public_storage/{path}', function (string $path) {
     $path = str_replace('..', '', $path);
     if (! Storage::disk('public')->exists($path)) {
         abort(404);

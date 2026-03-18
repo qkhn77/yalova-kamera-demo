@@ -46,7 +46,7 @@ class Project extends Model
         if (! str_starts_with($path, 'projects/')) {
             $path = 'projects/'.$path;
         }
-        return asset('storage/'.$path);
+        return asset('public_storage/'.$path);
     }
 
     /**
@@ -60,7 +60,7 @@ class Project extends Model
         $path = str_replace('\\', '/', (string) $this->image);
         $thumbPath = app(ThumbnailService::class)->getThumbPath('projects', $path);
         if ($thumbPath) {
-            return asset('storage/'.$thumbPath);
+            return asset('public_storage/'.$thumbPath);
         }
         return $this->image_url;
     }

@@ -27,7 +27,7 @@
                 @php
                     $headerLogo = \App\Models\Setting::get('site_logo');
                     $headerLogoUrl = $headerLogo
-                        ? (str_starts_with($headerLogo, 'settings/') ? asset('storage/' . $headerLogo) : asset($headerLogo))
+                        ? (str_starts_with($headerLogo, 'settings/') ? asset('public_storage/' . $headerLogo) : asset($headerLogo))
                         : asset('theme/yalovakamera/images/yalova_kamera.png');
                 @endphp
                 <a class="navbar-brand site-logo" href="{{ route('home') }}">

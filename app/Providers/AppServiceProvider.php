@@ -9,7 +9,8 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        // Sistem ana dizinden çalışıyor; public dizini kullanılmıyor. CSS, JS, Filament asset'leri root'ta.
+        $this->app->bind('path.public', fn () => base_path());
     }
 
     public function boot(): void

@@ -143,7 +143,7 @@ class AyarlarGenel extends Page
     {
         $data = $this->form->getState();
 
-        // FileUpload returns storage path; store as path that works with asset('storage/...')
+        // FileUpload returns storage path; store as path that works with asset('public_storage/...')
         foreach (['site_logo', 'footer_logo'] as $key) {
             if (!empty($data[$key]) && is_string($data[$key])) {
                 $data[$key] = ltrim($data[$key], '/');
