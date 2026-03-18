@@ -210,7 +210,7 @@
                             </div>
                             <div class="service-body">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/'.($s->icon ?: 'icon-service-item-1.svg')) }}" alt="">
+                                    <img src="{{ $s->icon_url ?? asset('theme/yalovakamera/images/icon-service-item-1.svg') }}" alt="">
                                 </div>
                                 <div class="service-content">
                                     <h3><a href="{{ route('services.show', $s->slug) }}">{{ $s->title }}</a></h3>
@@ -262,7 +262,7 @@
                             </div>
                             <div class="service-body">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/'.($p->icon ?: 'icon-service-item-1.svg')) }}" alt="">
+                                    <img src="{{ $p->icon_url ?? asset('theme/yalovakamera/images/icon-service-item-1.svg') }}" alt="">
                                 </div>
                                 <div class="service-content">
                                     <h3><a href="{{ route('projects.show', $p->slug) }}">{{ $p->title }}</a></h3>

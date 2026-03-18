@@ -28,7 +28,7 @@ class Project extends Model
         'sort_order' => 'integer',
     ];
 
-    protected $appends = ['image_url', 'image_thumb_url'];
+    protected $appends = ['image_url', 'image_thumb_url', 'icon_url'];
 
     /**
      * Görsel tam URL. storage/app/public/projects
@@ -47,6 +47,25 @@ class Project extends Model
             $path = 'projects/'.$path;
         }
         return asset('public_storage/'.$path);
+    }
+
+    /**
+     * İkon URL. Storage path (projects/...) ise public_storage, sadece dosya adı ise theme.
+     */
+    public function getIconUrlAttribute(): ?string
+    {
+        if (! $this->icon) {
+            return null;
+        }
+        $path = str_replace('\\', '/', (string) $this->icon);
+        $path = ltrim($path, '/');
+        if (str_contains($path, '/') || str_starts_with($path, 'projects/')) {
+            if (! str_starts_with($path, 'projects/')) {
+                $path = 'projects/'.$path;
+            }
+            return asset('public_storage/'.$path);
+        }
+        return asset('theme/yalovakamera/images/'.$path);
     }
 
     /**

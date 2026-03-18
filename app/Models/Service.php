@@ -27,7 +27,7 @@ class Service extends Model
         'sort_order' => 'integer',
     ];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'icon_url'];
 
     /**
      * Görsel tam URL. storage/app/public/services veya services/ dosya adı.
@@ -46,6 +46,25 @@ class Service extends Model
             $path = 'services/'.$path;
         }
         return asset('public_storage/'.$path);
+    }
+
+    /**
+     * İkon URL. Storage path (services/...) ise public_storage, sadece dosya adı ise theme.
+     */
+    public function getIconUrlAttribute(): ?string
+    {
+        if (! $this->icon) {
+            return null;
+        }
+        $path = str_replace('\\', '/', (string) $this->icon);
+        $path = ltrim($path, '/');
+        if (str_contains($path, '/') || str_starts_with($path, 'services/')) {
+            if (! str_starts_with($path, 'services/')) {
+                $path = 'services/'.$path;
+            }
+            return asset('public_storage/'.$path);
+        }
+        return asset('theme/yalovakamera/images/'.$path);
     }
 
     /**

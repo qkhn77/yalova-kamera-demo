@@ -15,30 +15,31 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // HTTP/HTTPS: Üretilen tüm linkler mevcut isteğin şemasına uysun (hem http hem https düzgün çalışsın).
-        if (!app()->runningInConsole() && request()) {
-            URL::forceScheme(request()->secure() ? 'https' : 'http');
-        }
+        // Proje hem HTTP hem HTTPS ile açılabilir; şema zorlanmaz, mevcut isteğe göre ayarlanır.
+        // Ziyaretçi http:// ile açarsa asset/url http, https:// ile açarsa https olur (Mixed Content önlenir).
+        if (! app()->runningInConsole() && request()) {
+            $scheme = request()->secure() ? 'https' : 'http';
+            URL::forceScheme($scheme);
 
-        // Site URL + şema: İstek HTTPS ise tüm asset/url https, HTTP ise http (Mixed Content önlenir).
-        try {
-            if (!app()->runningInConsole() && request()) {
-                $scheme = request()->secure() ? 'https' : 'http';
+            $host = request()->getHost();
+            $path = parse_url(config('app.url'), PHP_URL_PATH);
+            config(['app.url' => $scheme . '://' . $host . ($path ? rtrim($path, '/') : '')]);
+
+            try {
                 $url = \App\Models\Setting::get('site_url');
-                if (!empty($url) && is_string($url)) {
+                if (! empty($url) && is_string($url)) {
                     $url = rtrim($url, '/');
-                    $host = parse_url($url, PHP_URL_HOST) ?: request()->getHost();
+                    $host = parse_url($url, PHP_URL_HOST) ?: $host;
                     $path = parse_url($url, PHP_URL_PATH);
                     config(['app.url' => $scheme . '://' . $host . ($path ? rtrim($path, '/') : '')]);
-                } else {
-                    $current = config('app.url');
-                    $host = parse_url($current, PHP_URL_HOST) ?: request()->getHost();
-                    $path = parse_url($current, PHP_URL_PATH);
-                    config(['app.url' => $scheme . '://' . $host . ($path ? rtrim($path, '/') : '')]);
                 }
-                // Storage::url() (public disk) da aynı şemayı kullansın.
-                config(['filesystems.disks.public.url' => rtrim(config('app.url'), '/') . '/public_storage']);
+            } catch (\Throwable $e) {
+                // migrations / first install; app.url zaten yukarıda şema ile set edildi
             }
+            config(['filesystems.disks.public.url' => rtrim(config('app.url'), '/') . '/public_storage']);
+        }
+
+        try {
             if (!app()->runningInConsole()) {
 
                 // Mail ayarları (Site Ayarları → Mail Ayarları) — SMTP ve alıcı adres
