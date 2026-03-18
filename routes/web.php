@@ -181,14 +181,25 @@ Route::get('/bilgi/{slug}', function ($slug) {
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
-// public_storage/* dosyalarını sun (symlink yoksa veya Windows'ta çalışmıyorsa)
-Route::get('/public_storage/{path}', function (string $path) {
-    $path = str_replace('..', '', $path);
-    if (! Storage::disk('public')->exists($path)) {
+// /storage/* dosyalarını sun (symlink yoksa veya document root public değilse)
+// Not: Eğer sunucuda public/storage symlink'i varsa, web server dosyayı zaten direkt servis eder.
+Route::get('/storage/{path}', function (string $path) {
+    $path = str_replace(['..', '\\'], ['', '/'], $path);
+    $path = ltrim($path, '/');
+
+    $disk = Storage::disk('public');
+    if (! $disk->exists($path)) {
         abort(404);
     }
-    return response()->file(Storage::disk('public')->path($path), [
-        'Content-Type' => Storage::disk('public')->mimeType($path),
+
+    $fullPath = $disk->path($path);
+    if (! is_file($fullPath) || ! is_readable($fullPath)) {
+        abort(404);
+    }
+
+    return response()->file($fullPath, [
+        'Content-Type' => $disk->mimeType($path) ?: 'application/octet-stream',
+        'Cache-Control' => 'public, max-age=31536000, immutable',
     ]);
 })->where('path', '.*')->name('storage.serve');
 
