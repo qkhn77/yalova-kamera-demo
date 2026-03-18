@@ -37,7 +37,8 @@ class MenuItem extends Model
     {
         return match ($this->type) {
             'home' => route('home'),
-            'custom' => $this->url ?? '#',
+            'contact' => route('contact'),
+            'custom' => $this->resolveCustomUrl(),
             'page' => $this->resolvePageUrl(),
             'services' => route('services.index'),
             'service_category' => $this->resolveServiceCategoryUrl(),
@@ -47,6 +48,19 @@ class MenuItem extends Model
             'post_category' => $this->resolvePostCategoryUrl(),
             default => '#',
         };
+    }
+
+    /** Custom URL'yi uygulama base URL ile birleştirir (alt dizinde çalışınca linkler bozulmasın). */
+    protected function resolveCustomUrl(): string
+    {
+        $url = $this->url ?? '';
+        if ($url === '' || $url === '#') {
+            return '#';
+        }
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+        return url($url);
     }
 
     protected function resolvePageUrl(): string

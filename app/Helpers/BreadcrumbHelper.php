@@ -35,10 +35,14 @@ class BreadcrumbHelper
         foreach (self::$breadcrumbs as $index => $crumb) {
             if ($index === count(self::$breadcrumbs) - 1) {
                 // Son öğe, aktif
-                $html .= '<li class="breadcrumb-item active" aria-current="page">' . $crumb['title'] . '</li>';
+                $html .= '<li class="breadcrumb-item active" aria-current="page">' . e($crumb['title']) . '</li>';
             } else {
-                // Link
-                $html .= '<li class="breadcrumb-item"><a href="' . $crumb['url'] . '">' . $crumb['title'] . '</a></li>';
+                // Link: göreli path'leri (/, /foo) uygulama base URL ile birleştir
+                $href = $crumb['url'] ?? '#';
+                if ($href !== '#' && $href !== '' && !str_starts_with($href, 'http://') && !str_starts_with($href, 'https://')) {
+                    $href = url($href);
+                }
+                $html .= '<li class="breadcrumb-item"><a href="' . e($href) . '">' . e($crumb['title']) . '</a></li>';
             }
         }
 

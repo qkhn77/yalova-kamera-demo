@@ -75,6 +75,7 @@
                         <li><a href="{{ route('about') }}">Hakkımızda</a></li>
                         <li><a href="{{ route('services.index') }}">Servisler</a></li>
                         <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                        <li><a href="{{ route('contact') }}">İletişim</a></li>
                     </ul>
                 </div>
             </div>

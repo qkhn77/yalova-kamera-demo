@@ -15,8 +15,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (app()->environment('production')) {
-            URL::forceScheme('https');
+        // HTTP/HTTPS: Üretilen tüm linkler mevcut isteğin şemasına uysun (hem http hem https düzgün çalışsın).
+        if (!app()->runningInConsole() && request()) {
+            URL::forceScheme(request()->secure() ? 'https' : 'http');
         }
 
         // Site URL from Genel Ayarlar (admin) — sitemap, canonical, vb. için
