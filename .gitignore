@@ -28,3 +28,4 @@ yarn-error.log
 /.fleet
 /sitemap.xml
 /robots.txt
+app/Providers/AppServiceProvider.php
