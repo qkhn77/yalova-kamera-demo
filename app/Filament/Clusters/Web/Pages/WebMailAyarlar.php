@@ -43,7 +43,7 @@ class WebMailAyarlar extends Page implements HasForms
         return $form
             ->schema([
                 Forms\Components\Section::make('SMTP Bağlantısı')
-                    ->description('E-posta gönderimi için SMTP sunucu bilgileri.')
+                    ->description('E-posta gönderimi için SMTP ayarları. Veritabanında saklanır; iletişim formu ve bildirimler bu ayarlarla gönderilir.')
                     ->icon('heroicon-o-server-stack')
                     ->schema([
                         Forms\Components\TextInput::make('mail_host')
@@ -58,7 +58,7 @@ class WebMailAyarlar extends Page implements HasForms
                             ->placeholder('587')
                             ->required(),
                         Forms\Components\Select::make('mail_encryption')
-                            ->label('Mail Sertifika (Şifreleme)')
+                            ->label('Mail Sertifika')
                             ->options([
                                 'tls' => 'TLS',
                                 'ssl' => 'SSL',

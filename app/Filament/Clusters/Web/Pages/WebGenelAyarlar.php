@@ -52,22 +52,28 @@ class WebGenelAyarlar extends Page implements HasForms
 
     public function form(Form $form): Form
     {
+        $defaultSiteUrl = self::defaultSiteUrl();
+        $defaultAdminPath = 'admin';
+        $defaultAdminUrl = self::defaultAdminUrl();
+
         return $form
             ->schema([
                 Forms\Components\Section::make('URL Ayarları')
-                    ->description('Site ve admin panel adresleri.')
+                    ->description('Site ve admin panel adresleri. Varsayılan değerler boş bırakılırsa kullanılır.')
                     ->icon('heroicon-o-link')
                     ->schema([
                         Forms\Components\TextInput::make('site_url')
                             ->label('Site URL')
-                            ->placeholder(self::defaultSiteUrl())
+                            ->default($defaultSiteUrl)
+                            ->placeholder($defaultSiteUrl)
                             ->url()
-                            ->helperText('Varsayılan: ' . self::defaultSiteUrl())
+                            ->helperText('Varsayılan: ' . $defaultSiteUrl)
                             ->maxLength(255),
                         Forms\Components\TextInput::make('admin_path')
-                            ->label('Admin panel giriş URL yolu')
-                            ->placeholder('admin')
-                            ->helperText('Varsayılan: admin → Giriş: ' . self::defaultAdminUrl() . '. Değiştirdikten sonra "php artisan route:clear" çalıştırın.')
+                            ->label('Admin panel giriş URL')
+                            ->default($defaultAdminPath)
+                            ->placeholder($defaultAdminPath)
+                            ->helperText('Varsayılan: ' . $defaultAdminPath . ' → Giriş adresi: ' . $defaultAdminUrl . '. Değiştirdikten sonra "php artisan route:clear" çalıştırın.')
                             ->maxLength(64)
                             ->regex('/^[a-z0-9_-]+$/i'),
                     ])
@@ -78,18 +84,18 @@ class WebGenelAyarlar extends Page implements HasForms
                     ->icon('heroicon-o-magnifying-glass')
                     ->schema([
                         Forms\Components\TextInput::make('site_title')
-                            ->label('Web site adı / Google title')
+                            ->label('Web site adı (Google title)')
                             ->placeholder(config('app.name'))
-                            ->helperText('Sayfa başlığı ve Google\'da görünen başlık.')
+                            ->helperText('Sayfa başlığı ve Google arama sonuçlarında görünen başlık.')
                             ->maxLength(255),
                         Forms\Components\Textarea::make('meta_description')
-                            ->label('Site açıklaması (Google description)')
+                            ->label('Site açıklama (Google description)')
                             ->rows(3)
                             ->placeholder('Kısa site açıklaması…')
                             ->helperText('Google arama sonuçlarında görünen açıklama.')
                             ->maxLength(500),
                         Forms\Components\Textarea::make('meta_keywords')
-                            ->label('Anahtar kelimeler (Google keywords)')
+                            ->label('Site anahtar kelimeler (Google keywords)')
                             ->rows(2)
                             ->placeholder('kelime1, kelime2, kelime3')
                             ->helperText('Virgülle ayırarak anahtar kelimeler girin.')
@@ -108,7 +114,7 @@ class WebGenelAyarlar extends Page implements HasForms
                             ->directory('settings/logos')
                             ->visibility('public')
                             ->imagePreviewHeight(80)
-                            ->helperText('Varsayılan: theme/yalovakamera/images/yalova_kamera.png'),
+                            ->helperText('Varsayılan logo: theme/yalovakamera/images/yalova_kamera.png'),
                         Forms\Components\FileUpload::make('footer_logo')
                             ->label('Footer logo')
                             ->image()
@@ -116,7 +122,7 @@ class WebGenelAyarlar extends Page implements HasForms
                             ->directory('settings/logos')
                             ->visibility('public')
                             ->imagePreviewHeight(60)
-                            ->helperText('Varsayılan: theme/yalovakamera/images/footer-logo.svg'),
+                            ->helperText('Varsayılan logo: theme/yalovakamera/images/footer-logo.svg'),
                     ])
                     ->columns(1),
 

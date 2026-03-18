@@ -22,10 +22,12 @@ class ContactPage extends Model
         'map_url',
         'form_heading',
         'form_intro',
+        'whatsapp_url',
         'instagram_url',
         'linkedin_url',
         'pinterest_url',
         'twitter_url',
+        'facebook_url',
     ];
 
     /**
@@ -47,6 +49,12 @@ class ContactPage extends Model
             'map_url' => 'https://www.google.com/maps?q=Yalova%20Çiftlikköy&output=embed',
             'form_heading' => 'Mesaj Gönder',
             'form_intro' => 'Güvenlik sistemleri hakkında bilgi almak için bize mesaj gönderebilirsiniz.',
+            'whatsapp_url' => '',
+            'instagram_url' => '',
+            'linkedin_url' => '',
+            'pinterest_url' => '',
+            'twitter_url' => '',
+            'facebook_url' => '',
         ];
 
         return self::firstOrCreate([], $defaults);

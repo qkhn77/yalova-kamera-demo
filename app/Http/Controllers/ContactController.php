@@ -4,26 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
     /**
      * İletişim formu gönderimi. Mesaj "Mail Ayarları"ndaki "Mesajın Geleceği E-Posta" adresine gider.
+     * reCAPTCHA: API Ayarları'nda Site Key ve Secret Key doldurulmuşsa doğrulama yapılır.
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'nullable|string|max:50',
             'message' => 'required|string|max:5000',
-        ], [
+        ];
+        $messages = [
             'name.required' => 'Ad Soyad gerekli.',
             'email.required' => 'E-posta adresi gerekli.',
             'email.email' => 'Geçerli bir e-posta adresi girin.',
             'message.required' => 'Mesaj gerekli.',
-        ]);
+        ];
+
+        $recaptchaSecret = Setting::get('recaptcha_secret_key');
+        if (!empty($recaptchaSecret)) {
+            $rules['g-recaptcha-response'] = 'required';
+            $messages['g-recaptcha-response.required'] = 'Lütfen robot doğrulamasını tamamlayın.';
+        }
+
+        $validated = $request->validate($rules, $messages);
+
+        if (!empty($recaptchaSecret)) {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => $recaptchaSecret,
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+            $body = $response->json();
+            if (empty($body['success'])) {
+                return back()->with('error', 'Robot doğrulaması başarısız. Lütfen tekrar deneyin.')->withInput($request->except('g-recaptcha-response'));
+            }
+        }
 
         $to = Setting::get('mail_recipient');
         if (empty($to)) {

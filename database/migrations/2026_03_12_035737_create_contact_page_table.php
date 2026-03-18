@@ -26,10 +26,12 @@ return new class extends Migration
             $table->string('map_url')->nullable();
             $table->string('form_heading')->nullable();
             $table->text('form_intro')->nullable();
+            $table->string('whatsapp_url')->nullable();
             $table->string('instagram_url')->nullable();
             $table->string('linkedin_url')->nullable();
             $table->string('pinterest_url')->nullable();
             $table->string('twitter_url')->nullable();
+            $table->string('facebook_url')->nullable();
             $table->timestamps();
         });
     }

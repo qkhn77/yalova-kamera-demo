@@ -56,12 +56,24 @@
                         <p>Güvenlik kamerası ve alarm sistemlerinde keşif, kurulum, servis ve bakım hizmetleri.</p>
                     </div>
 
+                    @php
+                        $footerWhatsapp = \App\Models\Setting::get('whatsapp_code');
+                        $footerInstagram = \App\Models\Setting::get('instagram_token');
+                        if (!empty($footerInstagram) && !str_contains($footerInstagram, '://')) {
+                            $footerInstagram = 'https://instagram.com/' . ltrim($footerInstagram, '/');
+                        }
+                    @endphp
                     <div class="footer-social-links">
                         <ul>
+                            @if(!empty($footerWhatsapp))
+                            <li><a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $footerWhatsapp) }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+                            @endif
+                            @if(!empty($footerInstagram))
+                            <li><a href="{{ $footerInstagram }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                            @endif
                             <li><a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a></li>
                             <li><a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a></li>
                             <li><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
-                            <li><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
                         </ul>
                     </div>
                 </div>

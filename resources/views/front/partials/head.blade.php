@@ -2,8 +2,18 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-@if($gaId = config('services.google.analytics_id'))
-<!-- Google Analytics (GA4) - yalova_kamera -->
+@php
+    $gsc = \App\Models\Setting::get('google_search_console') ?: \App\Models\Setting::get('webmaster_verification');
+    $gaCode = \App\Models\Setting::get('google_analytics_code');
+@endphp
+@if(!empty($gsc))
+<meta name="google-site-verification" content="{{ $gsc }}">
+@endif
+
+@if(!empty($gaCode))
+{!! $gaCode !!}
+@elseif($gaId = config('services.google.analytics_id'))
+<!-- Google Analytics (GA4) - config fallback -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,13 +21,6 @@
   gtag('js', new Date());
   gtag('config', '{{ $gaId }}', { 'anonymize_ip': true });
 </script>
-@endif
-
-@php
-    $gsc = \App\Models\Setting::get('google_search_console') ?: \App\Models\Setting::get('webmaster_verification');
-@endphp
-@if(!empty($gsc))
-<meta name="google-site-verification" content="{{ $gsc }}">
 @endif
 
 @php

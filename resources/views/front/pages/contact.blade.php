@@ -1,10 +1,13 @@
 
 
+@php
+    $contact = \App\Models\ContactPage::instance();
+@endphp
 @extends('front.layouts.app')
 
-@section('title','İletişim | Yalova Kamera Sistemleri')
-@section('meta_description','Yalova kamera kurulumu konusunda uzman ekibimiz. Güvenlik kamerası ve alarm sistemi kurulumu, servis ve bakım hizmetlerinde yılların deneyimi.')
-@section('meta_keywords','yalova kamera kurulumu telefon, yalova güvenlik sistemi ara, yalova kamera fiyatları, yalova alarm sistemi yapan firmalar')
+@section('title', $contact->meta_title ?: 'İletişim | Yalova Kamera Sistemleri')
+@section('meta_description', $contact->meta_description ?: 'Yalova kamera kurulumu konusunda uzman ekibimiz.')
+@section('meta_keywords', $contact->meta_keywords ?: 'yalova kamera kurulumu telefon, yalova güvenlik sistemi ara')
 
 
 @php
@@ -41,42 +44,40 @@
 
                         <div class="section-title">
 
-                            <h3 class="wow fadeInUp">İletişim</h3>
+                            <h3 class="wow fadeInUp">{{ $contact->section_heading ?: 'İletişim' }}</h3>
 
                             <h2 class="wow fadeInUp" data-wow-delay="0.2s">
-                                <span>Güvenliğinizi</span> bizimle sağlayın
+                                <span>{{ $contact->section_subheading ?: 'Güvenliğinizi bizimle sağlayın' }}</span>
                             </h2>
 
                             <p class="wow fadeInUp" data-wow-delay="0.4s">
-                                Sorularınız mı var veya güvenlik sistemleri hakkında bilgi mi almak istiyorsunuz?
-                                Ekibimiz size yardımcı olmaktan memnuniyet duyar.
+                                {{ $contact->section_intro ?: 'Sorularınız mı var veya güvenlik sistemleri hakkında bilgi mi almak istiyorsunuz? Ekibimiz size yardımcı olmaktan memnuniyet duyar.' }}
                             </p>
 
                         </div>
 
 
                         <div class="contact-social-list wow fadeInUp" data-wow-delay="0.6s">
-
                             <ul>
-
-                                <li>
-                                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                                </li>
-
-                                <li>
-                                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                                </li>
-
-                                <li>
-                                    <a href="#"><i class="fa-brands fa-pinterest-p"></i></a>
-                                </li>
-
-                                <li>
-                                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                                </li>
-
+                                @if(!empty($contact->whatsapp_url))
+                                <li><a href="{{ str_starts_with($contact->whatsapp_url, 'http') ? $contact->whatsapp_url : 'https://wa.me/'.preg_replace('/[^0-9]/', '', $contact->whatsapp_url) }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+                                @endif
+                                @if(!empty($contact->instagram_url))
+                                <li><a href="{{ $contact->instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                                @endif
+                                @if(!empty($contact->facebook_url))
+                                <li><a href="{{ $contact->facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                @endif
+                                @if(!empty($contact->linkedin_url))
+                                <li><a href="{{ $contact->linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                                @endif
+                                @if(!empty($contact->pinterest_url))
+                                <li><a href="{{ $contact->pinterest_url }}" target="_blank" rel="noopener" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a></li>
+                                @endif
+                                @if(!empty($contact->twitter_url))
+                                <li><a href="{{ $contact->twitter_url }}" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                @endif
                             </ul>
-
                         </div>
 
                     </div>
@@ -101,9 +102,11 @@
                                 <p>Telefon</p>
 
                                 <h3>
-                                    <a href="tel:+902263520724">
-                                        0 (226) 352 07 24
-                                    </a>
+                                    @if(!empty($contact->phone))
+                                    <a href="tel:{{ preg_replace('/[^0-9+]/', '', $contact->phone) }}">{{ $contact->phone }}</a>
+                                    @else
+                                    —
+                                    @endif
                                 </h3>
 
                             </div>
@@ -123,9 +126,11 @@
                                 <p>E-posta</p>
 
                                 <h3>
-                                    <a href="mailto:info@yalovakamera.com">
-                                        info@yalovakamera.com
-                                    </a>
+                                    @if(!empty($contact->email))
+                                    <a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a>
+                                    @else
+                                    —
+                                    @endif
                                 </h3>
 
                             </div>
@@ -144,9 +149,7 @@
 
                                 <p>Adres</p>
 
-                                <h3>
-                                    Çiftlikköy / Yalova
-                                </h3>
+                                <h3>{{ $contact->address ?: '—' }}</h3>
 
                             </div>
 
@@ -176,14 +179,14 @@
 
                     <div class="contact-us-box">
 
+                        @if(!empty($contact->map_url))
                         <div class="google-map-iframe">
-
                             <iframe
-                                src="https://www.google.com/maps?q=Yalova%20Çiftlikköy&output=embed"
+                                src="{{ $contact->map_url }}"
                                 loading="lazy">
                             </iframe>
-
                         </div>
+                        @endif
 
 
 
@@ -191,11 +194,9 @@
 
                             <div class="section-title">
 
-                                <h2>Mesaj Gönder</h2>
+                                <h2>{{ $contact->form_heading ?: 'Mesaj Gönder' }}</h2>
 
-                                <p>
-                                    Güvenlik sistemleri hakkında bilgi almak için bize mesaj gönderebilirsiniz.
-                                </p>
+                                <p>{{ $contact->form_intro ?: 'Güvenlik sistemleri hakkında bilgi almak için bize mesaj gönderebilirsiniz.' }}</p>
 
                             </div>
 
@@ -217,7 +218,10 @@
                                 </div>
                             @endif
 
-                            <form method="POST" action="{{ route('contact.store') }}" class="contact-form">
+                            @php
+                                $recaptchaSiteKey = \App\Models\Setting::get('recaptcha_site_key');
+                            @endphp
+                            <form method="POST" action="{{ route('contact.store') }}" class="contact-form" id="contactForm">
 
                                 @csrf
 
@@ -238,10 +242,15 @@
                                     </div>
 
 
-                                    <div class="form-group col-md-12 mb-5">
+                                    <div class="form-group col-md-12 mb-4">
                                         <textarea name="message" class="form-control" rows="3" placeholder="Mesajınız" required>{{ old('message') }}</textarea>
                                     </div>
 
+                                    @if(!empty($recaptchaSiteKey))
+                                    <div class="form-group col-md-12 mb-4">
+                                        <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+                                    </div>
+                                    @endif
 
                                     <div class="col-md-12">
                                         <button type="submit" class="btn-default">
@@ -252,6 +261,9 @@
                                 </div>
 
                             </form>
+                            @if(!empty($recaptchaSiteKey))
+                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                            @endif
 
                         </div>
 
