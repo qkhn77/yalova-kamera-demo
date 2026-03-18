@@ -97,7 +97,7 @@ class Iletisim extends Page implements HasForms
 
                 Forms\Components\Section::make('Sosyal medya linkleri')
                     ->description('İkonlara tıklanınca açılacak URL\'ler. Boş bırakılan ikon gösterilmez.')
-                    ->icon('heroicon-o-share-across')
+                    ->icon('heroicon-o-share')
                     ->schema([
                         Forms\Components\TextInput::make('whatsapp_url')
                             ->label('WhatsApp (örn: 905551234567 veya https://wa.me/905551234567)')
