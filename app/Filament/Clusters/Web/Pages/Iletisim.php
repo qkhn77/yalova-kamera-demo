@@ -11,6 +11,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Schema;
 
 class Iletisim extends Page implements HasForms
 {
@@ -171,6 +172,13 @@ class Iletisim extends Page implements HasForms
     {
         $data = $this->form->getState();
         $c = ContactPage::instance();
+
+        // Canlı DB'de sütunlar eksik olabilir; varsa güncelle.
+        foreach (['whatsapp_url', 'facebook_url'] as $col) {
+            if (!Schema::hasColumn('contact_pages', $col)) {
+                unset($data[$col]);
+            }
+        }
 
         // WhatsApp: sadece rakam ise wa.me linkine çevir
         if (!empty($data['whatsapp_url']) && preg_match('/^[0-9+]+$/', preg_replace('/\s/', '', $data['whatsapp_url']))) {

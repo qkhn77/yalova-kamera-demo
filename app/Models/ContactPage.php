@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class ContactPage extends Model
 {
@@ -49,13 +50,21 @@ class ContactPage extends Model
             'map_url' => 'https://www.google.com/maps?q=Yalova%20Çiftlikköy&output=embed',
             'form_heading' => 'Mesaj Gönder',
             'form_intro' => 'Güvenlik sistemleri hakkında bilgi almak için bize mesaj gönderebilirsiniz.',
+        ];
+
+        // Bazı canlı ortamlarda tablo eski olabilir (sütunlar eksik).
+        foreach ([
             'whatsapp_url' => '',
             'instagram_url' => '',
             'linkedin_url' => '',
             'pinterest_url' => '',
             'twitter_url' => '',
             'facebook_url' => '',
-        ];
+        ] as $key => $value) {
+            if (Schema::hasColumn('contact_pages', $key)) {
+                $defaults[$key] = $value;
+            }
+        }
 
         return self::firstOrCreate([], $defaults);
     }
