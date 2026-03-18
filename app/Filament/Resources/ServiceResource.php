@@ -1,5 +1,5 @@
 <?php
-protected static bool $shouldRegisterNavigation = false;
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ServiceResource\Pages;
@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
+
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
     protected static ?string $navigationGroup = 'Servisler';

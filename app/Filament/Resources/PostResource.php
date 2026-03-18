@@ -62,7 +62,9 @@ class PostResource extends Resource
                         ->maxLength(255),
                     Forms\Components\FileUpload::make('image')
                         ->label('Görsel')
+                        ->disk('public')
                         ->directory('posts')
+                        ->visibility('public')
                         ->image()
                         ->imageEditor()
                         ->maxSize(2048)

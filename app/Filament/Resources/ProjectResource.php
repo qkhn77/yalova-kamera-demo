@@ -1,5 +1,5 @@
 <?php
-protected static bool $shouldRegisterNavigation = false;
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProjectResource\Pages;
@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
+
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationIcon = 'heroicon-o-folder';
     protected static ?string $navigationGroup = 'WebProje';
@@ -35,7 +37,14 @@ class ProjectResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')
-                    ->image(),
+                    ->label('Görsel')
+                    ->disk('public')
+                    ->directory('projects')
+                    ->visibility('public')
+                    ->image()
+                    ->imageEditor()
+                    ->maxSize(2048)
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
                 Forms\Components\TextInput::make('icon'),
                 Forms\Components\TextInput::make('sort_order')
                     ->required()
@@ -56,7 +65,8 @@ class ProjectResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->disk('public'),
                 Tables\Columns\TextColumn::make('icon')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sort_order')

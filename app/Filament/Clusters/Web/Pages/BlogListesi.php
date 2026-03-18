@@ -272,7 +272,9 @@ class BlogListesi extends Page implements HasForms, HasTable
                     // Görsel + dosya adı
                     Forms\Components\FileUpload::make('image')
                         ->label('Görsel')
+                        ->disk('public')
                         ->directory('posts')
+                        ->visibility('public')
                         ->image()
                         ->imageEditor()
                         ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
@@ -302,7 +304,9 @@ class BlogListesi extends Page implements HasForms, HasTable
                     // 8. OG Image
                     Forms\Components\FileUpload::make('og_image')
                         ->label('OG Image')
+                        ->disk('public')
                         ->directory('posts')
+                        ->visibility('public')
                         ->image()
                         ->imageEditor()
                         ->maxSize(2048)

@@ -252,7 +252,9 @@ class WebServisListesi extends Page implements HasForms, HasTable
                         ->helperText('Boş bırakılırsa başlıktan otomatik oluşturulur.'),
                     Forms\Components\FileUpload::make('image')
                         ->label('Görsel')
+                        ->disk('public')
                         ->directory('services')
+                        ->visibility('public')
                         ->image()
                         ->imageEditor()
                         ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])

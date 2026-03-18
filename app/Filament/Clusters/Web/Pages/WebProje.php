@@ -252,7 +252,9 @@ class WebProje extends Page implements HasForms, HasTable
                         ->helperText('Boş bırakılırsa başlıktan otomatik oluşturulur.'),
                     Forms\Components\FileUpload::make('image')
                         ->label('Görsel')
+                        ->disk('public')
                         ->directory('projects')
+                        ->visibility('public')
                         ->image()
                         ->imageEditor()
                         ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
