@@ -1,6 +1,11 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# /storage/* isteğini Laravel'e gönder.
+# Çünkü document root proje kökü olunca "storage/" dizini fiziksel olarak var ve
+# standart !-d !-f kuralları bu istekleri yakalamadan 404'e düşürebiliyor.
+RewriteRule ^storage/(.*)$ index.php [L]
+
 # Laravel front controller (redirect YOK)
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
