@@ -16,9 +16,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Proje hem HTTP hem HTTPS ile açılabilir; şema zorlanmaz, mevcut isteğe göre ayarlanır.
-        // Ziyaretçi http:// ile açarsa asset/url http, https:// ile açarsa https olur (Mixed Content önlenir).
+        // Proxy arkasında X-Forwarded-Proto da kontrol edilir (shared host SSL).
         if (! app()->runningInConsole() && request()) {
-            $scheme = request()->secure() ? 'https' : 'http';
+            $scheme = 'http';
+            if (request()->secure()) {
+                $scheme = 'https';
+            } elseif (strtolower((string) request()->header('X-Forwarded-Proto')) === 'https') {
+                $scheme = 'https';
+            } elseif (strtolower((string) request()->header('X-Forwarded-Scheme')) === 'https') {
+                $scheme = 'https';
+            }
             URL::forceScheme($scheme);
 
             $host = request()->getHost();
@@ -36,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
             } catch (\Throwable $e) {
                 // migrations / first install; app.url zaten yukarıda şema ile set edildi
             }
-            config(['filesystems.disks.public.url' => rtrim(config('app.url'), '/') . '/public_storage']);
+            config(['filesystems.disks.public.url' => rtrim(config('app.url'), '/') . '/storage']);
         }
 
         try {

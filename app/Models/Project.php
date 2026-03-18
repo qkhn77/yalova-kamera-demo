@@ -31,7 +31,7 @@ class Project extends Model
     protected $appends = ['image_url', 'image_thumb_url', 'icon_url'];
 
     /**
-     * Görsel tam URL. storage/app/public/projects
+     * Görsel tam URL. storage varsa /storage, tema varsayılan adı (service-image-X.jpg) ise theme.
      */
     public function getImageUrlAttribute(): ?string
     {
@@ -43,14 +43,18 @@ class Project extends Model
         if ($path === '') {
             return null;
         }
+        $basename = basename($path);
+        if (preg_match('/^(service-image|project)-\d+\.(jpg|jpeg|png|gif|webp)$/i', $basename)) {
+            return asset('theme/yalovakamera/images/'.$basename);
+        }
         if (! str_starts_with($path, 'projects/')) {
             $path = 'projects/'.$path;
         }
-        return asset('public_storage/'.$path);
+        return asset('storage/'.$path);
     }
 
     /**
-     * İkon URL. Storage path (projects/...) ise public_storage, sadece dosya adı ise theme.
+     * İkon URL. Storage path (projects/...) ise storage, sadece dosya adı ise theme.
      */
     public function getIconUrlAttribute(): ?string
     {
@@ -63,7 +67,7 @@ class Project extends Model
             if (! str_starts_with($path, 'projects/')) {
                 $path = 'projects/'.$path;
             }
-            return asset('public_storage/'.$path);
+            return asset('storage/'.$path);
         }
         return asset('theme/yalovakamera/images/'.$path);
     }
@@ -79,7 +83,7 @@ class Project extends Model
         $path = str_replace('\\', '/', (string) $this->image);
         $thumbPath = app(ThumbnailService::class)->getThumbPath('projects', $path);
         if ($thumbPath) {
-            return asset('public_storage/'.$thumbPath);
+            return asset('storage/'.$thumbPath);
         }
         return $this->image_url;
     }

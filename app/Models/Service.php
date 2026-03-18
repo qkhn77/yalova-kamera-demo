@@ -30,7 +30,7 @@ class Service extends Model
     protected $appends = ['image_url', 'icon_url'];
 
     /**
-     * Görsel tam URL. storage/app/public/services veya services/ dosya adı.
+     * Görsel tam URL. storage varsa /storage, tema varsayılan adı (service-image-X.jpg) ise theme.
      */
     public function getImageUrlAttribute(): ?string
     {
@@ -42,14 +42,19 @@ class Service extends Model
         if ($path === '') {
             return null;
         }
+        // Tema varsayılan dosya adları: storage'da yoksa theme'den ver (404 önlenir)
+        $basename = basename($path);
+        if (preg_match('/^service-image-\d+\.(jpg|jpeg|png|gif|webp)$/i', $basename)) {
+            return asset('theme/yalovakamera/images/'.$basename);
+        }
         if (! str_starts_with($path, 'services/')) {
             $path = 'services/'.$path;
         }
-        return asset('public_storage/'.$path);
+        return asset('storage/'.$path);
     }
 
     /**
-     * İkon URL. Storage path (services/...) ise public_storage, sadece dosya adı ise theme.
+     * İkon URL. Storage path (services/...) ise storage, sadece dosya adı ise theme.
      */
     public function getIconUrlAttribute(): ?string
     {
@@ -62,7 +67,7 @@ class Service extends Model
             if (! str_starts_with($path, 'services/')) {
                 $path = 'services/'.$path;
             }
-            return asset('public_storage/'.$path);
+            return asset('storage/'.$path);
         }
         return asset('theme/yalovakamera/images/'.$path);
     }
@@ -78,7 +83,7 @@ class Service extends Model
         $path = str_replace('\\', '/', (string) $this->image);
         $thumbPath = app(ThumbnailService::class)->getThumbPath('services', $path);
         if ($thumbPath) {
-            return asset('public_storage/'.$thumbPath);
+            return asset('storage/'.$thumbPath);
         }
         return $this->image_url;
     }
