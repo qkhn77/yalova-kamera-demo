@@ -2,7 +2,7 @@
     <div class="service-image">
         <a href="{{ route('services.show', $s->slug) }}">
             <figure class="image-anime">
-                <img src="{{ asset('theme/yalovakamera/images/' . ($s->image ?: 'service-image-1.jpg')) }}" alt="{{ $s->title }}">
+                <img src="{{ $s->image_url ?? asset('theme/yalovakamera/images/service-image-1.jpg') }}" alt="{{ $s->title }}">
             </figure>
         </a>
     </div>

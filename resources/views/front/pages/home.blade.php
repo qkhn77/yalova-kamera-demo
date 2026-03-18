@@ -204,7 +204,7 @@
                             <div class="service-image">
                                 <a href="{{ route('services.show', $s->slug) }}" data-cursor-text="Detay">
                                     <figure class="image-anime">
-                                        <img src="{{ asset('theme/yalovakamera/images/'.($s->image ?: 'service-image-1.jpg')) }}" alt="{{ $s->title }}">
+                                        <img src="{{ $s->image_url ?? asset('theme/yalovakamera/images/service-image-1.jpg') }}" alt="{{ $s->title }}">
                                     </figure>
                                 </a>
                             </div>
@@ -256,7 +256,7 @@
                             <div class="service-image">
                                 <a href="{{ route('projects.show', $p->slug) }}" data-cursor-text="Detay">
                                     <figure class="image-anime">
-                                        <img src="{{ asset('theme/yalovakamera/images/'.($p->image ?: 'service-image-1.jpg')) }}" alt="{{ $p->title }}">
+                                        <img src="{{ $p->image_url ?? asset('theme/yalovakamera/images/service-image-1.jpg') }}" alt="{{ $p->title }}">
                                     </figure>
                                 </a>
                             </div>
