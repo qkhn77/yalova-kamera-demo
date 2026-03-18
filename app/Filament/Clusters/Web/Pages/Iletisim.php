@@ -173,8 +173,9 @@ class Iletisim extends Page implements HasForms
         $data = $this->form->getState();
         $c = ContactPage::instance();
 
-        // Canlı DB'de sütunlar eksik olabilir; varsa güncelle.
-        foreach (['whatsapp_url', 'facebook_url'] as $col) {
+        // Canlı DB'de sütunlar eksik olabilir; yoksa update'e ekleme.
+        $optionalColumns = ['whatsapp_url', 'instagram_url', 'linkedin_url', 'pinterest_url', 'twitter_url', 'facebook_url'];
+        foreach ($optionalColumns as $col) {
             if (!Schema::hasColumn('contact_pages', $col)) {
                 unset($data[$col]);
             }
