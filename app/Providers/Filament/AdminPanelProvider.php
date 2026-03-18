@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
+use App\Models\Setting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -20,12 +21,22 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public static function adminPath(): string
+    {
+        try {
+            $path = Setting::get('admin_path', 'admin');
+            return is_string($path) && preg_match('/^[a-z0-9_-]+$/i', $path) ? trim($path) : 'admin';
+        } catch (\Throwable $e) {
+            return 'admin';
+        }
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path(self::adminPath())
             ->login()
             ->colors([
                 'primary' => Color::Amber,

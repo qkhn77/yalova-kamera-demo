@@ -201,29 +201,45 @@
 
 
 
-                            <form method="POST" action="#" class="contact-form">
+                            @if(session('success'))
+                                <div class="alert alert-success mb-4">{{ session('success') }}</div>
+                            @endif
+                            @if(session('error'))
+                                <div class="alert alert-danger mb-4">{{ session('error') }}</div>
+                            @endif
+                            @if($errors->any())
+                                <div class="alert alert-danger mb-4">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $err)
+                                            <li>{{ $err }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('contact.store') }}" class="contact-form">
 
                                 @csrf
 
                                 <div class="row">
 
                                     <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="name" class="form-control" placeholder="Ad Soyad">
+                                        <input type="text" name="name" class="form-control" placeholder="Ad Soyad" value="{{ old('name') }}" required>
                                     </div>
 
 
                                     <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="phone" class="form-control" placeholder="Telefon">
+                                        <input type="text" name="phone" class="form-control" placeholder="Telefon" value="{{ old('phone') }}">
                                     </div>
 
 
                                     <div class="form-group col-md-12 mb-4">
-                                        <input type="email" name="email" class="form-control" placeholder="E-posta">
+                                        <input type="email" name="email" class="form-control" placeholder="E-posta" value="{{ old('email') }}" required>
                                     </div>
 
 
                                     <div class="form-group col-md-12 mb-5">
-                                        <textarea name="message" class="form-control" rows="3" placeholder="Mesajınız"></textarea>
+                                        <textarea name="message" class="form-control" rows="3" placeholder="Mesajınız" required>{{ old('message') }}</textarea>
                                     </div>
 
 

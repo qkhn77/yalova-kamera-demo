@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SitemapController;
 use App\Models\BilgiSayfa;
 use Illuminate\Support\Facades\Storage;
@@ -155,7 +156,8 @@ Route::get('/blog/{slug}', function ($slug) {
     return view('front.blog.show', compact('post'));
 })->name('blog.show');
 
-Route::view('/iletisim', 'front.pages.contact')->name('contact');
+Route::get('/iletisim', fn () => view('front.pages.contact'))->name('contact');
+Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.store');
 
 // Dinamik sayfalar
 Route::get('/sayfa/{slug}', function ($slug) {

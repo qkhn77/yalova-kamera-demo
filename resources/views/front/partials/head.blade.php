@@ -13,9 +13,21 @@
 </script>
 @endif
 
-<title>@yield('title', 'Yalova Kamera Kurulumu | Güvenlik Kamerası Sistemleri - Yalova Kamera')</title>
-<meta name="description" content="@yield('meta_description', 'Yalova\'da profesyonel kamera kurulumu, güvenlik kamerası ve alarm sistemleri. CCTV çözümleri, servis ve bakım hizmetleri. Yalova kamera kurulumu için uzman ekibimizle iletişime geçin.')">
-<meta name="keywords" content="@yield('meta_keywords', 'yalova kamera kurulumu, güvenlik kamerası, alarm sistemi, CCTV, Yalova kamera servisi, güvenlik sistemi kurulumu, kamera montajı')">
+@php
+    $gsc = \App\Models\Setting::get('google_search_console') ?: \App\Models\Setting::get('webmaster_verification');
+@endphp
+@if(!empty($gsc))
+<meta name="google-site-verification" content="{{ $gsc }}">
+@endif
+
+@php
+    $siteTitle = \App\Models\Setting::get('site_title', config('app.name')) ?: 'Yalova Kamera Kurulumu | Güvenlik Kamerası Sistemleri - Yalova Kamera';
+    $siteDescription = \App\Models\Setting::get('meta_description') ?: 'Yalova\'da profesyonel kamera kurulumu, güvenlik kamerası ve alarm sistemleri. CCTV çözümleri, servis ve bakım hizmetleri. Yalova kamera kurulumu için uzman ekibimizle iletişime geçin.';
+    $siteKeywords = \App\Models\Setting::get('meta_keywords') ?: 'yalova kamera kurulumu, güvenlik kamerası, alarm sistemi, CCTV, Yalova kamera servisi, güvenlik sistemi kurulumu, kamera montajı';
+@endphp
+<title>@yield('title', $siteTitle)</title>
+<meta name="description" content="@yield('meta_description', $siteDescription)">
+<meta name="keywords" content="@yield('meta_keywords', $siteKeywords)">
 <meta name="robots" content="@yield('meta_robots', 'index, follow')">
 <meta name="author" content="Yalova Kamera Sistemleri">
 <meta name="language" content="tr-TR">

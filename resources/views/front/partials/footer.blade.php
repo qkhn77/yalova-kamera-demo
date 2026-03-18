@@ -5,8 +5,14 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="main-footer-box">
+                    @php
+                        $footerLogo = \App\Models\Setting::get('footer_logo');
+                        $footerLogoUrl = $footerLogo
+                            ? (str_starts_with($footerLogo, 'settings/') ? asset('storage/' . $footerLogo) : asset($footerLogo))
+                            : asset('theme/yalovakamera/images/footer-logo.svg');
+                    @endphp
                     <div class="footer-logo">
-                        <img src="{{ asset('theme/yalovakamera/images/footer-logo.svg') }}" alt="Yalova Kamera Sistemleri">
+                        <img src="{{ $footerLogoUrl }}" alt="{{ \App\Models\Setting::get('site_title', config('app.name')) }}">
                     </div>
 
                     <div class="footer-contact-details">
@@ -107,7 +113,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="footer-copyright-text">
-                        <p>© {{ date('Y') }} Yalova Kamera Sistemleri. Tüm hakları saklıdır.</p>
+                        <p>{{ \App\Models\Setting::get('copyright_text', '© ' . date('Y') . ' Yalova Kamera Sistemleri. Tüm hakları saklıdır.') }}</p>
                     </div>
                 </div>
 

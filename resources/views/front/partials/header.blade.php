@@ -24,8 +24,14 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container">
                 
+                @php
+                    $headerLogo = \App\Models\Setting::get('site_logo');
+                    $headerLogoUrl = $headerLogo
+                        ? (str_starts_with($headerLogo, 'settings/') ? asset('storage/' . $headerLogo) : asset($headerLogo))
+                        : asset('theme/yalovakamera/images/yalova_kamera.png');
+                @endphp
                 <a class="navbar-brand site-logo" href="{{ route('home') }}">
-                  <img src="{{ asset('theme/yalovakamera/images/yalova_kamera.png') }}" alt="Yalova Kamera Sistemleri Logo">
+                  <img src="{{ $headerLogoUrl }}" alt="{{ \App\Models\Setting::get('site_title', config('app.name')) }} Logo">
                 </a>
 
                 <div class="collapse navbar-collapse main-menu">
