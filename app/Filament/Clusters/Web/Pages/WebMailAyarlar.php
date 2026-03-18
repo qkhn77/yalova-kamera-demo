@@ -6,19 +6,22 @@ use App\Filament\Clusters\Web;
 use App\Models\Setting;
 use Filament\Actions;
 use Filament\Forms;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Notifications\Notification;
 
-class WebMailAyarlar extends Page
+class WebMailAyarlar extends Page implements HasForms
 {
+    use InteractsWithForms;
     use \Filament\Pages\Concerns\InteractsWithFormActions;
 
     protected static ?string $cluster = Web::class;
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Mail Ayarları';
     protected static ?string $slug = 'web-ayarlar/web-mail-ayarlar';
-    protected static string $view = 'filament.pages.ayarlar-form';
+    protected static string $view = 'filament.clusters.web.pages.web-mail-ayarlar';
 
     public ?array $data = [];
 

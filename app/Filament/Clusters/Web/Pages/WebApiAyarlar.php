@@ -6,19 +6,22 @@ use App\Filament\Clusters\Web;
 use App\Models\Setting;
 use Filament\Actions;
 use Filament\Forms;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Notifications\Notification;
 
-class WebApiAyarlar extends Page
+class WebApiAyarlar extends Page implements HasForms
 {
+    use InteractsWithForms;
     use \Filament\Pages\Concerns\InteractsWithFormActions;
 
     protected static ?string $cluster = Web::class;
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'API Ayarları';
     protected static ?string $slug = 'web-ayarlar/web-api-ayarlar';
-    protected static string $view = 'filament.pages.ayarlar-form';
+    protected static string $view = 'filament.clusters.web.pages.web-api-ayarlar';
 
     public ?array $data = [];
 
