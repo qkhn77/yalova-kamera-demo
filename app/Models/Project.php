@@ -31,26 +31,26 @@ class Project extends Model
     protected $appends = ['image_url', 'image_thumb_url', 'icon_url'];
 
     /**
-     * Görsel tam URL. storage varsa /storage, tema varsayılan adı (service-image-X.jpg) ise theme.
+     * Görsel tam URL. storage/app/public/projects
      */
     public function getImageUrlAttribute(): ?string
     {
         if (! $this->image) {
             return null;
         }
+
         $path = str_replace('\\', '/', (string) $this->image);
         $path = ltrim($path, '/');
+
         if ($path === '') {
             return null;
         }
-        $basename = basename($path);
-        if (preg_match('/^(service-image|project)-\d+\.(jpg|jpeg|png|gif|webp)$/i', $basename)) {
-            return asset('theme/yalovakamera/images/'.$basename);
-        }
+
         if (! str_starts_with($path, 'projects/')) {
-            $path = 'projects/'.$path;
+            $path = 'projects/' . $path;
         }
-        return asset('storage/'.$path);
+
+        return asset('storage/' . $path);
     }
 
     /**
@@ -61,15 +61,19 @@ class Project extends Model
         if (! $this->icon) {
             return null;
         }
+
         $path = str_replace('\\', '/', (string) $this->icon);
         $path = ltrim($path, '/');
+
         if (str_contains($path, '/') || str_starts_with($path, 'projects/')) {
             if (! str_starts_with($path, 'projects/')) {
-                $path = 'projects/'.$path;
+                $path = 'projects/' . $path;
             }
-            return asset('storage/'.$path);
+
+            return asset('storage/' . $path);
         }
-        return asset('theme/yalovakamera/images/'.$path);
+
+        return asset('theme/yalovakamera/images/' . $path);
     }
 
     /**
@@ -80,11 +84,14 @@ class Project extends Model
         if (! $this->image) {
             return null;
         }
+
         $path = str_replace('\\', '/', (string) $this->image);
         $thumbPath = app(ThumbnailService::class)->getThumbPath('projects', $path);
+
         if ($thumbPath) {
-            return asset('storage/'.$thumbPath);
+            return asset('storage/' . ltrim($thumbPath, '/'));
         }
+
         return $this->image_url;
     }
 
@@ -92,11 +99,13 @@ class Project extends Model
     {
         static::saved(fn () => Cache::forget('sitemap_xml'));
         static::deleted(fn () => Cache::forget('sitemap_xml'));
+
         static::creating(function (Project $project) {
             if (empty($project->slug)) {
                 $project->slug = Str::slug($project->title);
             }
         });
+
         static::updating(function (Project $project) {
             if ($project->isDirty('title') && ! $project->isDirty('slug')) {
                 $project->slug = Str::slug($project->title);

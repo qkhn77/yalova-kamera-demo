@@ -172,21 +172,25 @@ class Iletisim extends Page implements HasForms
     {
         $data = $this->form->getState();
         $c = ContactPage::instance();
+        $table = $c->getTable();
 
-        // Canlı DB'de sütunlar eksik olabilir; yoksa update'e ekleme.
-        $optionalColumns = ['whatsapp_url', 'instagram_url', 'linkedin_url', 'pinterest_url', 'twitter_url', 'facebook_url'];
-        foreach ($optionalColumns as $col) {
-            if (!Schema::hasColumn('contact_pages', $col)) {
-                unset($data[$col]);
+        // Canlı DB'de sosyal sütunlar eksik olabilir; sadece var olan sütunları update'e ver.
+        $allowed = [];
+        foreach (array_keys($data) as $col) {
+            if (Schema::hasColumn($table, $col)) {
+                $allowed[$col] = $data[$col];
             }
         }
 
-        // WhatsApp: sadece rakam ise wa.me linkine çevir
-        if (!empty($data['whatsapp_url']) && preg_match('/^[0-9+]+$/', preg_replace('/\s/', '', $data['whatsapp_url']))) {
-            $data['whatsapp_url'] = 'https://wa.me/' . preg_replace('/[^0-9]/', '', $data['whatsapp_url']);
+        // WhatsApp: sadece rakam ise wa.me linkine çevir (sütun varsa)
+        if (isset($allowed['whatsapp_url']) && $allowed['whatsapp_url'] !== null && $allowed['whatsapp_url'] !== '') {
+            $val = preg_replace('/\s/', '', $allowed['whatsapp_url']);
+            if (preg_match('/^[0-9+]+$/', $val)) {
+                $allowed['whatsapp_url'] = 'https://wa.me/' . preg_replace('/[^0-9]/', '', $val);
+            }
         }
 
-        $c->update($data);
+        $c->update($allowed);
         Notification::make()->title('İletişim sayfası kaydedildi.')->success()->send();
     }
 

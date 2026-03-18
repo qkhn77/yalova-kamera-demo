@@ -27,30 +27,29 @@ class Service extends Model
         'sort_order' => 'integer',
     ];
 
-    protected $appends = ['image_url', 'icon_url'];
+    protected $appends = ['image_url', 'image_thumb_url', 'icon_url'];
 
     /**
-     * Görsel tam URL. storage varsa /storage, tema varsayılan adı (service-image-X.jpg) ise theme.
+     * Görsel tam URL. storage/app/public/services veya services/ dosya adı.
      */
     public function getImageUrlAttribute(): ?string
     {
         if (! $this->image) {
             return null;
         }
+
         $path = str_replace('\\', '/', (string) $this->image);
         $path = ltrim($path, '/');
+
         if ($path === '') {
             return null;
         }
-        // Tema varsayılan dosya adları: storage'da yoksa theme'den ver (404 önlenir)
-        $basename = basename($path);
-        if (preg_match('/^service-image-\d+\.(jpg|jpeg|png|gif|webp)$/i', $basename)) {
-            return asset('theme/yalovakamera/images/'.$basename);
-        }
+
         if (! str_starts_with($path, 'services/')) {
-            $path = 'services/'.$path;
+            $path = 'services/' . $path;
         }
-        return asset('storage/'.$path);
+
+        return asset('storage/' . $path);
     }
 
     /**
@@ -61,15 +60,19 @@ class Service extends Model
         if (! $this->icon) {
             return null;
         }
+
         $path = str_replace('\\', '/', (string) $this->icon);
         $path = ltrim($path, '/');
+
         if (str_contains($path, '/') || str_starts_with($path, 'services/')) {
             if (! str_starts_with($path, 'services/')) {
-                $path = 'services/'.$path;
+                $path = 'services/' . $path;
             }
-            return asset('storage/'.$path);
+
+            return asset('storage/' . $path);
         }
-        return asset('theme/yalovakamera/images/'.$path);
+
+        return asset('theme/yalovakamera/images/' . $path);
     }
 
     /**
@@ -80,11 +83,14 @@ class Service extends Model
         if (! $this->image) {
             return null;
         }
+
         $path = str_replace('\\', '/', (string) $this->image);
         $thumbPath = app(ThumbnailService::class)->getThumbPath('services', $path);
+
         if ($thumbPath) {
-            return asset('storage/'.$thumbPath);
+            return asset('storage/' . ltrim($thumbPath, '/'));
         }
+
         return $this->image_url;
     }
 
@@ -92,11 +98,13 @@ class Service extends Model
     {
         static::saved(fn () => Cache::forget('sitemap_xml'));
         static::deleted(fn () => Cache::forget('sitemap_xml'));
+
         static::creating(function (Service $service) {
             if (empty($service->slug)) {
                 $service->slug = Str::slug($service->title);
             }
         });
+
         static::updating(function (Service $service) {
             if ($service->isDirty('title') && ! $service->isDirty('slug')) {
                 $service->slug = Str::slug($service->title);

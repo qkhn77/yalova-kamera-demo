@@ -42,7 +42,7 @@
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:title" content="@yield('og_title', 'Yalova Kamera Kurulumu | Güvenlik Kamerası Sistemleri - Yalova Kamera')">
 <meta property="og:description" content="@yield('og_description', 'Yalova\'da profesyonel kamera kurulumu, güvenlik kamerası ve alarm sistemleri. CCTV çözümleri, servis ve bakım hizmetleri.')">
-<meta property="og:image" content="@yield('og_image', asset('theme/yalovakamera/images/yalova_kamera.png'))">
+<meta property="og:image" content="@yield('og_image', '/theme/yalovakamera/images/yalova_kamera.png')">
 <meta property="og:site_name" content="Yalova Kamera Sistemleri">
 <meta property="og:locale" content="tr_TR">
 
@@ -51,22 +51,22 @@
 <meta property="twitter:url" content="{{ url()->current() }}">
 <meta property="twitter:title" content="@yield('og_title', 'Yalova Kamera Kurulumu | Güvenlik Kamerası Sistemleri - Yalova Kamera')">
 <meta property="twitter:description" content="@yield('og_description', 'Yalova\'da profesyonel kamera kurulumu, güvenlik kamerası ve alarm sistemleri.')">
-<meta property="twitter:image" content="@yield('og_image', asset('theme/yalovakamera/images/yalova_kamera.png'))">
+<meta property="twitter:image" content="@yield('og_image', '/theme/yalovakamera/images/yalova_kamera.png')">
 
 <link rel="canonical" href="{{ url()->current() }}">
 
-<link rel="shortcut icon" type="image/x-icon" href="{{ asset('theme/yalovakamera/images/favicon.png') }}">
+<link rel="shortcut icon" type="image/x-icon" href="/theme/yalovakamera/images/favicon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-<link href="{{ asset('theme/yalovakamera/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
-<link href="{{ asset('theme/yalovakamera/css/slicknav.min.css') }}" rel="stylesheet">
-<link href="{{ asset('theme/yalovakamera/css/swiper-bundle.min.css') }}" rel="stylesheet">
-<link href="{{ asset('theme/yalovakamera/css/all.min.css') }}" rel="stylesheet" media="screen">
-<link href="{{ asset('theme/yalovakamera/css/animate.css') }}" rel="stylesheet">
-<link href="{{ asset('theme/yalovakamera/css/magnific-popup.css') }}" rel="stylesheet">
-<link href="{{ asset('theme/yalovakamera/css/mousecursor.css') }}" rel="stylesheet">
-<link href="{{ asset('theme/yalovakamera/css/custom.css') }}" rel="stylesheet" media="screen">
+<link href="/theme/yalovakamera/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/theme/yalovakamera/css/slicknav.min.css" rel="stylesheet">
+<link href="/theme/yalovakamera/css/swiper-bundle.min.css" rel="stylesheet">
+<link href="/theme/yalovakamera/css/all.min.css" rel="stylesheet" media="screen">
+<link href="/theme/yalovakamera/css/animate.css" rel="stylesheet">
+<link href="/theme/yalovakamera/css/magnific-popup.css" rel="stylesheet">
+<link href="/theme/yalovakamera/css/mousecursor.css" rel="stylesheet">
+<link href="/theme/yalovakamera/css/custom.css" rel="stylesheet" media="screen">

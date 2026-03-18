@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SitemapController;
 use App\Models\BilgiSayfa;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\PostCategory;
@@ -180,6 +181,17 @@ Route::get('/bilgi/{slug}', function ($slug) {
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
+// public_storage/* dosyalarını sun (symlink yoksa veya Windows'ta çalışmıyorsa)
+Route::get('/public_storage/{path}', function (string $path) {
+    $path = str_replace('..', '', $path);
+    if (! Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    return response()->file(Storage::disk('public')->path($path), [
+        'Content-Type' => Storage::disk('public')->mimeType($path),
+    ]);
+})->where('path', '.*')->name('storage.serve');
+
 /*
 | SSH/terminal yoksa cache temizlemek için tarayıcıdan bu linki açın:
 | https://yalovakamera.com/clear-cache
@@ -196,9 +208,19 @@ Route::get('/clear-cache', function () {
     );
 })->name('clear-cache');
 
-// Kullanıcı oluştur (geçici) — /create-admin
+// Kgeçici temizlik sonra sil V
 
 
+
+Route::get('/clear-all-cache-temp', function () {
+    Artisan::call('optimize:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+
+    return nl2br("Cache temizlendi.\n" . Artisan::output());
+});
 
 
 // use App\Models\User;
