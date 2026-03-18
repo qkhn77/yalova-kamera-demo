@@ -192,8 +192,7 @@ Route::get('/public_storage/{path}', function (string $path) {
     ]);
 })->where('path', '.*')->name('storage.serve');
 
-//kullanıcı oluştur geçiçi
-//https://yalovakamera.com/create-admin
+// Kullanıcı oluştur (geçici) — /create-admin
 
 
 
