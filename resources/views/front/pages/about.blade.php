@@ -11,12 +11,40 @@
 @endphp
 
 @section('content')
+@php
+    $about = null;
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_pages')) {
+        $about = \App\Models\AboutPage::first();
+    }
+
+    $defaults = \App\Models\AboutPage::defaults();
+
+    $val = function (string $key) use ($about, $defaults): string {
+        $v = $about?->{$key};
+        if ($v === null || $v === '') {
+            return (string) ($defaults[$key] ?? '');
+        }
+        return (string) $v;
+    };
+
+    $tel = function (string $phone): string {
+        $digits = preg_replace('/[^0-9]/', '', $phone);
+        return 'tel:' . $digits;
+    };
+
+    $img = function (string $field, string $defaultFile) use ($about): string {
+        if ($about && !empty($about->{$field})) {
+            return \Illuminate\Support\Facades\Storage::disk('public')->url($about->{$field});
+        }
+        return asset('theme/yalovakamera/images/' . $defaultFile);
+    };
+@endphp
     <div class="page-header">
         <div class="container">
 
 
             <div class="page-header-box">
-                <h1 class="wow fadeInUp">Hakımızda</h1>
+                <h1 class="wow fadeInUp">{{ $val('header_h1') }}</h1>
              {!! \App\Helpers\BreadcrumbHelper::render() !!}
             </div>
 
@@ -45,17 +73,17 @@
                     <div class="about-us-images">
                         <div class="about-img-1">
                             <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/about-img-1.jpg') }}" alt="Yalova Kamera Sistemleri">
+                                <img src="{{ $img('about_img_1', 'about-img-1.jpg') }}" alt="Yalova Kamera Sistemleri">
                             </figure>
 
                             <div class="company-experience-circle">
-                                <img src="{{ asset('theme/yalovakamera/images/experience-circle.svg') }}" alt="">
+                                <img src="{{ $img('about_circle_icon', 'experience-circle.svg') }}" alt="">
                             </div>
                         </div>
 
                         <div class="about-img-2">
                             <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/about-img-2.jpg') }}" alt="Güvenlik Kamera Sistemleri">
+                                <img src="{{ $img('about_img_2', 'about-img-2.jpg') }}" alt="Güvenlik Kamera Sistemleri">
                             </figure>
                         </div>
                     </div>
@@ -65,24 +93,24 @@
                 <div class="col-lg-6">
                     <div class="about-us-content">
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">Hakkımızda</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Yalova’da güvenliğinizi</span> profesyonel çözümlerle koruyoruz</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">Yalova Kamera Sistemleri olarak Yalova ilinde kamera ve alarm sistemleri satış, kurulum, projelendirme, bakım ve onarım servisi hizmetleri vermekteyiz. Ev, iş yeri, ofis, mağaza, apartman ve sanayi alanları için ihtiyaca özel güvenlik çözümleri sunuyor; kaliteli ürün, uzman işçilik ve hızlı teknik destek anlayışıyla çalışıyoruz.</p>
+                            <h3 class="wow fadeInUp">{{ $val('about_heading') }}</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('about_subheading_span') }}</span> {{ $val('about_subheading_rest') }}</h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">{{ $val('about_paragraph') }}</p>
                         </div>
 
                         <div class="about-experience-box wow fadeInUp" data-wow-delay="0.6s">
                             <div class="about-experience-image">
                                 <figure class="image-anime reveal">
-                                    <img src="{{ asset('theme/yalovakamera/images/about-experience-image.jpg') }}" alt="Tecrübeli Güvenlik Hizmetleri">
+                                    <img src="{{ $img('about_experience_image', 'about-experience-image.jpg') }}" alt="Tecrübeli Güvenlik Hizmetleri">
                                 </figure>
                             </div>
 
                             <div class="about-experience-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-experience.svg') }}" alt="">
+                                    <img src="{{ $img('about_icon_experience', 'icon-about-experience.svg') }}" alt="">
                                 </div>
                                 <div class="about-experience-content">
-                                    <h3>Müşteri memnuniyeti odaklı, garantili ve profesyonel güvenlik sistemleri hizmeti sunuyoruz</h3>
+                                    <h3>{{ $val('about_experience_heading') }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -90,16 +118,16 @@
                         <div class="about-us-body wow fadeInUp" data-wow-delay="0.8s">
                             <div class="about-contact-box">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-contact.svg') }}" alt="">
+                                    <img src="{{ $img('about_icon_contact', 'icon-about-contact.svg') }}" alt="">
                                 </div>
                                 <div class="about-contact-box-content">
-                                    <p>Bize Hemen Ulaşın</p>
-                                    <h3><a href="tel:02263520724">0226 352 07 24</a></h3>
+                                    <p>{{ $val('about_contact_prompt') }}</p>
+                                    <h3><a href="{{ $tel($val('about_phone_text')) }}">{{ $val('about_phone_text') }}</a></h3>
                                 </div>
                             </div>
 
                             <div class="about-us-btn">
-                                <a href="contact.html" class="btn-default">İletişime Geçin</a>
+                                <a href="contact.html" class="btn-default">{{ $val('about_contact_button_text') }}</a>
                             </div>
                         </div>
                     </div>
@@ -116,7 +144,7 @@
                 <div class="col-lg-6">
                     <div class="mission-vision-image">
                         <figure class="image-anime">
-                            <img src="{{ asset('theme/yalovakamera/images/mission-vision-img.jpg') }}" alt="Misyon ve Vizyon">
+                            <img src="{{ $img('mission_vision_image', 'mission-vision-img.jpg') }}" alt="Misyon ve Vizyon">
                         </figure>
                     </div>
                 </div>
@@ -124,31 +152,31 @@
                     <div class="mission-vision-content">
                         <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.2s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-mission.svg') }}" alt="">
+                                <img src="{{ $img('icon_mission', 'icon-mission.svg') }}" alt="">
                             </div>
                             <div class="mission-vision-item-content">
-                                <h3>Misyonumuz</h3>
-                                <p>Müşterilerimize ihtiyaçlarına en uygun kamera ve alarm sistemlerini sunarak yaşam ve çalışma alanlarını daha güvenli hale getirmek; kaliteli ürün, doğru projelendirme ve güvenilir teknik servis ile kalıcı memnuniyet sağlamaktır.</p>
+                                <h3>{{ $val('mission_heading') }}</h3>
+                                <p>{{ $val('mission_text') }}</p>
                             </div>
                         </div>
 
                         <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.4s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-vision.svg') }}" alt="">
+                                <img src="{{ $img('icon_vision', 'icon-vision.svg') }}" alt="">
                             </div>
                             <div class="mission-vision-item-content">
-                                <h3>Vizyonumuz</h3>
-                                <p>Yalova’da güvenlik sistemleri alanında güvenilirliği, teknik yeterliliği ve hizmet kalitesiyle öne çıkan, müşterilerin ilk tercih ettiği lider firmalardan biri olmaktır.</p>
+                                <h3>{{ $val('vision_heading') }}</h3>
+                                <p>{{ $val('vision_text') }}</p>
                             </div>
                         </div>
 
                         <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.6s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-goal.svg') }}" alt="">
+                                <img src="{{ $img('icon_goal', 'icon-goal.svg') }}" alt="">
                             </div>
                             <div class="mission-vision-item-content">
-                                <h3>Hedefimiz</h3>
-                                <p>Her projede maksimum verim, uzun ömürlü sistem kullanımı ve hızlı servis desteği sunarak bireysel ve kurumsal müşterilerimize eksiksiz güvenlik çözümleri sağlamaktır.</p>
+                                <h3>{{ $val('goal_heading') }}</h3>
+                                <p>{{ $val('goal_text') }}</p>
                             </div>
                         </div>
                     </div>
@@ -164,8 +192,8 @@
             <div class="row section-row align-items-center">
                 <div class="col-lg-12">
                     <div class="section-title section-title-center">
-                        <h3 class="wow fadeInUp">Neden Bizi Tercih Etmelisiniz?</h3>
-                        <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Uzman ekip,</span> kaliteli ürün ve güvenilir servis</h2>
+                        <h3 class="wow fadeInUp">{{ $val('why_choose_heading') }}</h3>
+                        <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('why_choose_subheading_span') }}</span> {{ $val('why_choose_subheading_rest') }}</h2>
                     </div>
                 </div>
             </div>
@@ -175,21 +203,21 @@
                     <div class="why-choose-box">
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.4s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-1.svg') }}" alt="">
+                                <img src="{{ $img('why_choose_icon_1', 'icon-why-choose-1.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
-                                <h3>Hızlı Teknik Destek</h3>
-                                <p>Kurulum sonrası bakım, arıza tespiti ve onarım süreçlerinde hızlı ve çözüm odaklı destek sağlıyoruz.</p>
+                                <h3>{{ $val('why_choose_item_1_title') }}</h3>
+                                <p>{{ $val('why_choose_item_1_text') }}</p>
                             </div>
                         </div>
 
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.6s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-2.svg') }}" alt="">
+                                <img src="{{ $img('why_choose_icon_2', 'icon-why-choose-2.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
-                                <h3>İhtiyaca Özel Çözümler</h3>
-                                <p>Ev, iş yeri, apartman, mağaza ve fabrika gibi farklı alanlara özel projelendirme yapıyoruz.</p>
+                                <h3>{{ $val('why_choose_item_2_title') }}</h3>
+                                <p>{{ $val('why_choose_item_2_text') }}</p>
                             </div>
                         </div>
                     </div>
@@ -198,7 +226,7 @@
                 <div class="col-lg-6">
                     <div class="why-choose-image">
                         <figure>
-                            <img src="{{ asset('theme/yalovakamera/images/why-choose-image.png') }}" alt="Yalova Kamera Sistemleri Hizmetleri">
+                            <img src="{{ $img('why_choose_image', 'why-choose-image.png') }}" alt="Yalova Kamera Sistemleri Hizmetleri">
                         </figure>
                     </div>
                 </div>
@@ -207,21 +235,21 @@
                     <div class="why-choose-box">
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.4s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-3.svg') }}" alt="">
+                                <img src="{{ $img('why_choose_icon_3', 'icon-why-choose-3.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
-                                <h3>Uzaktan Erişim</h3>
-                                <p>Mobil cihazlardan izleme imkânı sunan modern kamera sistemleri ile her yerden kontrol sağlayabilirsiniz.</p>
+                                <h3>{{ $val('why_choose_item_3_title') }}</h3>
+                                <p>{{ $val('why_choose_item_3_text') }}</p>
                             </div>
                         </div>
 
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.6s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-4.svg') }}" alt="">
+                                <img src="{{ $img('why_choose_icon_4', 'icon-why-choose-4.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
-                                <h3>Garantili Hizmet</h3>
-                                <p>Tüm hizmetlerimiz garantili olup müşteri memnuniyeti odaklı çalışma prensibiyle sunulmaktadır.</p>
+                                <h3>{{ $val('why_choose_item_4_title') }}</h3>
+                                <p>{{ $val('why_choose_item_4_text') }}</p>
                             </div>
                         </div>
                     </div>
@@ -240,40 +268,40 @@
                         <div class="our-commitment-img-box">
                             <div class="commitment-image-1">
                                 <figure class="image-anime reveal">
-                                    <img src="{{ asset('theme/yalovakamera/images/commitment-image-1.jpg') }}" alt="Profesyonel Güvenlik Hizmetleri">
+                                    <img src="{{ $img('commitment_image_1', 'commitment-image-1.jpg') }}" alt="Profesyonel Güvenlik Hizmetleri">
                                 </figure>
                             </div>
 
                             <div class="satisfy-client-box">
                                 <div class="satisfy-client-content">
                                     <h2><span class="counter">100</span>+</h2>
-                                    <p>Memnun Müşteri ve Tamamlanan Güvenlik Çözümü</p>
+                                    <p>{{ $val('satisfy_client_text') }}</p>
                                 </div>
 
                                 <div class="satisfy-client-images">
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-1.jpg') }}" alt="">
+                                            <img src="{{ $img('satisfy_client_img_1', 'satisfy-client-img-1.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-2.jpg') }}" alt="">
+                                            <img src="{{ $img('satisfy_client_img_2', 'satisfy-client-img-2.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-3.jpg') }}" alt="">
+                                            <img src="{{ $img('satisfy_client_img_3', 'satisfy-client-img-3.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-4.jpg') }}" alt="">
+                                            <img src="{{ $img('satisfy_client_img_4', 'satisfy-client-img-4.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-5.jpg') }}" alt="">
+                                            <img src="{{ $img('satisfy_client_img_5', 'satisfy-client-img-5.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                 </div>
@@ -283,7 +311,7 @@
                         <div class="our-commitment-img-box">
                             <div class="commitment-image-2">
                                 <figure class="image-anime reveal">
-                                    <img src="{{ asset('theme/yalovakamera/images/commitment-image-2.jpg') }}" alt="Kamera ve Alarm Sistemleri">
+                                    <img src="{{ $img('commitment_image_2', 'commitment-image-2.jpg') }}" alt="Kamera ve Alarm Sistemleri">
                                 </figure>
                             </div>
                         </div>
@@ -293,33 +321,33 @@
                 <div class="col-lg-6">
                     <div class="our-commitment-content">
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">Taahhüdümüz</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Güvenlikte kaliteyi</span> ve sürekliliği sağlıyoruz</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">Yalova Kamera Sistemleri olarak her projede doğru keşif, doğru ürün seçimi ve doğru montaj ilkesiyle hareket ediyoruz. Sadece satış değil, satış sonrası teknik destek ve sürdürülebilir hizmet anlayışı da sunuyoruz.</p>
+                            <h3 class="wow fadeInUp">{{ $val('commitment_heading') }}</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('commitment_subheading_span') }}</span> {{ $val('commitment_subheading_rest') }}</h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">{{ $val('commitment_paragraph') }}</p>
                         </div>
                     </div>
 
                     <div class="commitment-counter-box">
                         <div class="commitment-counter-item">
                             <h2><span class="counter">100</span>+</h2>
-                            <p>Kurulum Hizmeti</p>
+                            <p>{{ $val('commitment_counter_item_1') }}</p>
                         </div>
 
                         <div class="commitment-counter-item">
                             <h2><span class="counter">100</span>+</h2>
-                            <p>Teknik Servis Desteği</p>
+                            <p>{{ $val('commitment_counter_item_2') }}</p>
                         </div>
 
                         <div class="commitment-counter-item">
                             <h2><span class="counter">100</span>+</h2>
-                            <p>Müşteri Memnuniyeti</p>
+                            <p>{{ $val('commitment_counter_item_3') }}</p>
                         </div>
                     </div>
 
                     <div class="commitment-list wow fadeInUp" data-wow-delay="0.6s">
                         <ul>
-                            <li>Kaliteli ürün, profesyonel kurulum ve garantili hizmet sunuyoruz.</li>
-                            <li>Kamera, alarm ve güvenlik sistemlerinde uzun ömürlü çözümler sağlıyoruz.</li>
+                            <li>{{ $val('commitment_list_item_1') }}</li>
+                            <li>{{ $val('commitment_list_item_2') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -335,30 +363,30 @@
                 <div class="col-lg-6">
                     <div class="our-expertise-content">
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">Uzmanlığımız</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Akıllı güvenlik çözümleri</span> ile maksimum koruma</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">Projeye uygun kamera sistemleri, alarm altyapıları, kayıt cihazları, görüntüleme çözümleri ve bakım servisleri ile kapsamlı güvenlik hizmetleri sunuyoruz.</p>
+                            <h3 class="wow fadeInUp">{{ $val('expertise_heading') }}</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('expertise_subheading_span') }}</span> {{ $val('expertise_subheading_rest') }}</h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">{{ $val('expertise_paragraph') }}</p>
                         </div>
 
                         <div class="our-expertise-body">
                             <div class="expertise-item-box">
                                 <div class="expertise-item">
                                     <div class="icon-box">
-                                        <img src="{{ asset('theme/yalovakamera/images/icon-expertise-item-1.svg') }}" alt="">
+                                        <img src="{{ $img('expertise_icon_1', 'icon-expertise-item-1.svg') }}" alt="">
                                     </div>
                                     <div class="expertise-item-content">
-                                        <h3>Modern Teknoloji</h3>
-                                        <p>Güncel güvenlik sistemleri ile yüksek performanslı çözümler sunuyoruz.</p>
+                                        <h3>{{ $val('expertise_item_1_title') }}</h3>
+                                        <p>{{ $val('expertise_item_1_text') }}</p>
                                     </div>
                                 </div>
 
                                 <div class="expertise-item">
                                     <div class="icon-box">
-                                        <img src="{{ asset('theme/yalovakamera/images/icon-expertise-item-2.svg') }}" alt="">
+                                        <img src="{{ $img('expertise_icon_2', 'icon-expertise-item-2.svg') }}" alt="">
                                     </div>
                                     <div class="expertise-item-content">
-                                        <h3>Profesyonel Uygulama</h3>
-                                        <p>Keşif, projelendirme, montaj ve servis süreçlerini titizlikle yürütüyoruz.</p>
+                                        <h3>{{ $val('expertise_item_2_title') }}</h3>
+                                        <p>{{ $val('expertise_item_2_text') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -366,13 +394,13 @@
                             <div class="expertise-counter-box">
                                 <div class="expertise-counter-content">
                                     <h2><span class="counter">24</span>/7</h2>
-                                    <p>Destek ve Servis Yaklaşımı</p>
+                                    <p>{{ $val('expertise_counter_label') }}</p>
                                 </div>
 
                                 <div class="expertise-counter-list">
                                     <ul>
-                                        <li>Kamera sistemleri kurulumu</li>
-                                        <li>Alarm sistemleri teknik servis hizmeti</li>
+                                        <li>{{ $val('expertise_counter_list_item_1') }}</li>
+                                        <li>{{ $val('expertise_counter_list_item_2') }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -383,16 +411,16 @@
                 <div class="col-lg-6">
                     <div class="our-expertise-image">
                         <figure class="image-anime reveal">
-                            <img src="{{ asset('theme/yalovakamera/images/expertise-image.jpg') }}" alt="Uzman Güvenlik Çözümleri">
+                            <img src="{{ $img('expertise_image', 'expertise-image.jpg') }}" alt="Uzman Güvenlik Çözümleri">
                         </figure>
 
                         <div class="expertise-contact-box">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-phone.svg') }}" alt="">
+                                <img src="{{ $img('expertise_phone_icon', 'icon-phone.svg') }}" alt="">
                             </div>
                             <div class="expertise-contact-content">
-                                <h3>Hemen Arayın</h3>
-                                <p><a href="tel:02263520724">0226 352 07 24</a></p>
+                                <h3>{{ $val('expertise_contact_heading') }}</h3>
+                                <p><a href="{{ $tel($val('expertise_phone_text')) }}">{{ $val('expertise_phone_text') }}</a></p>
                             </div>
                         </div>
                     </div>
@@ -409,19 +437,19 @@
                 <div class="col-lg-6">
                     <div class="what-we-do-content">
                         <div class="section-title section-title-center">
-                            <h3 class="wow fadeInUp">Ne Yapıyoruz?</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Güvenlik ve izleme</span> sistemlerinde profesyonel hizmet veriyoruz</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">Yalova Kamera Sistemleri olarak güvenlik kamerası ve alarm sistemleri satışından kurulumuna, projelendirmeden bakım ve onarıma kadar tüm süreçlerde profesyonel hizmet vermekteyiz.</p>
-                            <p class="wow fadeInUp" data-wow-delay="0.6s">Her mekânın güvenlik ihtiyacının farklı olduğunu biliyor, buna göre özel çözümler geliştiriyoruz. Kullandığımız sistemler yüksek görüntü kalitesi, güvenilir performans ve kolay kullanım avantajı sunar. Amacımız müşterilerimize uzun ömürlü, verimli ve sorunsuz güvenlik altyapısı sağlamaktır.</p>
+                            <h3 class="wow fadeInUp">{{ $val('what_we_do_heading') }}</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('what_we_do_subheading_span') }}</span> {{ $val('what_we_do_subheading_rest') }}</h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">{{ $val('what_we_do_paragraph_1') }}</p>
+                            <p class="wow fadeInUp" data-wow-delay="0.6s">{{ $val('what_we_do_paragraph_2') }}</p>
                         </div>
 
                         <div class="about-need-help wow fadeInUp" data-wow-delay="0.8s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-need-help.svg') }}" alt="">
+                                <img src="{{ $img('need_help_icon', 'icon-need-help.svg') }}" alt="">
                             </div>
                             <div class="need-help-content">
-                                <p>Hizmetlerimiz Hakkında Bilgi Alın</p>
-                                <h3><a href="tel:02263520724">0226 352 07 24</a></h3>
+                                <p>{{ $val('need_help_text') }}</p>
+                                <h3><a href="{{ $tel($val('what_we_do_phone_text')) }}">{{ $val('what_we_do_phone_text') }}</a></h3>
                             </div>
                         </div>
                     </div>                    
@@ -432,28 +460,28 @@
                         <div class="what-we-counter-box">
                             <div class="what-we-counter-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-what-we-counter-1.svg') }}" alt="">
+                                    <img src="{{ $img('what_we_counter_icon_1', 'icon-what-we-counter-1.svg') }}" alt="">
                                 </div>
                                 <div class="what-we-counter-item-content">
                                     <h3><span class="counter">24</span>/7</h3>
-                                    <p>Teknik Destek Yaklaşımı</p>
+                                    <p>{{ $val('what_we_counter_label_1') }}</p>
                                 </div>
                             </div>
 
                             <div class="what-we-counter-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-what-we-counter-2.svg') }}" alt="">
+                                    <img src="{{ $img('what_we_counter_icon_2', 'icon-what-we-counter-2.svg') }}" alt="">
                                 </div>
                                 <div class="what-we-counter-item-content">
                                     <h3><span class="counter">100</span>+</h3>
-                                    <p>Tamamlanan Hizmet</p>
+                                    <p>{{ $val('what_we_counter_label_2') }}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="what-we-image">
                             <figure>
-                                <img src="{{ asset('theme/yalovakamera/images/what-we-image.jpg') }}" alt="Güvenlik Çözümleri">
+                                <img src="{{ $img('what_we_image', 'what-we-image.jpg') }}" alt="Güvenlik Çözümleri">
                             </figure>
                         </div>
                     </div>
@@ -469,19 +497,19 @@
             <div class="row section-row align-items-center">
                 <div class="col-lg-6">
                     <div class="section-title">
-                        <h3 class="wow fadeInUp">Uzman Ekibimiz</h3>
-                        <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Güvenliğiniz için çalışan</span> profesyonel kadro</h2>
+                        <h3 class="wow fadeInUp">{{ $val('team_heading') }}</h3>
+                        <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('team_subheading_span') }}</span> {{ $val('team_subheading_rest') }}</h2>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="section-content-btn">
                         <div class="section-title-content wow fadeInUp" data-wow-delay="0.4s">
-                            <p>Kurulum, bakım, onarım ve teknik destek süreçlerinde deneyimli ekibimizle Yalova’da profesyonel güvenlik sistemleri hizmeti sunuyoruz.</p>
+                            <p>{{ $val('team_paragraph') }}</p>
                         </div>
     
                         <div class="section-btn wow fadeInUp" data-wow-delay="0.6s">
-                            <a href="team.html" class="btn-default">Tüm Ekibi Gör</a>
+                            <a href="team.html" class="btn-default">{{ $val('team_button_text') }}</a>
                         </div>
                     </div>   
                 </div>
@@ -493,7 +521,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="{{ asset('theme/yalovakamera/images/team-1.jpg') }}" alt="">
+                                    <img src="{{ $img('team_img_1', 'team-1.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -507,8 +535,8 @@
                         </div>
                 
                         <div class="team-content">
-                            <h3><a href="team-single.html">Teknik Destek Ekibi</a></h3>
-                            <p>Kurulum ve Servis Uzmanı</p>
+                            <h3><a href="team-single.html">{{ $val('team_title_1') }}</a></h3>
+                            <p>{{ $val('team_text_1') }}</p>
                         </div>
                     </div>
                 </div>
@@ -518,7 +546,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="{{ asset('theme/yalovakamera/images/team-2.jpg') }}" alt="">
+                                    <img src="{{ $img('team_img_2', 'team-2.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -532,8 +560,8 @@
                         </div>
                 
                         <div class="team-content">
-                            <h3><a href="team-single.html">Projelendirme Ekibi</a></h3>
-                            <p>Güvenlik Sistemleri Uzmanı</p>
+                            <h3><a href="team-single.html">{{ $val('team_title_2') }}</a></h3>
+                            <p>{{ $val('team_text_2') }}</p>
                         </div>
                     </div>
                 </div>
@@ -543,7 +571,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="{{ asset('theme/yalovakamera/images/team-3.jpg') }}" alt="">
+                                    <img src="{{ $img('team_img_3', 'team-3.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -557,8 +585,8 @@
                         </div>
                 
                         <div class="team-content">
-                            <h3><a href="team-single.html">Bakım Onarım Ekibi</a></h3>
-                            <p>Sistem Kontrol Uzmanı</p>
+                            <h3><a href="team-single.html">{{ $val('team_title_3') }}</a></h3>
+                            <p>{{ $val('team_text_3') }}</p>
                         </div>
                     </div>
                 </div>
@@ -568,7 +596,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="{{ asset('theme/yalovakamera/images/team-4.jpg') }}" alt="">
+                                    <img src="{{ $img('team_img_4', 'team-4.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -582,8 +610,8 @@
                         </div>
                 
                         <div class="team-content">
-                            <h3><a href="team-single.html">Müşteri Destek Ekibi</a></h3>
-                            <p>Destek ve Koordinasyon</p>
+                            <h3><a href="team-single.html">{{ $val('team_title_4') }}</a></h3>
+                            <p>{{ $val('team_text_4') }}</p>
                         </div>
                     </div>
                 </div>
@@ -600,16 +628,16 @@
                     <div class="our-support-images">
                         <div class="our-support-image box-1">
                             <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/support-image-1.jpg') }}" alt="">
+                                <img src="{{ $img('support_image_1', 'support-image-1.jpg') }}" alt="">
                             </figure>
                         </div>
                         <div class="our-support-image box-2">
                             <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/support-image-2.jpg') }}" alt="">
+                                <img src="{{ $img('support_image_2', 'support-image-2.jpg') }}" alt="">
                             </figure>
                         </div>
                         <div class="our-support-circle">
-                            <a href="contact.html"><img src="{{ asset('theme/yalovakamera/images/contact-now-circle-2.svg') }}" alt=""></a>
+                            <a href="contact.html"><img src="{{ $img('support_circle_icon', 'contact-now-circle-2.svg') }}" alt=""></a>
                         </div>
                     </div>
                 </div>
@@ -617,35 +645,35 @@
                 <div class="col-lg-6">
                     <div class="our-support-content">
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">Teknik Destek</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Her zaman ulaşılabilir</span> güvenilir teknik servis</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">Sistemlerinizin sorunsuz çalışması için bakım, kontrol, arıza tespiti ve onarım hizmetlerini profesyonel şekilde sunuyoruz.</p>
+                            <h3 class="wow fadeInUp">{{ $val('support_heading') }}</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('support_subheading_span') }}</span> {{ $val('support_subheading_rest') }}</h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">{{ $val('support_paragraph') }}</p>
                         </div>
 
                         <div class="our-support-body wow fadeInUp" data-wow-delay="0.6s">
                             <div class="support-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-support-item-1.svg') }}" alt="">
+                                    <img src="{{ $img('support_icon_1', 'icon-support-item-1.svg') }}" alt="">
                                 </div>
                                 <div class="support-item-content">
-                                    <h3>Kamera Sistemi Kurulumu</h3>
-                                    <p>İç ve dış mekânlara uygun profesyonel kamera sistemleri kurulumu yapıyoruz.</p>
+                                    <h3>{{ $val('support_item_1_title') }}</h3>
+                                    <p>{{ $val('support_item_1_text') }}</p>
                                 </div>
                             </div>
 
                             <div class="support-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-support-item-2.svg') }}" alt="">
+                                    <img src="{{ $img('support_icon_2', 'icon-support-item-2.svg') }}" alt="">
                                 </div>
                                 <div class="support-item-content">
-                                    <h3>Alarm Sistemleri Servisi</h3>
-                                    <p>Alarm sistemleri için kurulum, kontrol, bakım ve onarım desteği veriyoruz.</p>
+                                    <h3>{{ $val('support_item_2_title') }}</h3>
+                                    <p>{{ $val('support_item_2_text') }}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="our-support-btn wow fadeInUp" data-wow-delay="0.8s">
-                            <a href="contact.html" class="btn-default">Bizimle İletişime Geçin</a>
+                            <a href="contact.html" class="btn-default">{{ $val('support_button_text') }}</a>
                         </div>
                     </div>
                 </div>
@@ -660,8 +688,8 @@
             <div class="row section-row">
                 <div class="col-lg-12">
                     <div class="section-title section-title-center">
-                        <h3 class="wow fadeInUp">Müşteri Yorumları</h3>
-                        <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Müşterilerimizin</span> bize duyduğu güven</h2>
+                        <h3 class="wow fadeInUp">{{ $val('testimonials_heading') }}</h3>
+                        <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('testimonials_subheading_span') }}</span> {{ $val('testimonials_subheading_rest') }}</h2>
                     </div>
                 </div>               
             </div>
@@ -677,16 +705,16 @@
                                             <div class="testimonial-author-box">
                                                 <div class="author-image">
                                                     <figure class="image-anime">
-                                                        <img src="{{ asset('theme/yalovakamera/images/author-1.jpg') }}" alt="">
+                                                        <img src="{{ $img('testimonial_author_img_1', 'author-1.jpg') }}" alt="">
                                                     </figure>
                                                 </div>
                                                 <div class="author-content">
-                                                    <h3>Ahmet Y.</h3>
-                                                    <p>İşyeri Sahibi</p>
+                                                    <h3>{{ $val('testimonial_name_1') }}</h3>
+                                                    <p>{{ $val('testimonial_role_1') }}</p>
                                                 </div>  
                                             </div>        
                                             <div class="testimonial-quote">
-                                                <img src="{{ asset('theme/yalovakamera/images/testimonial-quote.svg') }}" alt="">
+                                                <img src="{{ $img('testimonial_quote_icon', 'testimonial-quote.svg') }}" alt="">
                                             </div>
                                         </div>
                                         <div class="testimonial-rating">
@@ -697,7 +725,7 @@
                                             <i class="fa-solid fa-star"></i>                                   
                                         </div>                              
                                         <div class="testimonial-content">
-                                            <p>"İşyerimiz için kamera ve alarm sistemi kurulumu yaptırdık. Hem kurulum süreci hem de sonrasında verilen destekten çok memnun kaldık. Güvenilir ve profesyonel bir firma."</p>
+                                            <p>"{{ $val('testimonial_text_1') }}"</p>
                                         </div>                              
                                     </div>
                                 </div>
@@ -708,16 +736,16 @@
                                             <div class="testimonial-author-box">
                                                 <div class="author-image">
                                                     <figure class="image-anime">
-                                                        <img src="{{ asset('theme/yalovakamera/images/author-2.jpg') }}" alt="">
+                                                        <img src="{{ $img('testimonial_author_img_2', 'author-2.jpg') }}" alt="">
                                                     </figure>
                                                 </div>
                                                 <div class="author-content">
-                                                    <h3>Mehmet K.</h3>
-                                                    <p>Apartman Yöneticisi</p>
+                                                    <h3>{{ $val('testimonial_name_2') }}</h3>
+                                                    <p>{{ $val('testimonial_role_2') }}</p>
                                                 </div>  
                                             </div>        
                                             <div class="testimonial-quote">
-                                                <img src="{{ asset('theme/yalovakamera/images/testimonial-quote.svg') }}" alt="">
+                                                <img src="{{ $img('testimonial_quote_icon', 'testimonial-quote.svg') }}" alt="">
                                             </div>
                                         </div>
                                         <div class="testimonial-rating">
@@ -728,7 +756,7 @@
                                             <i class="fa-solid fa-star"></i>                                   
                                         </div>                                   
                                         <div class="testimonial-content">
-                                            <p>"Apartmanımız için yapılan kamera sistemi kurulumu çok başarılı oldu. Görüntü kalitesi çok iyi, ekip ilgili ve işini düzgün yapıyor. Tavsiye ederim."</p>
+                                            <p>"{{ $val('testimonial_text_2') }}"</p>
                                         </div>                              
                                     </div>
                                 </div>
@@ -739,16 +767,16 @@
                                             <div class="testimonial-author-box">
                                                 <div class="author-image">
                                                     <figure class="image-anime">
-                                                        <img src="{{ asset('theme/yalovakamera/images/author-3.jpg') }}" alt="">
+                                                        <img src="{{ $img('testimonial_author_img_3', 'author-3.jpg') }}" alt="">
                                                     </figure>
                                                 </div>
                                                 <div class="author-content">
-                                                    <h3>Ayşe T.</h3>
-                                                    <p>Ev Sahibi</p>
+                                                    <h3>{{ $val('testimonial_name_3') }}</h3>
+                                                    <p>{{ $val('testimonial_role_3') }}</p>
                                                 </div>  
                                             </div>        
                                             <div class="testimonial-quote">
-                                                <img src="{{ asset('theme/yalovakamera/images/testimonial-quote.svg') }}" alt="">
+                                                <img src="{{ $img('testimonial_quote_icon', 'testimonial-quote.svg') }}" alt="">
                                             </div>
                                         </div>
                                         <div class="testimonial-rating">
@@ -759,7 +787,7 @@
                                             <i class="fa-solid fa-star"></i>                                   
                                         </div>                           
                                         <div class="testimonial-content">
-                                            <p>"Evimize kurulan güvenlik sistemi sayesinde içimiz çok daha rahat. Sorularımıza hızlı cevap verildi, montaj temiz ve düzenli yapıldı. Müşteri memnuniyeti gerçekten ön planda."</p>
+                                            <p>"{{ $val('testimonial_text_3') }}"</p>
                                         </div>                              
                                     </div>
                                 </div>
@@ -783,29 +811,29 @@
                 <div class="col-lg-6">
                     <div class="cta-box-content">
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">İletişim</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Güvenliğiniz için</span> doğru adres: Yalova Kamera Sistemleri</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">Kamera ve alarm sistemleri hakkında bilgi almak, keşif talep etmek veya teklif istemek için hemen bizimle iletişime geçin.</p>
+                            <h3 class="wow fadeInUp">{{ $val('cta_heading') }}</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('cta_subheading_span') }}</span> {{ $val('cta_subheading_rest') }}</h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">{{ $val('cta_paragraph') }}</p>
                         </div>
 
                         <div class="cta-box-body wow fadeInUp" data-wow-delay="0.6s">
                             <div class="cta-box-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-phone.svg') }}" alt="">
+                                    <img src="{{ $img('cta_phone_icon', 'icon-phone.svg') }}" alt="">
                                 </div>
                                 <div class="cta-box-item-content">
-                                    <p>Telefon Numarası</p>
-                                    <h3><a href="tel:02263520724">0226 352 07 24</a></h3>
+                                    <p>{{ $val('cta_phone_label') }}</p>
+                                    <h3><a href="{{ $tel($val('cta_phone_text')) }}">{{ $val('cta_phone_text') }}</a></h3>
                                 </div>
                             </div>
 
                             <div class="cta-box-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-mail.svg') }}" alt="">
+                                    <img src="{{ $img('cta_mail_icon', 'icon-mail.svg') }}" alt="">
                                 </div>
                                 <div class="cta-box-item-content">
-                                    <p>E-posta Adresi</p>
-                                    <h3><a href="mailto:info@yalovakamera.com">info@yalovakamera.com</a></h3>
+                                    <p>{{ $val('cta_mail_label') }}</p>
+                                    <h3><a href="mailto:{{ $val('cta_mail_text') }}">{{ $val('cta_mail_text') }}</a></h3>
                                 </div>
                             </div>
                         </div>
@@ -814,7 +842,7 @@
 
                 <div class="col-lg-6">
                     <div class="cta-box-image">
-                        <img src="{{ asset('theme/yalovakamera/images/cta-box-image.png') }}" alt="İletişim">
+                        <img src="{{ $img('cta_image', 'cta-box-image.png') }}" alt="İletişim">
                     </div>
                 </div>
             </div>
@@ -829,16 +857,16 @@
                 <div class="col-lg-6">
                     <div class="our-faqs-content">
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">Sık Sorulan Sorular</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Merak edilen</span> sorular ve cevaplar</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">Kamera ve alarm sistemleri, kurulum süreçleri, bakım hizmetleri ve teknik destek hakkında sık sorulan soruların cevaplarını burada bulabilirsiniz.</p>
+                            <h3 class="wow fadeInUp">{{ $val('faqs_heading') }}</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $val('faqs_subheading_span') }}</span> {{ $val('faqs_subheading_rest') }}</h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">{{ $val('faqs_paragraph') }}</p>
                         </div>
 
                         <div class="our-faqs-list wow fadeInUp" data-wow-delay="0.6s">
                             <ul>
-                                <li>Yüksek çözünürlüklü görüntü sistemleri</li>
-                                <li>Uzaktan izleme ve kontrol çözümleri</li>
-                                <li>Profesyonel kurulum ve teknik servis desteği</li>
+                                <li>{{ $val('faqs_list_item_1') }}</li>
+                                <li>{{ $val('faqs_list_item_2') }}</li>
+                                <li>{{ $val('faqs_list_item_3') }}</li>
                             </ul>
                         </div>
                     </div>
@@ -849,13 +877,13 @@
                         <div class="accordion-item wow fadeInUp">
                             <h2 class="accordion-header" id="heading1">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                                    Hangi tür kamera sistemleri sunuyorsunuz?
+                                    {{ $val('faq_q_1') }}
                                 </button>
                             </h2>
                             <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordion">
                                 <div class="accordion-body">
-                                    <p>İhtiyaca göre iç ve dış mekân güvenlik kameraları, kayıt cihazları, IP kamera sistemleri ve uzaktan izleme destekli çözümler sunuyoruz.</p>
-                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
+                                    <p>{{ $val('faq_a_1') }}</p>
+                                    <img src="{{ $img('faq_image', 'faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -863,13 +891,13 @@
                         <div class="accordion-item wow fadeInUp" data-wow-delay="0.2s">
                             <h2 class="accordion-header" id="heading2">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                    Kamera görüntülerine telefondan erişebilir miyim?
+                                    {{ $val('faq_q_2') }}
                                 </button>
                             </h2>
                             <div id="collapse2" class="accordion-collapse collapse show" aria-labelledby="heading2" data-bs-parent="#accordion">
                                 <div class="accordion-body">
-                                    <p>Evet. Kurulan sisteme göre cep telefonu, tablet veya bilgisayar üzerinden canlı izleme ve geçmiş kayıtları görüntüleme imkânı sunulmaktadır.</p>
-                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
+                                    <p>{{ $val('faq_a_2') }}</p>
+                                    <img src="{{ $img('faq_image', 'faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -877,13 +905,13 @@
                         <div class="accordion-item wow fadeInUp" data-wow-delay="0.4s">
                             <h2 class="accordion-header" id="heading3">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                                    Kurulum hizmeti veriyor musunuz?
+                                    {{ $val('faq_q_3') }}
                                 </button>
                             </h2>
                             <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordion">
                                 <div class="accordion-body">
-                                    <p>Evet. Satışını yaptığımız tüm sistemler için keşif, projelendirme, kurulum ve devreye alma hizmeti veriyoruz.</p>
-                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
+                                    <p>{{ $val('faq_a_3') }}</p>
+                                    <img src="{{ $img('faq_image', 'faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -891,13 +919,13 @@
                         <div class="accordion-item wow fadeInUp" data-wow-delay="0.6s">
                             <h2 class="accordion-header" id="heading4">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                    Bakım ve onarım servisi sağlıyor musunuz?
+                                    {{ $val('faq_q_4') }}
                                 </button>
                             </h2>
                             <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordion">
                                 <div class="accordion-body">
-                                    <p>Evet. Mevcut kamera ve alarm sistemleri için arıza tespiti, periyodik bakım, onarım ve sistem iyileştirme hizmetleri sunuyoruz.</p>
-                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
+                                    <p>{{ $val('faq_a_4') }}</p>
+                                    <img src="{{ $img('faq_image', 'faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
