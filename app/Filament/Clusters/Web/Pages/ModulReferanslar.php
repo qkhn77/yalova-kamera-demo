@@ -24,7 +24,7 @@ class ModulReferanslar extends BaseModulSectionEditor
         ];
     }
 
-    protected function getFormSchema(): array
+    protected function getEditorSchema(): array
     {
         return [
             Forms\Components\Placeholder::make('info')

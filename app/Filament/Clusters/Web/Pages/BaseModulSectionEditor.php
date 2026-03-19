@@ -30,7 +30,7 @@ abstract class BaseModulSectionEditor extends Page implements HasForms
 
     abstract protected function getDefaultData(): array;
 
-    abstract protected function getFormSchema(): array;
+    abstract protected function getEditorSchema(): array;
 
     public function mount(): void
     {
@@ -48,7 +48,7 @@ abstract class BaseModulSectionEditor extends Page implements HasForms
     {
         return $form
             ->statePath('data')
-            ->schema($this->getFormSchema())
+            ->schema($this->getEditorSchema())
             ->columns(1);
     }
 

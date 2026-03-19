@@ -37,7 +37,7 @@ class ModulMusteriYorumlari extends BaseModulSectionEditor
         ];
     }
 
-    protected function getFormSchema(): array
+    protected function getEditorSchema(): array
     {
         return [
             Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),

@@ -35,7 +35,7 @@ class ModulTeknikDestek extends BaseModulSectionEditor
         ];
     }
 
-    protected function getFormSchema(): array
+    protected function getEditorSchema(): array
     {
         return [
             Forms\Components\FileUpload::make('image_1')->label('Sol Görsel 1')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
