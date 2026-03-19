@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Web\Pages;
 
 use App\Filament\Clusters\Web;
+use App\Models\Setting;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -11,7 +12,6 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
-use Illuminate\Support\Facades\File;
 
 abstract class BaseModulSectionEditor extends Page implements HasForms
 {
@@ -26,38 +26,39 @@ abstract class BaseModulSectionEditor extends Page implements HasForms
 
     public ?array $data = [];
 
-    abstract protected static function getSectionFileName(): string;
+    abstract protected static function getModuleKey(): string;
+
+    abstract protected function getDefaultData(): array;
+
+    abstract protected function getFormSchema(): array;
 
     public function mount(): void
     {
-        $this->form->fill([
-            'content' => $this->readSectionContent(),
-        ]);
+        $defaults = $this->getDefaultData();
+        $state = [];
+
+        foreach ($defaults as $key => $defaultValue) {
+            $state[$key] = Setting::get($this->settingKey($key), $defaultValue);
+        }
+
+        $this->form->fill($state);
     }
 
     public function form(Form $form): Form
     {
         return $form
             ->statePath('data')
-            ->schema([
-                Forms\Components\Placeholder::make('info')
-                    ->label('Bilgi')
-                    ->content('Bu editör, ilgili front section dosyasını birebir düzenler. Yazı ve görselleri front sırasına göre peş peşe düzenleyebilirsiniz.'),
-                Forms\Components\Textarea::make('content')
-                    ->label('Blade İçeriği')
-                    ->rows(38)
-                    ->required()
-                    ->columnSpanFull(),
-            ])
+            ->schema($this->getFormSchema())
             ->columns(1);
     }
 
     public function save(): void
     {
         $state = $this->form->getState();
-        $content = (string) ($state['content'] ?? '');
 
-        File::put($this->getSectionFilePath(), $content);
+        foreach ($state as $key => $value) {
+            Setting::set($this->settingKey($key), $value ?? '', 'web_moduller');
+        }
 
         Notification::make()
             ->title('Modül içeriği kaydedildi.')
@@ -75,20 +76,9 @@ abstract class BaseModulSectionEditor extends Page implements HasForms
         ];
     }
 
-    protected function getSectionFilePath(): string
+    protected function settingKey(string $field): string
     {
-        return resource_path('views/front/sections/' . static::getSectionFileName());
-    }
-
-    protected function readSectionContent(): string
-    {
-        $file = $this->getSectionFilePath();
-
-        if (! File::exists($file)) {
-            return '';
-        }
-
-        return (string) File::get($file);
+        return 'modul.' . static::getModuleKey() . '.' . $field;
     }
 }
 

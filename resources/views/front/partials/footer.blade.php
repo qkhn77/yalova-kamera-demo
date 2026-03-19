@@ -106,12 +106,12 @@
                     <ul>
                         @forelse($footerBilgiSayfalari as $footerBilgi)
                             <li>
-                                <a href="{{ route('bilgi.show', $footerBilgi->slug) }}">
+                                <a href="{{ route('information.show', $footerBilgi->slug) }}">
                                     {{ $footerBilgi->title }}
                                 </a>
                             </li>
                         @empty
-                            <li><a href="{{ route('bilgi.index') }}">Bilgi Merkezi</a></li>
+                            <li><a href="{{ route('information.index') }}">Bilgi Merkezi</a></li>
                         @endforelse
                     </ul>
                 </div>
@@ -157,8 +157,8 @@
                         @endphp
                         <ul>
                             <li><a href="{{ route('contact') }}">Destek</a></li>
-                            <li><a href="{{ $privacyPage ? route('bilgi.show', $privacyPage->slug) : route('bilgi.index') }}">Gizlilik Politikası</a></li>
-                            <li><a href="{{ $termsPage ? route('bilgi.show', $termsPage->slug) : route('bilgi.index') }}">Kullanım Şartları</a></li>
+                            <li><a href="{{ $privacyPage ? route('information.show', $privacyPage->slug) : route('information.index') }}">Gizlilik Politikası</a></li>
+                            <li><a href="{{ $termsPage ? route('information.show', $termsPage->slug) : route('information.index') }}">Kullanım Şartları</a></li>
                         </ul>
                     </div>
                 </div>

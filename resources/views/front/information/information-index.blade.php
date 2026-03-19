@@ -33,7 +33,7 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="post-item wow fadeInUp">
                             <div class="post-featured-image">
-                                <a href="{{ route('bilgi.show', $sayfa->slug) }}" data-cursor-text="Oku">
+                                <a href="{{ route('information.show', $sayfa->slug) }}" data-cursor-text="Oku">
                                     <figure>
                                         <img src="{{ $imageUrl }}" alt="{{ $sayfa->title }}">
                                     </figure>
@@ -44,10 +44,10 @@
                                     @if($sayfa->published_at)
                                         <p>{{ $sayfa->published_at->format('d M, Y') }}</p>
                                     @endif
-                                    <h2><a href="{{ route('bilgi.show', $sayfa->slug) }}">{{ $sayfa->title }}</a></h2>
+                                    <h2><a href="{{ route('information.show', $sayfa->slug) }}">{{ $sayfa->title }}</a></h2>
                                 </div>
                                 <div class="post-item-btn">
-                                    <a href="{{ route('bilgi.show', $sayfa->slug) }}" class="readmore-btn">Devamını Oku</a>
+                                    <a href="{{ route('information.show', $sayfa->slug) }}" class="readmore-btn">Devamını Oku</a>
                                 </div>
                             </div>
                             @if($summary)

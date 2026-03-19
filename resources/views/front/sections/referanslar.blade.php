@@ -1,11 +1,14 @@
+@php
+    $s = fn (string $k, string $d = '') => \App\Models\Setting::get("modul.referanslar.$k", $d);
+@endphp
 <!-- Our Projects Start -->
 <div class="our-projects">
     <div class="container">
         <div class="row section-row align-items-center">
             <div class="col-lg-12">
                 <div class="section-title section-title-center">
-                    <h3 class="wow fadeInUp">Projeler</h3>
-                    <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>Örnek</span> uygulamalar</h2>
+                    <h3 class="wow fadeInUp">{{ $s('heading', 'Projeler') }}</h3>
+                    <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque"><span>{{ $s('sub_span', 'Örnek') }}</span> {{ $s('sub_text', 'uygulamalar') }}</h2>
                 </div>
             </div>
         </div>

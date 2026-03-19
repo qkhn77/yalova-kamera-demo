@@ -177,16 +177,16 @@ Route::get('/bilgi', function () {
         ->orderByDesc('published_at')
         ->get();
 
-    return view('front.pages.bilgi-index', compact('bilgiSayfalari'));
-})->name('bilgi.index');
+    return view('front.information.information-index', compact('bilgiSayfalari'));
+})->name('information.index');
 
 Route::get('/bilgi/{slug}', function ($slug) {
     $bilgiSayfa = BilgiSayfa::where('slug', $slug)
         ->where('is_active', true)
         ->firstOrFail();
 
-    return view('front.pages.bilgi-show', compact('bilgiSayfa'));
-})->name('bilgi.show');
+    return view('front.information.information-show', compact('bilgiSayfa'));
+})->name('information.show');
 
 // Google SEO: Dinamik sitemap ve robots.txt (Filament’ten eklenen içerik otomatik dahil)
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');

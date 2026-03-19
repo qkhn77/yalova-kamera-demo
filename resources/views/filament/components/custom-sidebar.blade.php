@@ -70,7 +70,6 @@
     $isBloglar = str_starts_with($currentPath, $adminPrefix.'/web/bloglar');
     $isWebAyarlar = str_starts_with($currentPath, $adminPrefix.'/web/web-ayarlar');
     $isWebModuller = str_starts_with($currentPath, $adminPrefix.'/web/web-moduller');
-    $isWebModullerUcuncuGrup = str_starts_with($currentPath, $adminPrefix.'/web/web-moduller/ucuncu-grup');
 
     $isAyarlar = str_starts_with($currentPath, $adminPrefix.'/ayarlar');
     $isKullaniciAyarlari = str_starts_with($currentPath, $adminPrefix.'/ayarlar/kullanici-ayarlari');
@@ -93,7 +92,6 @@
         bloglarOpen: @js($isBloglar),
         webAyarlarOpen: @js($isWebAyarlar),
         webModullerOpen: @js($isWebModuller),
-        webModullerUcuncuGrupOpen: @js($isWebModullerUcuncuGrup),
         ayarlarOpen: @js($isAyarlar),
         kullaniciAyarlariOpen: @js($isKullaniciAyarlari),
     }"
@@ -317,19 +315,13 @@
                 <span>Modüller</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
             <div x-show="webModullerOpen" x-collapse class="nav-group">
-                <a href="{{ WebModuller::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller') ? 'is-active' : '' }}"><span>Modül Ana Sayfası</span></a>
-                <button type="button" class="nav-item {{ $isWebModullerUcuncuGrup ? 'is-active' : '' }}" x-on:click="webModullerUcuncuGrupOpen = !webModullerUcuncuGrupOpen" :aria-expanded="webModullerUcuncuGrupOpen">
-                    <span>3. Grup</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                </button>
-                <div x-show="webModullerUcuncuGrupOpen" x-collapse class="nav-group">
-                    <a href="{{ ModulNedenBiz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/neden-biz') ? 'is-active' : '' }}"><span>Neden Biz</span></a>
-                    <a href="{{ ModulNelerYapiyoruz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/neler-yapiyoruz') ? 'is-active' : '' }}"><span>Neler Yapıyoruz</span></a>
-                    <a href="{{ ModulReferanslar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/referanslar') ? 'is-active' : '' }}"><span>Referanslar</span></a>
-                    <a href="{{ ModulRakamlarlaBiz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/rakamlarla-biz') ? 'is-active' : '' }}"><span>Rakamlarla Biz</span></a>
-                    <a href="{{ ModulTeknikDestek::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/teknik-destek') ? 'is-active' : '' }}"><span>Teknik Destek</span></a>
-                    <a href="{{ ModulMusteriYorumlari::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/musteri-yorumlari') ? 'is-active' : '' }}"><span>Müşteri Yorumları</span></a>
-                    <a href="{{ ModulFaqs::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/faqs') ? 'is-active' : '' }}"><span>SSS</span></a>
-                </div>
+                <a href="{{ ModulNedenBiz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/neden-biz') ? 'is-active' : '' }}"><span>Neden Biz</span></a>
+                <a href="{{ ModulNelerYapiyoruz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/neler-yapiyoruz') ? 'is-active' : '' }}"><span>Neler Yapıyoruz</span></a>
+                <a href="{{ ModulReferanslar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/referanslar') ? 'is-active' : '' }}"><span>Referanslar</span></a>
+                <a href="{{ ModulRakamlarlaBiz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/rakamlarla-biz') ? 'is-active' : '' }}"><span>Rakamlarla Biz</span></a>
+                <a href="{{ ModulTeknikDestek::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/teknik-destek') ? 'is-active' : '' }}"><span>Teknik Destek</span></a>
+                <a href="{{ ModulMusteriYorumlari::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/musteri-yorumlari') ? 'is-active' : '' }}"><span>Müşteri Yorumları</span></a>
+                <a href="{{ ModulFaqs::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/faqs') ? 'is-active' : '' }}"><span>SSS</span></a>
             </div>
             <button type="button" class="nav-item {{ $isServisler ? 'is-active' : '' }}" x-on:click="servislerOpen = !servislerOpen" :aria-expanded="servislerOpen">
                 <span>Servisler</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>

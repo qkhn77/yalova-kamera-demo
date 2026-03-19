@@ -114,7 +114,7 @@ class BilgiSayfalari extends Page implements HasForms, HasTable
                 Tables\Actions\ViewAction::make()
                     ->label('Görüntüle')
                     ->icon('heroicon-o-eye')
-                    ->url(fn (BilgiSayfa $record): string => route('bilgi.show', $record->slug), shouldOpenInNewTab: true),
+                    ->url(fn (BilgiSayfa $record): string => route('information.show', $record->slug), shouldOpenInNewTab: true),
                 Tables\Actions\EditAction::make()
                     ->label('Düzenle')
                     ->icon('heroicon-o-pencil-square')
