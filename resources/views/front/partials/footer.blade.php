@@ -8,7 +8,7 @@
                     @php
                         $footerLogo = \App\Models\Setting::get('footer_logo');
                         $footerLogoUrl = $footerLogo
-                            ? (str_starts_with($footerLogo, 'settings/') ? asset('storage/' . $footerLogo) : asset($footerLogo))
+                            ? (str_starts_with($footerLogo, 'settings/') ? asset('uploads/' . ltrim($footerLogo, '/')) : asset($footerLogo))
                             : asset('theme/yalovakamera/images/footer-logo.svg');
                     @endphp
                     <div class="footer-logo">

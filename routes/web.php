@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SitemapController;
 use App\Models\BilgiSayfa;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Page;
 use App\Models\Post;
@@ -198,10 +199,31 @@ Route::get('/storage/{path}', function (string $path) {
     }
 
     return response()->file($fullPath, [
-        'Content-Type' => $disk->mimeType($path) ?: 'application/octet-stream',
+        'Content-Type' => File::mimeType($fullPath) ?: 'application/octet-stream',
         'Cache-Control' => 'public, max-age=31536000, immutable',
     ]);
 })->where('path', '.*')->name('storage.serve');
+
+// /uploads/* dosyalarını sun (public disk URL'i)
+Route::get('/uploads/{path}', function (string $path) {
+    $path = str_replace(['..', '\\'], ['', '/'], $path);
+    $path = ltrim($path, '/');
+
+    $disk = Storage::disk('public');
+    if (! $disk->exists($path)) {
+        abort(404);
+    }
+
+    $fullPath = $disk->path($path);
+    if (! is_file($fullPath) || ! is_readable($fullPath)) {
+        abort(404);
+    }
+
+    return response()->file($fullPath, [
+        'Content-Type' => File::mimeType($fullPath) ?: 'application/octet-stream',
+        'Cache-Control' => 'public, max-age=31536000, immutable',
+    ]);
+})->where('path', '.*')->name('uploads.serve');
 
 /*
 | SSH/terminal yoksa cache temizlemek için tarayıcıdan bu linki açın:

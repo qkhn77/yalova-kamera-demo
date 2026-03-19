@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
 
             // storage URL düzelt
             config([
-                'filesystems.disks.public.url' => 'https://' . $host . '/storage'
+                'filesystems.disks.public.url' => 'https://' . $host . '/uploads'
             ]);
 
             try {

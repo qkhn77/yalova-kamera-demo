@@ -1,5 +1,7 @@
 @php
-    $img = fn ($path) => $path ? (str_starts_with(ltrim($path, '/'), 'storage/') ? asset(ltrim($path, '/')) : asset('storage/' . ltrim($path, '/'))) : null;
+    $img = fn ($path) => $path
+        ? asset('uploads/' . ltrim(str_replace('\\', '/', $path), '/'))
+        : null;
 @endphp
 @extends('front.layouts.app')
 

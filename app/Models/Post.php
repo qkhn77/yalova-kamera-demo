@@ -56,7 +56,7 @@ class Post extends Model
         if (! str_starts_with($path, 'posts/')) {
             $path = 'posts/'.$path;
         }
-        return asset('storage/'.$path);
+        return asset('uploads/'.$path);
     }
 
     /**
@@ -70,7 +70,7 @@ class Post extends Model
         $path = str_replace('\\', '/', (string) $this->image);
         $thumbPath = app(ThumbnailService::class)->getThumbPath('posts', $path);
         if ($thumbPath) {
-            return asset('storage/'.$thumbPath);
+            return asset('uploads/'.ltrim($thumbPath, '/'));
         }
         return $this->image_url;
     }
@@ -88,7 +88,7 @@ class Post extends Model
         if (! str_starts_with($path, 'posts/')) {
             $path = 'posts/'.$path;
         }
-        return asset('storage/'.$path);
+        return asset('uploads/'.$path);
     }
 
     protected static function booted(): void

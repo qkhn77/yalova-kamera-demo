@@ -49,7 +49,7 @@ class Service extends Model
             $path = 'services/' . $path;
         }
 
-        return asset('storage/' . $path);
+        return asset('uploads/'.$path);
     }
 
     /**
@@ -69,7 +69,7 @@ class Service extends Model
                 $path = 'services/' . $path;
             }
 
-            return asset('storage/' . $path);
+            return asset('uploads/'.$path);
         }
 
         return asset('theme/yalovakamera/images/' . $path);
@@ -88,7 +88,7 @@ class Service extends Model
         $thumbPath = app(ThumbnailService::class)->getThumbPath('services', $path);
 
         if ($thumbPath) {
-            return asset('storage/' . ltrim($thumbPath, '/'));
+            return asset('uploads/'.ltrim($thumbPath, '/'));
         }
 
         return $this->image_url;
