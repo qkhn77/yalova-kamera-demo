@@ -1,10 +1,10 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# /storage/* isteğini Laravel'e gönder.
-# Çünkü document root proje kökü olunca "storage/" dizini fiziksel olarak var ve
-# standart !-d !-f kuralları bu istekleri yakalamadan 404'e düşürebiliyor.
-RewriteRule ^storage/(.*)$ index.php [L]
+# /storage/* isteklerini symlink olmadan storage/app/public/* altına yönlendir.
+# document root proje kökü olduğunda admin FileUpload önizlemeleri için gereklidir.
+RewriteCond %{REQUEST_URI} !^/storage/app/public/ [NC]
+RewriteRule ^storage/(.*)$ storage/app/public/$1 [L]
 
 # Laravel front controller (redirect YOK)
 RewriteCond %{REQUEST_FILENAME} !-d
