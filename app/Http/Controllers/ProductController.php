@@ -6,11 +6,21 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class ProductController extends Controller
 {
     public function index(Request $request): View
     {
+        if (! Schema::hasTable('products') || ! Schema::hasTable('product_categories')) {
+            return view('front.products.index', [
+                'products' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12),
+                'featuredProducts' => collect(),
+                'categories' => collect(),
+                'brands' => collect(),
+            ]);
+        }
+
         $query = Product::query()
             ->with('category')
             ->active()
@@ -72,6 +82,10 @@ class ProductController extends Controller
 
     public function category(string $slug, Request $request): View
     {
+        if (! Schema::hasTable('products') || ! Schema::hasTable('product_categories')) {
+            abort(404);
+        }
+
         $category = ProductCategory::query()
             ->active()
             ->where('slug', $slug)
@@ -119,6 +133,10 @@ class ProductController extends Controller
 
     public function show(string $slug): View
     {
+        if (! Schema::hasTable('products') || ! Schema::hasTable('product_categories')) {
+            abort(404);
+        }
+
         $product = Product::query()
             ->with('category')
             ->active()
