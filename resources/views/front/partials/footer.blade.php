@@ -94,12 +94,25 @@
 
             <div class="col-lg-2 col-md-6">
                 <div class="footer-links">
-                    <h3>Servisler</h3>
+                    <h3>Bilgi Sayfaları</h3>
+                    @php
+                        $footerBilgiSayfalari = \App\Models\BilgiSayfa::query()
+                            ->where('is_active', true)
+                            ->orderBy('sort_order')
+                            ->orderBy('title')
+                            ->limit(8)
+                            ->get();
+                    @endphp
                     <ul>
-                        <li><a href="{{ route('services.index') }}">IP Kamera Sistemleri</a></li>
-                        <li><a href="{{ route('services.index') }}">Alarm Sistemleri</a></li>
-                        <li><a href="{{ route('services.index') }}">Montaj & Kurulum</a></li>
-                        <li><a href="{{ route('services.index') }}">Teknik Servis</a></li>
+                        @forelse($footerBilgiSayfalari as $footerBilgi)
+                            <li>
+                                <a href="{{ route('bilgi.show', $footerBilgi->slug) }}">
+                                    {{ $footerBilgi->title }}
+                                </a>
+                            </li>
+                        @empty
+                            <li><a href="{{ route('bilgi.index') }}">Bilgi Merkezi</a></li>
+                        @endforelse
                     </ul>
                 </div>
             </div>
@@ -132,10 +145,20 @@
 
                 <div class="col-md-6">
                     <div class="footer-privacy-policy">
+                        @php
+                            $privacyPage = \App\Models\BilgiSayfa::query()
+                                ->where('is_active', true)
+                                ->where('slug', 'gizlilik-politikasi')
+                                ->first();
+                            $termsPage = \App\Models\BilgiSayfa::query()
+                                ->where('is_active', true)
+                                ->whereIn('slug', ['kullanim-sartlari', 'kullanim-kosullari'])
+                                ->first();
+                        @endphp
                         <ul>
                             <li><a href="{{ route('contact') }}">Destek</a></li>
-                            <li><a href="#">Gizlilik Politikası</a></li>
-                            <li><a href="#">Kullanım Şartları</a></li>
+                            <li><a href="{{ $privacyPage ? route('bilgi.show', $privacyPage->slug) : route('bilgi.index') }}">Gizlilik Politikası</a></li>
+                            <li><a href="{{ $termsPage ? route('bilgi.show', $termsPage->slug) : route('bilgi.index') }}">Kullanım Şartları</a></li>
                         </ul>
                     </div>
                 </div>

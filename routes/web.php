@@ -170,6 +170,16 @@ Route::get('/sayfa/{slug}', function ($slug) {
 })->name('page.show');
 
 // Bilgi sayfaları (Filament Bilgi Sayfalarından eklenenler)
+Route::get('/bilgi', function () {
+    $bilgiSayfalari = BilgiSayfa::query()
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->orderByDesc('published_at')
+        ->get();
+
+    return view('front.pages.bilgi-index', compact('bilgiSayfalari'));
+})->name('bilgi.index');
+
 Route::get('/bilgi/{slug}', function ($slug) {
     $bilgiSayfa = BilgiSayfa::where('slug', $slug)
         ->where('is_active', true)

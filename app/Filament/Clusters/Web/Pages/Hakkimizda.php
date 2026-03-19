@@ -61,15 +61,6 @@ class Hakkimizda extends Page implements HasForms
                     ->description('Hakkımızda bölüm başlıkları ve görseller')
                     ->icon('heroicon-o-information-circle')
                     ->schema([
-                        TextInput::make('about_heading')->label('Bölüm Başlığı')->maxLength(255),
-                        TextInput::make('about_subheading_span')->label('Alt Başlık (Span)')->maxLength(255),
-                        TextInput::make('about_subheading_rest')->label('Alt Başlık (Devamı)')->maxLength(255),
-                        Textarea::make('about_paragraph')->label('Açıklama')->rows(4),
-                        TextInput::make('about_experience_heading')->label('Alt Kart Başlığı')->maxLength(255),
-                        TextInput::make('about_contact_prompt')->label('İletişim Kutusu Üst Metni')->maxLength(255),
-                        TextInput::make('about_phone_text')->label('Telefon Metni')->maxLength(50),
-                        TextInput::make('about_contact_button_text')->label('Buton Metni')->maxLength(255),
-
                         FileUpload::make('about_img_1')
                             ->label('Hakkımızda Görsel 1')
                             ->image()
@@ -88,6 +79,11 @@ class Hakkimizda extends Page implements HasForms
                             ->disk('public')
                             ->directory('about')
                             ->visibility('public'),
+                        TextInput::make('about_heading')->label('Bölüm Başlığı')->maxLength(255),
+                        TextInput::make('about_subheading_span')->label('Alt Başlık (Span)')->maxLength(255),
+                        TextInput::make('about_subheading_rest')->label('Alt Başlık (Devamı)')->maxLength(255),
+                        Textarea::make('about_paragraph')->label('Açıklama')->rows(4),
+
                         FileUpload::make('about_experience_image')
                             ->label('Hakkımızda Experience Görseli')
                             ->image()
@@ -100,12 +96,17 @@ class Hakkimizda extends Page implements HasForms
                             ->disk('public')
                             ->directory('about')
                             ->visibility('public'),
+                        TextInput::make('about_experience_heading')->label('Alt Kart Başlığı')->maxLength(255),
+
                         FileUpload::make('about_icon_contact')
                             ->label('Contact İkon')
                             ->image()
                             ->disk('public')
                             ->directory('about')
                             ->visibility('public'),
+                        TextInput::make('about_contact_prompt')->label('İletişim Kutusu Üst Metni')->maxLength(255),
+                        TextInput::make('about_phone_text')->label('Telefon Metni')->maxLength(50),
+                        TextInput::make('about_contact_button_text')->label('Buton Metni')->maxLength(255),
                     ])
                     ->columns(1),
 
@@ -153,12 +154,6 @@ class Hakkimizda extends Page implements HasForms
                         TextInput::make('why_choose_heading')->label('Bölüm Başlığı')->maxLength(255),
                         TextInput::make('why_choose_subheading_span')->label('Alt Başlık (Span)')->maxLength(255),
                         TextInput::make('why_choose_subheading_rest')->label('Alt Başlık (Devamı)')->maxLength(255),
-                        FileUpload::make('why_choose_image')
-                            ->label('Neden Görseli')
-                            ->image()
-                            ->disk('public')
-                            ->directory('about')
-                            ->visibility('public'),
 
                         FileUpload::make('why_choose_icon_1')->label('İkon 1')->image()->disk('public')->directory('about')->visibility('public'),
                         TextInput::make('why_choose_item_1_title')->label('Başlık 1')->maxLength(255),
@@ -175,6 +170,12 @@ class Hakkimizda extends Page implements HasForms
                         FileUpload::make('why_choose_icon_4')->label('İkon 4')->image()->disk('public')->directory('about')->visibility('public'),
                         TextInput::make('why_choose_item_4_title')->label('Başlık 4')->maxLength(255),
                         Textarea::make('why_choose_item_4_text')->label('Metin 4')->rows(3),
+                        FileUpload::make('why_choose_image')
+                            ->label('Neden Görseli')
+                            ->image()
+                            ->disk('public')
+                            ->directory('about')
+                            ->visibility('public'),
                     ])
                     ->columns(1),
 
@@ -183,18 +184,19 @@ class Hakkimizda extends Page implements HasForms
                     ->icon('heroicon-o-clipboard-document-check')
                     ->schema([
                         FileUpload::make('commitment_image_1')->label('Taahhüt Görsel 1')->image()->disk('public')->directory('about')->visibility('public'),
+
+                        TextInput::make('satisfy_client_text')->label('Memnun Müşteri Metni')->maxLength(255),
                         FileUpload::make('satisfy_client_img_1')->label('Memnun Müşteri Görsel 1')->image()->disk('public')->directory('about')->visibility('public'),
                         FileUpload::make('satisfy_client_img_2')->label('Memnun Müşteri Görsel 2')->image()->disk('public')->directory('about')->visibility('public'),
                         FileUpload::make('satisfy_client_img_3')->label('Memnun Müşteri Görsel 3')->image()->disk('public')->directory('about')->visibility('public'),
                         FileUpload::make('satisfy_client_img_4')->label('Memnun Müşteri Görsel 4')->image()->disk('public')->directory('about')->visibility('public'),
                         FileUpload::make('satisfy_client_img_5')->label('Memnun Müşteri Görsel 5')->image()->disk('public')->directory('about')->visibility('public'),
-                        FileUpload::make('commitment_image_2')->label('Taahhüt Görsel 2')->image()->disk('public')->directory('about')->visibility('public'),
 
+                        FileUpload::make('commitment_image_2')->label('Taahhüt Görsel 2')->image()->disk('public')->directory('about')->visibility('public'),
                         TextInput::make('commitment_heading')->label('Bölüm Başlığı')->maxLength(255),
                         TextInput::make('commitment_subheading_span')->label('Alt Başlık (Span)')->maxLength(255),
                         TextInput::make('commitment_subheading_rest')->label('Alt Başlık (Devamı)')->maxLength(255),
                         Textarea::make('commitment_paragraph')->label('Açıklama')->rows(4),
-                        TextInput::make('satisfy_client_text')->label('Memnun Müşteri Metni')->maxLength(255),
                         TextInput::make('commitment_counter_item_1')->label('Sayaç 1')->maxLength(255),
                         TextInput::make('commitment_counter_item_2')->label('Sayaç 2')->maxLength(255),
                         TextInput::make('commitment_counter_item_3')->label('Sayaç 3')->maxLength(255),
@@ -368,8 +370,6 @@ class Hakkimizda extends Page implements HasForms
                         TextInput::make('faqs_list_item_2')->label('Liste 2')->maxLength(255),
                         TextInput::make('faqs_list_item_3')->label('Liste 3')->maxLength(255),
 
-                        FileUpload::make('faq_image')->label('Accordion Görsel')->image()->disk('public')->directory('about')->visibility('public'),
-
                         TextInput::make('faq_q_1')->label('Soru 1')->maxLength(255),
                         Textarea::make('faq_a_1')->label('Cevap 1')->rows(3),
                         TextInput::make('faq_q_2')->label('Soru 2')->maxLength(255),
@@ -378,6 +378,7 @@ class Hakkimizda extends Page implements HasForms
                         Textarea::make('faq_a_3')->label('Cevap 3')->rows(3),
                         TextInput::make('faq_q_4')->label('Soru 4')->maxLength(255),
                         Textarea::make('faq_a_4')->label('Cevap 4')->rows(3),
+                        FileUpload::make('faq_image')->label('Accordion Görsel')->image()->disk('public')->directory('about')->visibility('public'),
                     ])
                     ->columns(1),
             ]);
