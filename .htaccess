@@ -1,10 +1,10 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# /storage/* isteklerini symlink olmadan storage/app/public/* altına yönlendir.
+# /storage/* ve /uploads/* isteklerini symlink olmadan storage/app/public/* altına yönlendir.
 # document root proje kökü olduğunda admin FileUpload önizlemeleri için gereklidir.
 RewriteCond %{REQUEST_URI} !^/storage/app/public/ [NC]
-RewriteRule ^storage/(.*)$ storage/app/public/$1 [L]
+RewriteRule ^(?:storage|uploads)/(.*)$ storage/app/public/$1 [L]
 
 # Laravel front controller (redirect YOK)
 RewriteCond %{REQUEST_FILENAME} !-d
