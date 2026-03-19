@@ -23,40 +23,6 @@
         </div>
     </div>
 
-  <!-- Meta -->
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-	<meta name="description" content="Yalova Kamera Sistemleri; Yalova ilinde güvenlik kamerası, alarm sistemleri, satış, kurulum, projelendirme, bakım ve onarım hizmetleri sunmaktadır.">
-	<meta name="keywords" content="Yalova kamera sistemleri, Yalova güvenlik kamerası, alarm sistemleri Yalova, kamera kurulumu Yalova, güvenlik sistemleri Yalova">
-	<meta name="author" content="Yalova Kamera Sistemleri">
-	<!-- Page Title -->
-    <title>Hakkımızda - Yalova Kamera Sistemleri</title>
-	<!-- Favicon Icon -->
-	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('theme/yalovakamera/images/favicon.png') }}">
-	<!-- Google Fonts Css-->
-	<link rel="preconnect" href="https://fonts.googleapis.com/">
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
-	<!-- Bootstrap Css -->
-	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<!-- SlickNav Css -->
-	<link href="css/slicknav.min.css" rel="stylesheet">
-	<!-- Swiper Css -->
-	<link rel="stylesheet" href="css/swiper-bundle.min.css">
-	<!-- Font Awesome Icon Css-->
-	<link href="css/all.min.css" rel="stylesheet" media="screen">
-	<!-- Animated Css -->
-	<link href="css/animate.css" rel="stylesheet">
-    <!-- Magnific Popup Core Css File -->
-	<link rel="stylesheet" href="css/magnific-popup.css">
-	<!-- Mouse Cursor Css File -->
-	<link rel="stylesheet" href="css/mousecursor.css">
-	<!-- Main Custom Css -->
-	<link href="css/custom.css" rel="stylesheet" media="screen">
-</head>
-<body>
-
     <!-- Preloader Start -->
 	<div class="preloader">
 		<div class="loading-container">
