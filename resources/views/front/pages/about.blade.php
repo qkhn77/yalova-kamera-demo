@@ -1,5 +1,151 @@
 @extends('front.layouts.app')
 
+@section('title', 'Hakkımızda | Yalova Kamera Sistemleri')
+@section('meta_description', 'Yalova Kamera Sistemleri olarak kamera ve alarm sistemleri satış, kurulum, bakım ve teknik servis hizmetleri sunuyoruz.')
+@section('meta_keywords', 'yalova kamera sistemleri, güvenlik kamerası yalova, alarm sistemleri yalova, kamera kurulumu')
+
+@section('og_type', 'website')
+@section('og_title', 'Hakkımızda | Yalova Kamera Sistemleri')
+@section('og_description', 'Yalova Kamera Sistemleri; güvenlik kamerası ve alarm sistemlerinde keşif, kurulum ve teknik servis hizmeti sunar.')
+
+@php
+    \App\Helpers\BreadcrumbHelper::clear();
+    \App\Helpers\BreadcrumbHelper::add('Anasayfa', route('home'));
+    \App\Helpers\BreadcrumbHelper::add('Hakkımızda');
+@endphp
+
+@section('content')
+    <div class="page-header parallaxie">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="page-header-box">
+                        <h1 class="wow fadeInUp" data-cursor="-opaque">Hakkımızda</h1>
+                        {!! \App\Helpers\BreadcrumbHelper::render() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-us page-about-us">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-us-images">
+                        <div class="about-img-1">
+                            <figure class="image-anime reveal">
+                                <img src="{{ asset('theme/yalovakamera/images/about-img-1.jpg') }}" alt="Yalova Kamera Sistemleri">
+                            </figure>
+                            <div class="company-experience-circle">
+                                <img src="{{ asset('theme/yalovakamera/images/experience-circle.svg') }}" alt="">
+                            </div>
+                        </div>
+
+                        <div class="about-img-2">
+                            <figure class="image-anime reveal">
+                                <img src="{{ asset('theme/yalovakamera/images/about-img-2.jpg') }}" alt="Güvenlik Kamera Sistemleri">
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="about-us-content">
+                        <div class="section-title">
+                            <h3 class="wow fadeInUp">Hakkımızda</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">
+                                <span>Yalova'da güvenliğinizi</span> profesyonel çözümlerle koruyoruz
+                            </h2>
+                            <p class="wow fadeInUp" data-wow-delay="0.4s">
+                                Yalova Kamera Sistemleri olarak Yalova'da kamera ve alarm sistemleri satış, kurulum, projelendirme, bakım ve onarım hizmetleri sunuyoruz.
+                                Ev, iş yeri, ofis, mağaza, apartman ve sanayi alanları için ihtiyaca özel güvenlik çözümleri geliştiriyoruz.
+                            </p>
+                        </div>
+
+                        <div class="about-experience-box wow fadeInUp" data-wow-delay="0.6s">
+                            <div class="about-experience-image">
+                                <figure class="image-anime reveal">
+                                    <img src="{{ asset('theme/yalovakamera/images/about-experience-image.jpg') }}" alt="Tecrübeli Güvenlik Hizmetleri">
+                                </figure>
+                            </div>
+
+                            <div class="about-experience-item">
+                                <div class="icon-box">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-experience.svg') }}" alt="">
+                                </div>
+                                <div class="about-experience-content">
+                                    <h3>Müşteri memnuniyeti odaklı, garantili ve profesyonel hizmet sunuyoruz</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-us-body wow fadeInUp" data-wow-delay="0.8s">
+                            <div class="about-contact-box">
+                                <div class="icon-box">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-contact.svg') }}" alt="">
+                                </div>
+                                <div class="about-contact-box-content">
+                                    <p>Bize hemen ulaşın</p>
+                                    <h3><a href="tel:+902263520724">0 (226) 352 07 24</a></h3>
+                                </div>
+                            </div>
+
+                            <div class="about-us-btn">
+                                <a href="{{ route('contact') }}" class="btn-default">İletişime Geçin</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="our-mission-vision dark-section">
+        <div class="container-fluid">
+            <div class="row no-gutters">
+                <div class="col-lg-6">
+                    <div class="mission-vision-image">
+                        <figure class="image-anime">
+                            <img src="{{ asset('theme/yalovakamera/images/mission-vision-img.jpg') }}" alt="Misyon ve Vizyon">
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="mission-vision-content">
+                        <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.2s">
+                            <div class="icon-box">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-mission.svg') }}" alt="">
+                            </div>
+                            <div class="mission-vision-item-content">
+                                <h3>Misyonumuz</h3>
+                                <p>
+                                    Müşterilerimize ihtiyaçlarına en uygun güvenlik sistemlerini sunarak yaşam ve çalışma alanlarını daha güvenli hale getirmek;
+                                    kaliteli ürün, doğru projelendirme ve güvenilir teknik servis ile sürdürülebilir memnuniyet sağlamaktır.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.4s">
+                            <div class="icon-box">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-vision.svg') }}" alt="">
+                            </div>
+                            <div class="mission-vision-item-content">
+                                <h3>Vizyonumuz</h3>
+                                <p>
+                                    Yalova'da güvenlik teknolojileri alanında öncü, yenilikçi ve güvenilir bir marka olarak bireysel ve kurumsal müşterilerin ilk tercihi olmak.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@extends('front.layouts.app')
+
 @section('title','Hakkımızda | Yalova Kamera Sistemleri')
 @section('meta_description','Yalova kamera kurulumu konusunda uzman ekibimiz. Güvenlik kamerası ve alarm sistemi kurulumu, servis ve bakım hizmetlerinde yılların deneyimi.')
 @section('meta_keywords','yalova kamera kurulumu, yalova güvenlik sistemi, yalova kamera fiyatları, yalova alarm sistemi')
