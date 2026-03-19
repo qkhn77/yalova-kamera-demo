@@ -30,7 +30,7 @@ class Hakkimizda extends Page implements HasForms
 
     protected static ?string $slug = 'sayfalar/hakkimizda';
 
-    protected static string $view = 'filament.clusters.web.pages.hakkimizda';
+    protected static string $view = 'filament.clusters.web.pages.hakkimizda-form';
 
     public function mount(): void
     {
