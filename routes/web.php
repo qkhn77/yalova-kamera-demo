@@ -190,7 +190,18 @@ Route::get('/storage/{path}', function (string $path) {
 
     $disk = Storage::disk('public');
     if (! $disk->exists($path)) {
-        abort(404);
+        // Linux case-sensitive: DB'deki isim farklı case ile kaydedilmiş olabilir.
+        $dir = trim(dirname($path), './\\');
+        $dir = $dir === '' ? null : $dir;
+        $base = basename($path);
+        $files = $disk->files($dir);
+        $matched = collect($files)->first(
+            fn (string $f) => strcasecmp(basename($f), $base) === 0
+        );
+        if (! $matched) {
+            abort(404);
+        }
+        $path = $matched;
     }
 
     $fullPath = $disk->path($path);
@@ -211,7 +222,18 @@ Route::get('/uploads/{path}', function (string $path) {
 
     $disk = Storage::disk('public');
     if (! $disk->exists($path)) {
-        abort(404);
+        // Linux case-sensitive: DB'deki isim farklı case ile kaydedilmiş olabilir.
+        $dir = trim(dirname($path), './\\');
+        $dir = $dir === '' ? null : $dir;
+        $base = basename($path);
+        $files = $disk->files($dir);
+        $matched = collect($files)->first(
+            fn (string $f) => strcasecmp(basename($f), $base) === 0
+        );
+        if (! $matched) {
+            abort(404);
+        }
+        $path = $matched;
     }
 
     $fullPath = $disk->path($path);
