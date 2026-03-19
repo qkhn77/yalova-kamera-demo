@@ -1,151 +1,5 @@
 @extends('front.layouts.app')
 
-@section('title', 'Hakkımızda | Yalova Kamera Sistemleri')
-@section('meta_description', 'Yalova Kamera Sistemleri olarak kamera ve alarm sistemleri satış, kurulum, bakım ve teknik servis hizmetleri sunuyoruz.')
-@section('meta_keywords', 'yalova kamera sistemleri, güvenlik kamerası yalova, alarm sistemleri yalova, kamera kurulumu')
-
-@section('og_type', 'website')
-@section('og_title', 'Hakkımızda | Yalova Kamera Sistemleri')
-@section('og_description', 'Yalova Kamera Sistemleri; güvenlik kamerası ve alarm sistemlerinde keşif, kurulum ve teknik servis hizmeti sunar.')
-
-@php
-    \App\Helpers\BreadcrumbHelper::clear();
-    \App\Helpers\BreadcrumbHelper::add('Anasayfa', route('home'));
-    \App\Helpers\BreadcrumbHelper::add('Hakkımızda');
-@endphp
-
-@section('content')
-    <div class="page-header parallaxie">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-12">
-                    <div class="page-header-box">
-                        <h1 class="wow fadeInUp" data-cursor="-opaque">Hakkımızda</h1>
-                        {!! \App\Helpers\BreadcrumbHelper::render() !!}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="about-us page-about-us">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="about-us-images">
-                        <div class="about-img-1">
-                            <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/about-img-1.jpg') }}" alt="Yalova Kamera Sistemleri">
-                            </figure>
-                            <div class="company-experience-circle">
-                                <img src="{{ asset('theme/yalovakamera/images/experience-circle.svg') }}" alt="">
-                            </div>
-                        </div>
-
-                        <div class="about-img-2">
-                            <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/about-img-2.jpg') }}" alt="Güvenlik Kamera Sistemleri">
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="about-us-content">
-                        <div class="section-title">
-                            <h3 class="wow fadeInUp">Hakkımızda</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">
-                                <span>Yalova'da güvenliğinizi</span> profesyonel çözümlerle koruyoruz
-                            </h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.4s">
-                                Yalova Kamera Sistemleri olarak Yalova'da kamera ve alarm sistemleri satış, kurulum, projelendirme, bakım ve onarım hizmetleri sunuyoruz.
-                                Ev, iş yeri, ofis, mağaza, apartman ve sanayi alanları için ihtiyaca özel güvenlik çözümleri geliştiriyoruz.
-                            </p>
-                        </div>
-
-                        <div class="about-experience-box wow fadeInUp" data-wow-delay="0.6s">
-                            <div class="about-experience-image">
-                                <figure class="image-anime reveal">
-                                    <img src="{{ asset('theme/yalovakamera/images/about-experience-image.jpg') }}" alt="Tecrübeli Güvenlik Hizmetleri">
-                                </figure>
-                            </div>
-
-                            <div class="about-experience-item">
-                                <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-experience.svg') }}" alt="">
-                                </div>
-                                <div class="about-experience-content">
-                                    <h3>Müşteri memnuniyeti odaklı, garantili ve profesyonel hizmet sunuyoruz</h3>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="about-us-body wow fadeInUp" data-wow-delay="0.8s">
-                            <div class="about-contact-box">
-                                <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-contact.svg') }}" alt="">
-                                </div>
-                                <div class="about-contact-box-content">
-                                    <p>Bize hemen ulaşın</p>
-                                    <h3><a href="tel:+902263520724">0 (226) 352 07 24</a></h3>
-                                </div>
-                            </div>
-
-                            <div class="about-us-btn">
-                                <a href="{{ route('contact') }}" class="btn-default">İletişime Geçin</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="our-mission-vision dark-section">
-        <div class="container-fluid">
-            <div class="row no-gutters">
-                <div class="col-lg-6">
-                    <div class="mission-vision-image">
-                        <figure class="image-anime">
-                            <img src="{{ asset('theme/yalovakamera/images/mission-vision-img.jpg') }}" alt="Misyon ve Vizyon">
-                        </figure>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="mission-vision-content">
-                        <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.2s">
-                            <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-mission.svg') }}" alt="">
-                            </div>
-                            <div class="mission-vision-item-content">
-                                <h3>Misyonumuz</h3>
-                                <p>
-                                    Müşterilerimize ihtiyaçlarına en uygun güvenlik sistemlerini sunarak yaşam ve çalışma alanlarını daha güvenli hale getirmek;
-                                    kaliteli ürün, doğru projelendirme ve güvenilir teknik servis ile sürdürülebilir memnuniyet sağlamaktır.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.4s">
-                            <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-vision.svg') }}" alt="">
-                            </div>
-                            <div class="mission-vision-item-content">
-                                <h3>Vizyonumuz</h3>
-                                <p>
-                                    Yalova'da güvenlik teknolojileri alanında öncü, yenilikçi ve güvenilir bir marka olarak bireysel ve kurumsal müşterilerin ilk tercihi olmak.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-@extends('front.layouts.app')
-
 @section('title','Hakkımızda | Yalova Kamera Sistemleri')
 @section('meta_description','Yalova kamera kurulumu konusunda uzman ekibimiz. Güvenlik kamerası ve alarm sistemi kurulumu, servis ve bakım hizmetlerinde yılların deneyimi.')
 @section('meta_keywords','yalova kamera kurulumu, yalova güvenlik sistemi, yalova kamera fiyatları, yalova alarm sistemi')
@@ -157,11 +11,19 @@
 @endphp
 
 @section('content')
-    <!DOCTYPE html>
-<html lang="tr">
+    <div class="page-header">
+        <div class="container">
 
-<head>
-	<!-- Meta -->
+
+            <div class="page-header-box">
+                <h1 class="wow fadeInUp">Hakımızda</h1>
+             {!! \App\Helpers\BreadcrumbHelper::render() !!}
+            </div>
+
+        </div>
+    </div>
+
+  <!-- Meta -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
@@ -171,7 +33,7 @@
 	<!-- Page Title -->
     <title>Hakkımızda - Yalova Kamera Sistemleri</title>
 	<!-- Favicon Icon -->
-	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('theme/yalovakamera/images/favicon.png') }}">
 	<!-- Google Fonts Css-->
 	<link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -199,71 +61,14 @@
 	<div class="preloader">
 		<div class="loading-container">
 			<div class="loading"></div>
-			<div id="loading-icon"><img src="images/loader.svg" alt=""></div>
+			<div id="loading-icon"><img src="{{ asset('theme/yalovakamera/images/loader.svg') }}" alt=""></div>
 		</div>
 	</div>
 	<!-- Preloader End -->
 
-    <!-- Header Start -->
-	<header class="main-header">
-		<div class="header-sticky">
-			<nav class="navbar navbar-expand-lg">
-				<div class="container">
-					<!-- Logo Start -->
-					<a class="navbar-brand" href="index.html">
-						<img src="images/logo.svg" alt="Yalova Kamera Sistemleri Logo">
-					</a>
-					<!-- Logo End -->
-
-					<!-- Main Menu Start -->
-					<div class="collapse navbar-collapse main-menu">
-                        <div class="nav-menu-wrapper">
-                            <ul class="navbar-nav mr-auto" id="menu">
-                                <li class="nav-item"><a class="nav-link" href="index.html">Ana Sayfa</a></li>
-                                <li class="nav-item"><a class="nav-link" href="about.html">Hakkımızda</a></li>
-                                <li class="nav-item"><a class="nav-link" href="services.html">Hizmetlerimiz</a></li>
-                                <li class="nav-item"><a class="nav-link" href="projects.html">Projeler</a></li>
-                                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                                <li class="nav-item"><a class="nav-link" href="contact.html">İletişim</a></li>                         
-                            </ul>
-                        </div>
-                        
-                        <!-- Header Btn Start -->
-                        <div class="header-btn">
-                            <a href="contact.html" class="btn-default">Teklif Al</a>
-                        </div>
-                        <!-- Header Btn End -->
-					</div>
-					<!-- Main Menu End -->
-					<div class="navbar-toggle"></div>
-				</div>
-			</nav>
-			<div class="responsive-menu"></div>
-		</div>
-	</header>
 	<!-- Header End -->
 
-    <!-- Page Header Start -->
-	<div class="page-header parallaxie">
-		<div class="container">
-			<div class="row align-items-center">
-				<div class="col-lg-12">
-					<!-- Page Header Box Start -->
-					<div class="page-header-box">
-						<h1 class="wow fadeInUp" data-cursor="-opaque">Hakkımızda</h1>
-						<nav class="wow fadeInUp" data-wow-delay="0.2s">
-                            <ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Hakkımızda</li>
-							</ol>
-						</nav>
-					</div>
-					<!-- Page Header Box End -->
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Page Header End -->
+
 
     <!-- About Us Section Start -->
     <div class="about-us page-about-us">
@@ -274,17 +79,17 @@
                     <div class="about-us-images">
                         <div class="about-img-1">
                             <figure class="image-anime reveal">
-                                <img src="images/about-img-1.jpg" alt="Yalova Kamera Sistemleri">
+                                <img src="{{ asset('theme/yalovakamera/images/about-img-1.jpg') }}" alt="Yalova Kamera Sistemleri">
                             </figure>
 
                             <div class="company-experience-circle">
-                                <img src="images/experience-circle.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/experience-circle.svg') }}" alt="">
                             </div>
                         </div>
 
                         <div class="about-img-2">
                             <figure class="image-anime reveal">
-                                <img src="images/about-img-2.jpg" alt="Güvenlik Kamera Sistemleri">
+                                <img src="{{ asset('theme/yalovakamera/images/about-img-2.jpg') }}" alt="Güvenlik Kamera Sistemleri">
                             </figure>
                         </div>
                     </div>
@@ -302,13 +107,13 @@
                         <div class="about-experience-box wow fadeInUp" data-wow-delay="0.6s">
                             <div class="about-experience-image">
                                 <figure class="image-anime reveal">
-                                    <img src="images/about-experience-image.jpg" alt="Tecrübeli Güvenlik Hizmetleri">
+                                    <img src="{{ asset('theme/yalovakamera/images/about-experience-image.jpg') }}" alt="Tecrübeli Güvenlik Hizmetleri">
                                 </figure>
                             </div>
 
                             <div class="about-experience-item">
                                 <div class="icon-box">
-                                    <img src="images/icon-about-experience.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-experience.svg') }}" alt="">
                                 </div>
                                 <div class="about-experience-content">
                                     <h3>Müşteri memnuniyeti odaklı, garantili ve profesyonel güvenlik sistemleri hizmeti sunuyoruz</h3>
@@ -319,7 +124,7 @@
                         <div class="about-us-body wow fadeInUp" data-wow-delay="0.8s">
                             <div class="about-contact-box">
                                 <div class="icon-box">
-                                    <img src="images/icon-about-contact.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-contact.svg') }}" alt="">
                                 </div>
                                 <div class="about-contact-box-content">
                                     <p>Bize Hemen Ulaşın</p>
@@ -345,7 +150,7 @@
                 <div class="col-lg-6">
                     <div class="mission-vision-image">
                         <figure class="image-anime">
-                            <img src="images/mission-vision-img.jpg" alt="Misyon ve Vizyon">
+                            <img src="{{ asset('theme/yalovakamera/images/mission-vision-img.jpg') }}" alt="Misyon ve Vizyon">
                         </figure>
                     </div>
                 </div>
@@ -353,7 +158,7 @@
                     <div class="mission-vision-content">
                         <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.2s">
                             <div class="icon-box">
-                                <img src="images/icon-mission.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-mission.svg') }}" alt="">
                             </div>
                             <div class="mission-vision-item-content">
                                 <h3>Misyonumuz</h3>
@@ -363,7 +168,7 @@
 
                         <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.4s">
                             <div class="icon-box">
-                                <img src="images/icon-vision.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-vision.svg') }}" alt="">
                             </div>
                             <div class="mission-vision-item-content">
                                 <h3>Vizyonumuz</h3>
@@ -373,7 +178,7 @@
 
                         <div class="mission-vision-item wow fadeInUp" data-wow-delay="0.6s">
                             <div class="icon-box">
-                                <img src="images/icon-goal.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-goal.svg') }}" alt="">
                             </div>
                             <div class="mission-vision-item-content">
                                 <h3>Hedefimiz</h3>
@@ -404,7 +209,7 @@
                     <div class="why-choose-box">
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.4s">
                             <div class="icon-box">
-                                <img src="images/icon-why-choose-1.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-1.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
                                 <h3>Hızlı Teknik Destek</h3>
@@ -414,7 +219,7 @@
 
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.6s">
                             <div class="icon-box">
-                                <img src="images/icon-why-choose-2.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-2.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
                                 <h3>İhtiyaca Özel Çözümler</h3>
@@ -427,7 +232,7 @@
                 <div class="col-lg-6">
                     <div class="why-choose-image">
                         <figure>
-                            <img src="images/why-choose-image.png" alt="Yalova Kamera Sistemleri Hizmetleri">
+                            <img src="{{ asset('theme/yalovakamera/images/why-choose-image.png') }}" alt="Yalova Kamera Sistemleri Hizmetleri">
                         </figure>
                     </div>
                 </div>
@@ -436,7 +241,7 @@
                     <div class="why-choose-box">
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.4s">
                             <div class="icon-box">
-                                <img src="images/icon-why-choose-3.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-3.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
                                 <h3>Uzaktan Erişim</h3>
@@ -446,7 +251,7 @@
 
                         <div class="why-choose-item wow fadeInUp" data-wow-delay="0.6s">
                             <div class="icon-box">
-                                <img src="images/icon-why-choose-4.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-why-choose-4.svg') }}" alt="">
                             </div>
                             <div class="why-choose-item-content">
                                 <h3>Garantili Hizmet</h3>
@@ -469,7 +274,7 @@
                         <div class="our-commitment-img-box">
                             <div class="commitment-image-1">
                                 <figure class="image-anime reveal">
-                                    <img src="images/commitment-image-1.jpg" alt="Profesyonel Güvenlik Hizmetleri">
+                                    <img src="{{ asset('theme/yalovakamera/images/commitment-image-1.jpg') }}" alt="Profesyonel Güvenlik Hizmetleri">
                                 </figure>
                             </div>
 
@@ -482,27 +287,27 @@
                                 <div class="satisfy-client-images">
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="images/satisfy-client-img-1.jpg" alt="">
+                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-1.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="images/satisfy-client-img-2.jpg" alt="">
+                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-2.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="images/satisfy-client-img-3.jpg" alt="">
+                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-3.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="images/satisfy-client-img-4.jpg" alt="">
+                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-4.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                     <div class="satisfy-client-image">
                                         <figure class="image-anime reveal">
-                                            <img src="images/satisfy-client-img-5.jpg" alt="">
+                                            <img src="{{ asset('theme/yalovakamera/images/satisfy-client-img-5.jpg') }}" alt="">
                                         </figure>
                                     </div>
                                 </div>
@@ -512,7 +317,7 @@
                         <div class="our-commitment-img-box">
                             <div class="commitment-image-2">
                                 <figure class="image-anime reveal">
-                                    <img src="images/commitment-image-2.jpg" alt="Kamera ve Alarm Sistemleri">
+                                    <img src="{{ asset('theme/yalovakamera/images/commitment-image-2.jpg') }}" alt="Kamera ve Alarm Sistemleri">
                                 </figure>
                             </div>
                         </div>
@@ -573,7 +378,7 @@
                             <div class="expertise-item-box">
                                 <div class="expertise-item">
                                     <div class="icon-box">
-                                        <img src="images/icon-expertise-item-1.svg" alt="">
+                                        <img src="{{ asset('theme/yalovakamera/images/icon-expertise-item-1.svg') }}" alt="">
                                     </div>
                                     <div class="expertise-item-content">
                                         <h3>Modern Teknoloji</h3>
@@ -583,7 +388,7 @@
 
                                 <div class="expertise-item">
                                     <div class="icon-box">
-                                        <img src="images/icon-expertise-item-2.svg" alt="">
+                                        <img src="{{ asset('theme/yalovakamera/images/icon-expertise-item-2.svg') }}" alt="">
                                     </div>
                                     <div class="expertise-item-content">
                                         <h3>Profesyonel Uygulama</h3>
@@ -612,12 +417,12 @@
                 <div class="col-lg-6">
                     <div class="our-expertise-image">
                         <figure class="image-anime reveal">
-                            <img src="images/expertise-image.jpg" alt="Uzman Güvenlik Çözümleri">
+                            <img src="{{ asset('theme/yalovakamera/images/expertise-image.jpg') }}" alt="Uzman Güvenlik Çözümleri">
                         </figure>
 
                         <div class="expertise-contact-box">
                             <div class="icon-box">
-                                <img src="images/icon-phone.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-phone.svg') }}" alt="">
                             </div>
                             <div class="expertise-contact-content">
                                 <h3>Hemen Arayın</h3>
@@ -646,7 +451,7 @@
 
                         <div class="about-need-help wow fadeInUp" data-wow-delay="0.8s">
                             <div class="icon-box">
-                                <img src="images/icon-need-help.svg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-need-help.svg') }}" alt="">
                             </div>
                             <div class="need-help-content">
                                 <p>Hizmetlerimiz Hakkında Bilgi Alın</p>
@@ -661,7 +466,7 @@
                         <div class="what-we-counter-box">
                             <div class="what-we-counter-item">
                                 <div class="icon-box">
-                                    <img src="images/icon-what-we-counter-1.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-what-we-counter-1.svg') }}" alt="">
                                 </div>
                                 <div class="what-we-counter-item-content">
                                     <h3><span class="counter">24</span>/7</h3>
@@ -671,7 +476,7 @@
 
                             <div class="what-we-counter-item">
                                 <div class="icon-box">
-                                    <img src="images/icon-what-we-counter-2.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-what-we-counter-2.svg') }}" alt="">
                                 </div>
                                 <div class="what-we-counter-item-content">
                                     <h3><span class="counter">100</span>+</h3>
@@ -682,7 +487,7 @@
 
                         <div class="what-we-image">
                             <figure>
-                                <img src="images/what-we-image.jpg" alt="Güvenlik Çözümleri">
+                                <img src="{{ asset('theme/yalovakamera/images/what-we-image.jpg') }}" alt="Güvenlik Çözümleri">
                             </figure>
                         </div>
                     </div>
@@ -722,7 +527,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="images/team-1.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/team-1.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -747,7 +552,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="images/team-2.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/team-2.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -772,7 +577,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="images/team-3.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/team-3.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -797,7 +602,7 @@
                         <div class="team-image">
                             <a href="team-single.html" data-cursor-text="Görüntüle">
                                 <figure class="image-anime">
-                                    <img src="images/team-4.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/team-4.jpg') }}" alt="">
                                 </figure>
                             </a>
                 
@@ -829,16 +634,16 @@
                     <div class="our-support-images">
                         <div class="our-support-image box-1">
                             <figure class="image-anime reveal">
-                                <img src="images/support-image-1.jpg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/support-image-1.jpg') }}" alt="">
                             </figure>
                         </div>
                         <div class="our-support-image box-2">
                             <figure class="image-anime reveal">
-                                <img src="images/support-image-2.jpg" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/support-image-2.jpg') }}" alt="">
                             </figure>
                         </div>
                         <div class="our-support-circle">
-                            <a href="contact.html"><img src="images/contact-now-circle-2.svg" alt=""></a>
+                            <a href="contact.html"><img src="{{ asset('theme/yalovakamera/images/contact-now-circle-2.svg') }}" alt=""></a>
                         </div>
                     </div>
                 </div>
@@ -854,7 +659,7 @@
                         <div class="our-support-body wow fadeInUp" data-wow-delay="0.6s">
                             <div class="support-item">
                                 <div class="icon-box">
-                                    <img src="images/icon-support-item-1.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-support-item-1.svg') }}" alt="">
                                 </div>
                                 <div class="support-item-content">
                                     <h3>Kamera Sistemi Kurulumu</h3>
@@ -864,7 +669,7 @@
 
                             <div class="support-item">
                                 <div class="icon-box">
-                                    <img src="images/icon-support-item-2.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-support-item-2.svg') }}" alt="">
                                 </div>
                                 <div class="support-item-content">
                                     <h3>Alarm Sistemleri Servisi</h3>
@@ -906,7 +711,7 @@
                                             <div class="testimonial-author-box">
                                                 <div class="author-image">
                                                     <figure class="image-anime">
-                                                        <img src="images/author-1.jpg" alt="">
+                                                        <img src="{{ asset('theme/yalovakamera/images/author-1.jpg') }}" alt="">
                                                     </figure>
                                                 </div>
                                                 <div class="author-content">
@@ -915,7 +720,7 @@
                                                 </div>  
                                             </div>        
                                             <div class="testimonial-quote">
-                                                <img src="images/testimonial-quote.svg" alt="">
+                                                <img src="{{ asset('theme/yalovakamera/images/testimonial-quote.svg') }}" alt="">
                                             </div>
                                         </div>
                                         <div class="testimonial-rating">
@@ -937,7 +742,7 @@
                                             <div class="testimonial-author-box">
                                                 <div class="author-image">
                                                     <figure class="image-anime">
-                                                        <img src="images/author-2.jpg" alt="">
+                                                        <img src="{{ asset('theme/yalovakamera/images/author-2.jpg') }}" alt="">
                                                     </figure>
                                                 </div>
                                                 <div class="author-content">
@@ -946,7 +751,7 @@
                                                 </div>  
                                             </div>        
                                             <div class="testimonial-quote">
-                                                <img src="images/testimonial-quote.svg" alt="">
+                                                <img src="{{ asset('theme/yalovakamera/images/testimonial-quote.svg') }}" alt="">
                                             </div>
                                         </div>
                                         <div class="testimonial-rating">
@@ -968,7 +773,7 @@
                                             <div class="testimonial-author-box">
                                                 <div class="author-image">
                                                     <figure class="image-anime">
-                                                        <img src="images/author-3.jpg" alt="">
+                                                        <img src="{{ asset('theme/yalovakamera/images/author-3.jpg') }}" alt="">
                                                     </figure>
                                                 </div>
                                                 <div class="author-content">
@@ -977,7 +782,7 @@
                                                 </div>  
                                             </div>        
                                             <div class="testimonial-quote">
-                                                <img src="images/testimonial-quote.svg" alt="">
+                                                <img src="{{ asset('theme/yalovakamera/images/testimonial-quote.svg') }}" alt="">
                                             </div>
                                         </div>
                                         <div class="testimonial-rating">
@@ -1020,7 +825,7 @@
                         <div class="cta-box-body wow fadeInUp" data-wow-delay="0.6s">
                             <div class="cta-box-item">
                                 <div class="icon-box">
-                                    <img src="images/icon-phone.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-phone.svg') }}" alt="">
                                 </div>
                                 <div class="cta-box-item-content">
                                     <p>Telefon Numarası</p>
@@ -1030,7 +835,7 @@
 
                             <div class="cta-box-item">
                                 <div class="icon-box">
-                                    <img src="images/icon-mail.svg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-mail.svg') }}" alt="">
                                 </div>
                                 <div class="cta-box-item-content">
                                     <p>E-posta Adresi</p>
@@ -1043,7 +848,7 @@
 
                 <div class="col-lg-6">
                     <div class="cta-box-image">
-                        <img src="images/cta-box-image.png" alt="İletişim">
+                        <img src="{{ asset('theme/yalovakamera/images/cta-box-image.png') }}" alt="İletişim">
                     </div>
                 </div>
             </div>
@@ -1084,7 +889,7 @@
                             <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordion">
                                 <div class="accordion-body">
                                     <p>İhtiyaca göre iç ve dış mekân güvenlik kameraları, kayıt cihazları, IP kamera sistemleri ve uzaktan izleme destekli çözümler sunuyoruz.</p>
-                                    <img src="images/faqs-accordion-img.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -1098,7 +903,7 @@
                             <div id="collapse2" class="accordion-collapse collapse show" aria-labelledby="heading2" data-bs-parent="#accordion">
                                 <div class="accordion-body">
                                     <p>Evet. Kurulan sisteme göre cep telefonu, tablet veya bilgisayar üzerinden canlı izleme ve geçmiş kayıtları görüntüleme imkânı sunulmaktadır.</p>
-                                    <img src="images/faqs-accordion-img.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -1112,7 +917,7 @@
                             <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordion">
                                 <div class="accordion-body">
                                     <p>Evet. Satışını yaptığımız tüm sistemler için keşif, projelendirme, kurulum ve devreye alma hizmeti veriyoruz.</p>
-                                    <img src="images/faqs-accordion-img.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -1126,7 +931,7 @@
                             <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordion">
                                 <div class="accordion-body">
                                     <p>Evet. Mevcut kamera ve alarm sistemleri için arıza tespiti, periyodik bakım, onarım ve sistem iyileştirme hizmetleri sunuyoruz.</p>
-                                    <img src="images/faqs-accordion-img.jpg" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/faqs-accordion-img.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -1136,165 +941,29 @@
         </div>
     </div>
     <!-- Our FAQs Section End -->
+      
+      
+        
 
-    <!-- Main Footer Start -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="main-footer-box">
-                        <div class="footer-logo">
-                            <img src="images/footer-logo.svg" alt="Yalova Kamera Sistemleri">
-                        </div>
-                        
-                        <div class="footer-contact-details">
-                            <div class="footer-contact-item">
-                                <div class="icon-box">
-                                    <img src="images/icon-phone.svg" alt="">
-                                </div>
-                                <div class="footer-contact-item-content">
-                                    <p>Telefon</p>
-                                    <h3><a href="tel:02263520724">0226 352 07 24</a></h3>
-                                </div>
-                            </div>
 
-                            <div class="footer-contact-item">
-                                <div class="icon-box">
-                                    <img src="images/icon-mail.svg" alt="">
-                                </div>
-                                <div class="footer-contact-item-content">
-                                    <p>E-posta</p>
-                                    <h3><a href="mailto:info@yalovakamera.com">info@yalovakamera.com</a></h3>
-                                </div>
-                            </div>
 
-                            <div class="footer-contact-item">
-                                <div class="icon-box">
-                                    <img src="images/icon-location.svg" alt="">
-                                </div>
-                                <div class="footer-contact-item-content">
-                                    <p>Adres</p>
-                                    <h3>Sahil Mah. Yalı Cad. No:3 YALOVA</h3>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                </div>
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="about-footer">
-                        <div class="footer-links">
-                            <h3>Firma Hakkında</h3>
-                            <p>Yalova Kamera Sistemleri olarak güvenlik kamerası ve alarm sistemleri satış, kurulum, projelendirme, bakım ve onarım hizmetleri sunuyoruz.</p>
-                        </div>
 
-                        <div class="footer-social-links">
-                            <ul>
-                                <li><a href="#"><i class="fa-brands fa-pinterest-p"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>                                    								
-                            </ul>
-                        </div>
-                    </div>               
-                </div>
 
-                <div class="col-lg-2 col-md-6">
-                    <div class="footer-links">
-                        <h3>Hızlı Menü</h3>
-                        <ul>
-                            <li><a href="index.html">Ana Sayfa</a></li>
-                            <li><a href="about.html">Hakkımızda</a></li>
-                            <li><a href="services.html">Hizmetlerimiz</a></li>
-                            <li><a href="blog.html">Blog</a></li>
-                        </ul>
-                    </div>
-                </div>
 
-                <div class="col-lg-2 col-md-6">
-                    <div class="footer-links">
-                        <h3>Hizmetler</h3>
-                        <ul>
-                            <li><a href="service-single.html">Kamera Sistemleri Kurulumu</a></li>
-                            <li><a href="service-single.html">Alarm Sistemleri</a></li>
-                            <li><a href="service-single.html">Bakım ve Onarım</a></li>
-                            <li><a href="service-single.html">Teknik Servis Desteği</a></li>
-                        </ul>
-                    </div>
-                </div>
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="newsletter-form footer-links">
-                        <h3>Bülten</h3>
-                        <p>Hizmetlerimiz ve kampanyalarımız hakkında bilgi almak için e-posta adresinizi bırakabilirsiniz.</p>
-                        <form id="newsletterForm" action="#" method="POST">
-                            <div class="form-group">
-                                <input type="email" name="email" class="form-control" id="mail" placeholder="E-posta adresiniz" required="">
-                                <button type="submit" class="newsletter-btn"><i class="fa-regular fa-paper-plane"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="footer-copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="footer-copyright-text">
-                            <p>Copyright © 2026 Yalova Kamera Sistemleri. Tüm Hakları Saklıdır.</p>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="footer-privacy-policy">
-                            <ul>
-                                <li><a href="#">yardım</a></li>
-                                <li><a href="#">gizlilik politikası</a></li>
-                                <li><a href="#">şartlar ve koşullar</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Main Footer End -->
 
-    <!-- Jquery Library File -->
-    <script src="js/jquery-3.7.1.min.js"></script>
-    <!-- Bootstrap js file -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- Validator js file -->
-    <script src="js/validator.min.js"></script>
-    <!-- SlickNav js file -->
-    <script src="js/jquery.slicknav.js"></script>
-    <!-- Swiper js file -->
-    <script src="js/swiper-bundle.min.js"></script>
-    <!-- Counter js file -->
-    <script src="js/jquery.waypoints.min.js"></script>
-    <script src="js/jquery.counterup.min.js"></script>
-    <!-- Isotop js file -->
-	<script src="js/isotope.min.js"></script>
-    <!-- Magnific js file -->
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <!-- SmoothScroll -->
-    <script src="js/SmoothScroll.js"></script>
-    <!-- Parallax js -->
-    <script src="js/parallaxie.js"></script>
-    <!-- MagicCursor js file -->
-    <script src="js/gsap.min.js"></script>
-    <script src="js/magiccursor.js"></script>
-    <!-- Text Effect js file -->
-    <script src="js/SplitText.js"></script>
-    <script src="js/ScrollTrigger.min.js"></script>
-    <!-- YTPlayer js File -->
-    <script src="js/jquery.mb.YTPlayer.min.js"></script>
-    <!-- Wow js file -->
-    <script src="js/wow.min.js"></script>
-    <!-- Main Custom js file -->
-    <script src="js/function.js"></script>
-</body>
-</html>
+
+
+
+
+
+
+
+
+
+
+
 @endsection
