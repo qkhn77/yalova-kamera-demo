@@ -1,15 +1,24 @@
 @php
     $menuItems = \App\Models\MenuItem::getTree();
-    $productCategories = \App\Models\ProductCategory::query()
-        ->where('is_active', true)
-        ->orderBy('sort_order')
-        ->orderBy('name')
-        ->limit(12)
-        ->get();
-    $hasProductsInDynamicMenu = $menuItems->contains(function ($item) {
+    $hasProductRoutes = \Illuminate\Support\Facades\Route::has('products.index') && \Illuminate\Support\Facades\Route::has('products.category');
+    $productCategories = collect();
+    if ($hasProductRoutes && \Illuminate\Support\Facades\Schema::hasTable('product_categories')) {
+        try {
+            $productCategories = \App\Models\ProductCategory::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->limit(12)
+                ->get();
+        } catch (\Throwable $e) {
+            $productCategories = collect();
+        }
+    }
+    $productsIndexUrl = $hasProductRoutes ? rtrim(route('products.index'), '/') : null;
+    $hasProductsInDynamicMenu = $productsIndexUrl ? $menuItems->contains(function ($item) use ($productsIndexUrl) {
         $href = rtrim((string) $item->href, '/');
-        return $href === rtrim(route('products.index'), '/');
-    });
+        return $href === $productsIndexUrl;
+    }) : false;
     $menuBg = \App\Models\Setting::get('menu_bg_color', '');
     $menuText = \App\Models\Setting::get('menu_text_color', '');
     $menuHoverBg = \App\Models\Setting::get('menu_hover_bg', '');
@@ -102,17 +111,19 @@
                                 <li class="nav-item {{ request()->routeIs('projects*') ? 'active' : '' }}">
                                     <a class="nav-link" href="{{ route('projects.index') }}">Projeler</a>
                                 </li>
-                                <li class="nav-item dropdown {{ request()->routeIs('products*') ? 'active' : '' }}">
-                                    <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Ürünler
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('products.index') }}">Tüm Ürünler</a></li>
-                                        @foreach($productCategories as $cat)
-                                            <li><a class="dropdown-item" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </li>
+                                @if($hasProductRoutes)
+                                    <li class="nav-item dropdown {{ request()->routeIs('products*') ? 'active' : '' }}">
+                                        <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Ürünler
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ route('products.index') }}">Tüm Ürünler</a></li>
+                                            @foreach($productCategories as $cat)
+                                                <li><a class="dropdown-item" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endif
                                 <li class="nav-item {{ request()->routeIs('blog*') ? 'active' : '' }}">
                                     <a class="nav-link" href="{{ route('blog.index') }}">Blog</a>
                                 </li>
@@ -120,7 +131,7 @@
                                     <a class="nav-link" href="{{ route('contact') }}">İletişim</a>
                                 </li>
                             @endforelse
-                            @if($menuItems->isNotEmpty() && !$hasProductsInDynamicMenu)
+                            @if($hasProductRoutes && $menuItems->isNotEmpty() && !$hasProductsInDynamicMenu)
                                 <li class="nav-item dropdown {{ request()->routeIs('products*') ? 'active' : '' }}">
                                     <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Ürünler

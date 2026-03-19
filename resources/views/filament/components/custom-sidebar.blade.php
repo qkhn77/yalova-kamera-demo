@@ -73,6 +73,8 @@
 
     $isAyarlar = str_starts_with($currentPath, $adminPrefix.'/ayarlar');
     $isKullaniciAyarlari = str_starts_with($currentPath, $adminPrefix.'/ayarlar/kullanici-ayarlari');
+    $hasProductAdminRoutes = \Illuminate\Support\Facades\Route::has('filament.admin.resources.products.index')
+        && \Illuminate\Support\Facades\Route::has('filament.admin.resources.product-categories.index');
 @endphp
 
 <div
@@ -330,8 +332,10 @@
                 <a href="{{ WebServisListesi::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/servisler/web-servis-listesi') ? 'is-active' : '' }}"><span>Servis Listesi</span></a>
                 <a href="{{ WebServisKategori::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/servisler/web-servis-kategori') ? 'is-active' : '' }}"><span>Servis Kategori</span></a>
             </div>
-            <a href="{{ url($adminPrefix.'/products') }}" class="nav-item {{ request()->is($adminPrefix.'/products*') ? 'is-active' : '' }}"><span>Ürün Listesi</span></a>
-            <a href="{{ url($adminPrefix.'/product-categories') }}" class="nav-item {{ request()->is($adminPrefix.'/product-categories*') ? 'is-active' : '' }}"><span>Ürün Kategorileri</span></a>
+            @if($hasProductAdminRoutes)
+                <a href="{{ route('filament.admin.resources.products.index') }}" class="nav-item {{ request()->is($adminPrefix.'/products*') ? 'is-active' : '' }}"><span>Ürün Listesi</span></a>
+                <a href="{{ route('filament.admin.resources.product-categories.index') }}" class="nav-item {{ request()->is($adminPrefix.'/product-categories*') ? 'is-active' : '' }}"><span>Ürün Kategorileri</span></a>
+            @endif
             <button type="button" class="nav-item {{ $isProjeler ? 'is-active' : '' }}" x-on:click="projelerOpen = !projelerOpen" :aria-expanded="projelerOpen">
                 <span>Projeler</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
