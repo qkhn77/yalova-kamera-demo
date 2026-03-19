@@ -6,6 +6,8 @@ use App\Models\BilgiSayfa;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Project;
 use App\Models\ProjectCategory;
 use App\Models\Service;
@@ -75,6 +77,15 @@ class SitemapController extends Controller
         $urls[] = $this->url($base.'/WebProje', now(), 'weekly', '0.9');
         ProjectCategory::where('is_active', true)->get()->each(function ($cat) use ($base, &$urls) {
             $urls[] = $this->url($base.'/WebProje/kategori/'.$cat->slug, $cat->updated_at, 'weekly', '0.8');
+        });
+
+        // —— Ürünler ——
+        $urls[] = $this->url($base.'/urunler', now(), 'weekly', '0.9');
+        ProductCategory::where('is_active', true)->get()->each(function ($cat) use ($base, &$urls) {
+            $urls[] = $this->url($base.'/urun-kategori/'.$cat->slug, $cat->updated_at, 'weekly', '0.8');
+        });
+        Product::where('is_active', true)->get()->each(function ($product) use ($base, &$urls) {
+            $urls[] = $this->url($base.'/urun/'.$product->slug, $product->updated_at, 'weekly', '0.8');
         });
         Project::where('is_active', true)->get()->each(function ($p) use ($base, &$urls) {
             $urls[] = $this->url($base.'/WebProje/'.$p->slug, $p->updated_at, 'monthly', '0.7');

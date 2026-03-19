@@ -330,6 +330,8 @@
                 <a href="{{ WebServisListesi::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/servisler/web-servis-listesi') ? 'is-active' : '' }}"><span>Servis Listesi</span></a>
                 <a href="{{ WebServisKategori::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/servisler/web-servis-kategori') ? 'is-active' : '' }}"><span>Servis Kategori</span></a>
             </div>
+            <a href="{{ url($adminPrefix.'/products') }}" class="nav-item {{ request()->is($adminPrefix.'/products*') ? 'is-active' : '' }}"><span>Ürün Listesi</span></a>
+            <a href="{{ url($adminPrefix.'/product-categories') }}" class="nav-item {{ request()->is($adminPrefix.'/product-categories*') ? 'is-active' : '' }}"><span>Ürün Kategorileri</span></a>
             <button type="button" class="nav-item {{ $isProjeler ? 'is-active' : '' }}" x-on:click="projelerOpen = !projelerOpen" :aria-expanded="projelerOpen">
                 <span>Projeler</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>

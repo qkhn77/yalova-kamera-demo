@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SitemapController;
 use App\Models\BilgiSayfa;
 use Illuminate\Support\Facades\File;
@@ -114,6 +115,11 @@ Route::get('/WebProje/{slug}', function ($slug) {
 
     return view('front.projects.show', compact('project'));
 })->name('projects.show');
+
+// ÜRÜNLER
+Route::get('/urunler', [ProductController::class, 'index'])->name('products.index');
+Route::get('/urun-kategori/{slug}', [ProductController::class, 'category'])->name('products.category');
+Route::get('/urun/{slug}', [ProductController::class, 'show'])->name('products.show');
 
 // BLOG
 Route::get('/blog', function () {
