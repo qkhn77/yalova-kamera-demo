@@ -38,20 +38,39 @@ class ModulTeknikDestek extends BaseModulSectionEditor
     protected function getEditorSchema(): array
     {
         return [
-            Forms\Components\FileUpload::make('image_1')->label('Sol Görsel 1')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
-            Forms\Components\FileUpload::make('image_2')->label('Sol Görsel 2')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
-            Forms\Components\FileUpload::make('circle_image')->label('Çember Görsel')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
-            Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
-            Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
-            Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
-            Forms\Components\Textarea::make('text')->label('Açıklama')->rows(3)->required(),
-            Forms\Components\FileUpload::make('icon_1')->label('Öğe 1 İkon')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
-            Forms\Components\TextInput::make('title_1')->label('Öğe 1 Başlık')->required(),
-            Forms\Components\Textarea::make('text_1')->label('Öğe 1 Metin')->rows(2)->required(),
-            Forms\Components\FileUpload::make('icon_2')->label('Öğe 2 İkon')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
-            Forms\Components\TextInput::make('title_2')->label('Öğe 2 Başlık')->required(),
-            Forms\Components\Textarea::make('text_2')->label('Öğe 2 Metin')->rows(2)->required(),
-            Forms\Components\TextInput::make('button_text')->label('Buton Metni')->required(),
+            Forms\Components\Section::make('Görseller')
+                ->schema([
+                    Forms\Components\FileUpload::make('image_1')->label('Sol Görsel 1')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
+                    Forms\Components\FileUpload::make('image_2')->label('Sol Görsel 2')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
+                    Forms\Components\FileUpload::make('circle_image')->label('Çember Görsel')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Metin Alanı')
+                ->schema([
+                    Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
+                    Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
+                    Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
+                    Forms\Components\Textarea::make('text')->label('Açıklama')->rows(3)->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Öğe 1')
+                ->schema([
+                    Forms\Components\FileUpload::make('icon_1')->label('İkon')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
+                    Forms\Components\TextInput::make('title_1')->label('Başlık')->required(),
+                    Forms\Components\Textarea::make('text_1')->label('Metin')->rows(2)->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Öğe 2')
+                ->schema([
+                    Forms\Components\FileUpload::make('icon_2')->label('İkon')->image()->disk('public')->directory('moduller/teknik-destek')->visibility('public'),
+                    Forms\Components\TextInput::make('title_2')->label('Başlık')->required(),
+                    Forms\Components\Textarea::make('text_2')->label('Metin')->rows(2)->required(),
+                    Forms\Components\TextInput::make('button_text')->label('Buton Metni')->required(),
+                ])
+                ->columns(1),
         ];
     }
 }

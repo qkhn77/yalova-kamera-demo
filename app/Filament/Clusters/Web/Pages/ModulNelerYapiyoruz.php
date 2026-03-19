@@ -39,21 +39,45 @@ class ModulNelerYapiyoruz extends BaseModulSectionEditor
     protected function getEditorSchema(): array
     {
         return [
-            Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
-            Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
-            Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
-            Forms\Components\Textarea::make('text_1')->label('Paragraf 1')->rows(3)->required(),
-            Forms\Components\Textarea::make('text_2')->label('Paragraf 2')->rows(3)->required(),
-            Forms\Components\FileUpload::make('need_help_icon')->label('Yardım İkon')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
-            Forms\Components\TextInput::make('need_help_text')->label('Yardım Metni')->required(),
-            Forms\Components\TextInput::make('phone')->label('Telefon')->required(),
-            Forms\Components\FileUpload::make('counter_icon_1')->label('Sayaç 1 İkon')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
-            Forms\Components\TextInput::make('counter_value_1')->label('Sayaç 1 Değer')->required(),
-            Forms\Components\TextInput::make('counter_label_1')->label('Sayaç 1 Etiket')->required(),
-            Forms\Components\FileUpload::make('counter_icon_2')->label('Sayaç 2 İkon')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
-            Forms\Components\TextInput::make('counter_value_2')->label('Sayaç 2 Değer')->required(),
-            Forms\Components\TextInput::make('counter_label_2')->label('Sayaç 2 Etiket')->required(),
-            Forms\Components\FileUpload::make('main_image')->label('Ana Görsel')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
+            Forms\Components\Section::make('Başlık ve Açıklama')
+                ->schema([
+                    Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
+                    Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
+                    Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
+                    Forms\Components\Textarea::make('text_1')->label('Paragraf 1')->rows(3)->required(),
+                    Forms\Components\Textarea::make('text_2')->label('Paragraf 2')->rows(3)->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Destek Alanı')
+                ->schema([
+                    Forms\Components\FileUpload::make('need_help_icon')->label('Yardım İkon')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
+                    Forms\Components\TextInput::make('need_help_text')->label('Yardım Metni')->required(),
+                    Forms\Components\TextInput::make('phone')->label('Telefon')->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Sayaç 1')
+                ->schema([
+                    Forms\Components\FileUpload::make('counter_icon_1')->label('İkon')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
+                    Forms\Components\TextInput::make('counter_value_1')->label('Değer')->required(),
+                    Forms\Components\TextInput::make('counter_label_1')->label('Etiket')->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Sayaç 2')
+                ->schema([
+                    Forms\Components\FileUpload::make('counter_icon_2')->label('İkon')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
+                    Forms\Components\TextInput::make('counter_value_2')->label('Değer')->required(),
+                    Forms\Components\TextInput::make('counter_label_2')->label('Etiket')->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Ana Görsel')
+                ->schema([
+                    Forms\Components\FileUpload::make('main_image')->label('Görsel')->image()->disk('public')->directory('moduller/neler-yapiyoruz')->visibility('public'),
+                ])
+                ->columns(1),
         ];
     }
 }

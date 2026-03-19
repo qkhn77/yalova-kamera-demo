@@ -40,22 +40,46 @@ class ModulFaqs extends BaseModulSectionEditor
     protected function getEditorSchema(): array
     {
         return [
-            Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
-            Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
-            Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
-            Forms\Components\Textarea::make('text')->label('Açıklama')->rows(3)->required(),
-            Forms\Components\TextInput::make('list_1')->label('Liste 1')->required(),
-            Forms\Components\TextInput::make('list_2')->label('Liste 2')->required(),
-            Forms\Components\TextInput::make('list_3')->label('Liste 3')->required(),
-            Forms\Components\FileUpload::make('image')->label('FAQ Görseli')->image()->disk('public')->directory('moduller/faqs')->visibility('public'),
-            Forms\Components\TextInput::make('q_1')->label('Soru 1')->required(),
-            Forms\Components\Textarea::make('a_1')->label('Cevap 1')->rows(2)->required(),
-            Forms\Components\TextInput::make('q_2')->label('Soru 2')->required(),
-            Forms\Components\Textarea::make('a_2')->label('Cevap 2')->rows(2)->required(),
-            Forms\Components\TextInput::make('q_3')->label('Soru 3')->required(),
-            Forms\Components\Textarea::make('a_3')->label('Cevap 3')->rows(2)->required(),
-            Forms\Components\TextInput::make('q_4')->label('Soru 4')->required(),
-            Forms\Components\Textarea::make('a_4')->label('Cevap 4')->rows(2)->required(),
+            Forms\Components\Section::make('Başlık ve Giriş')
+                ->schema([
+                    Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
+                    Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
+                    Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
+                    Forms\Components\Textarea::make('text')->label('Açıklama')->rows(3)->required(),
+                    Forms\Components\TextInput::make('list_1')->label('Liste 1')->required(),
+                    Forms\Components\TextInput::make('list_2')->label('Liste 2')->required(),
+                    Forms\Components\TextInput::make('list_3')->label('Liste 3')->required(),
+                    Forms\Components\FileUpload::make('image')->label('FAQ Görseli')->image()->disk('public')->directory('moduller/faqs')->visibility('public'),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Soru 1')
+                ->schema([
+                    Forms\Components\TextInput::make('q_1')->label('Soru')->required(),
+                    Forms\Components\Textarea::make('a_1')->label('Cevap')->rows(2)->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Soru 2')
+                ->schema([
+                    Forms\Components\TextInput::make('q_2')->label('Soru')->required(),
+                    Forms\Components\Textarea::make('a_2')->label('Cevap')->rows(2)->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Soru 3')
+                ->schema([
+                    Forms\Components\TextInput::make('q_3')->label('Soru')->required(),
+                    Forms\Components\Textarea::make('a_3')->label('Cevap')->rows(2)->required(),
+                ])
+                ->columns(1),
+
+            Forms\Components\Section::make('Soru 4')
+                ->schema([
+                    Forms\Components\TextInput::make('q_4')->label('Soru')->required(),
+                    Forms\Components\Textarea::make('a_4')->label('Cevap')->rows(2)->required(),
+                ])
+                ->columns(1),
         ];
     }
 }

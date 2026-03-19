@@ -40,25 +40,41 @@ class ModulMusteriYorumlari extends BaseModulSectionEditor
     protected function getEditorSchema(): array
     {
         return [
-            Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
-            Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
-            Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
-            Forms\Components\FileUpload::make('quote_icon')->label('Alıntı İkonu')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
+            Forms\Components\Section::make('Başlık Alanı')
+                ->schema([
+                    Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
+                    Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
+                    Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
+                    Forms\Components\FileUpload::make('quote_icon')->label('Alıntı İkonu')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
+                ])
+                ->columns(1),
 
-            Forms\Components\FileUpload::make('author_image_1')->label('Yorum 1 Yazar Görseli')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
-            Forms\Components\TextInput::make('name_1')->label('Yorum 1 İsim')->required(),
-            Forms\Components\TextInput::make('role_1')->label('Yorum 1 Ünvan')->required(),
-            Forms\Components\Textarea::make('comment_1')->label('Yorum 1 Metni')->rows(2)->required(),
+            Forms\Components\Section::make('Yorum 1')
+                ->schema([
+                    Forms\Components\FileUpload::make('author_image_1')->label('Yazar Görseli')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
+                    Forms\Components\TextInput::make('name_1')->label('İsim')->required(),
+                    Forms\Components\TextInput::make('role_1')->label('Ünvan')->required(),
+                    Forms\Components\Textarea::make('comment_1')->label('Yorum')->rows(2)->required(),
+                ])
+                ->columns(1),
 
-            Forms\Components\FileUpload::make('author_image_2')->label('Yorum 2 Yazar Görseli')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
-            Forms\Components\TextInput::make('name_2')->label('Yorum 2 İsim')->required(),
-            Forms\Components\TextInput::make('role_2')->label('Yorum 2 Ünvan')->required(),
-            Forms\Components\Textarea::make('comment_2')->label('Yorum 2 Metni')->rows(2)->required(),
+            Forms\Components\Section::make('Yorum 2')
+                ->schema([
+                    Forms\Components\FileUpload::make('author_image_2')->label('Yazar Görseli')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
+                    Forms\Components\TextInput::make('name_2')->label('İsim')->required(),
+                    Forms\Components\TextInput::make('role_2')->label('Ünvan')->required(),
+                    Forms\Components\Textarea::make('comment_2')->label('Yorum')->rows(2)->required(),
+                ])
+                ->columns(1),
 
-            Forms\Components\FileUpload::make('author_image_3')->label('Yorum 3 Yazar Görseli')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
-            Forms\Components\TextInput::make('name_3')->label('Yorum 3 İsim')->required(),
-            Forms\Components\TextInput::make('role_3')->label('Yorum 3 Ünvan')->required(),
-            Forms\Components\Textarea::make('comment_3')->label('Yorum 3 Metni')->rows(2)->required(),
+            Forms\Components\Section::make('Yorum 3')
+                ->schema([
+                    Forms\Components\FileUpload::make('author_image_3')->label('Yazar Görseli')->image()->disk('public')->directory('moduller/musteri-yorumlari')->visibility('public'),
+                    Forms\Components\TextInput::make('name_3')->label('İsim')->required(),
+                    Forms\Components\TextInput::make('role_3')->label('Ünvan')->required(),
+                    Forms\Components\Textarea::make('comment_3')->label('Yorum')->rows(2)->required(),
+                ])
+                ->columns(1),
         ];
     }
 }

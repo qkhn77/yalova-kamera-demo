@@ -40,26 +40,46 @@ class ModulNedenBiz extends BaseModulSectionEditor
     protected function getEditorSchema(): array
     {
         return [
-            Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
-            Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
-            Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
-            Forms\Components\FileUpload::make('image')->label('Orta Görsel')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
+            Forms\Components\Section::make('Başlık Alanı')
+                ->schema([
+                    Forms\Components\TextInput::make('heading')->label('Bölüm Başlığı')->required(),
+                    Forms\Components\TextInput::make('sub_span')->label('Alt Başlık (Span)')->required(),
+                    Forms\Components\TextInput::make('sub_text')->label('Alt Başlık (Devamı)')->required(),
+                    Forms\Components\FileUpload::make('image')->label('Orta Görsel')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
+                ])
+                ->columns(1),
 
-            Forms\Components\FileUpload::make('icon_1')->label('İkon 1')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
-            Forms\Components\TextInput::make('title_1')->label('Başlık 1')->required(),
-            Forms\Components\Textarea::make('text_1')->label('Metin 1')->rows(2)->required(),
+            Forms\Components\Section::make('Öğe 1')
+                ->schema([
+                    Forms\Components\FileUpload::make('icon_1')->label('İkon')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
+                    Forms\Components\TextInput::make('title_1')->label('Başlık')->required(),
+                    Forms\Components\Textarea::make('text_1')->label('Metin')->rows(2)->required(),
+                ])
+                ->columns(1),
 
-            Forms\Components\FileUpload::make('icon_2')->label('İkon 2')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
-            Forms\Components\TextInput::make('title_2')->label('Başlık 2')->required(),
-            Forms\Components\Textarea::make('text_2')->label('Metin 2')->rows(2)->required(),
+            Forms\Components\Section::make('Öğe 2')
+                ->schema([
+                    Forms\Components\FileUpload::make('icon_2')->label('İkon')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
+                    Forms\Components\TextInput::make('title_2')->label('Başlık')->required(),
+                    Forms\Components\Textarea::make('text_2')->label('Metin')->rows(2)->required(),
+                ])
+                ->columns(1),
 
-            Forms\Components\FileUpload::make('icon_3')->label('İkon 3')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
-            Forms\Components\TextInput::make('title_3')->label('Başlık 3')->required(),
-            Forms\Components\Textarea::make('text_3')->label('Metin 3')->rows(2)->required(),
+            Forms\Components\Section::make('Öğe 3')
+                ->schema([
+                    Forms\Components\FileUpload::make('icon_3')->label('İkon')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
+                    Forms\Components\TextInput::make('title_3')->label('Başlık')->required(),
+                    Forms\Components\Textarea::make('text_3')->label('Metin')->rows(2)->required(),
+                ])
+                ->columns(1),
 
-            Forms\Components\FileUpload::make('icon_4')->label('İkon 4')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
-            Forms\Components\TextInput::make('title_4')->label('Başlık 4')->required(),
-            Forms\Components\Textarea::make('text_4')->label('Metin 4')->rows(2)->required(),
+            Forms\Components\Section::make('Öğe 4')
+                ->schema([
+                    Forms\Components\FileUpload::make('icon_4')->label('İkon')->image()->disk('public')->directory('moduller/neden-biz')->visibility('public'),
+                    Forms\Components\TextInput::make('title_4')->label('Başlık')->required(),
+                    Forms\Components\Textarea::make('text_4')->label('Metin')->rows(2)->required(),
+                ])
+                ->columns(1),
         ];
     }
 }
