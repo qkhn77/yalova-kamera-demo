@@ -263,6 +263,11 @@ class ModulMenu extends Page implements HasForms, HasTable
             $data['target_type'] = 'same_tab';
         }
 
+        // Geriye uyumluluk: eski schema'da bu alanlar zorunlu olabilir.
+        $data['type'] = $data['type'] ?? 'custom';
+        $data['label'] = $data['title'] ?? ($data['label'] ?? '');
+        $data['link_id'] = $data['link_id'] ?? null;
+
         return $data;
     }
 
@@ -294,7 +299,11 @@ class ModulMenu extends Page implements HasForms, HasTable
 
         MenuItem::query()->create([
             'parent_id' => null,
+            'type' => 'custom',
+            'label' => 'Ürünler',
             'title' => 'Ürünler',
+            'url' => null,
+            'link_id' => null,
             'route_name' => 'products.index',
             'target_type' => 'same_tab',
             'menu_location' => 'primary',
