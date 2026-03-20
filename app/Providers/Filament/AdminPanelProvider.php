@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
+use App\Filament\Resources\ProductCategoryResource;
+use App\Filament\Resources\ProductResource;
 use App\Models\Setting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -45,6 +47,10 @@ class AdminPanelProvider extends PanelProvider
                 in: app_path('Filament/Clusters'),
                 for: 'App\\Filament\\Clusters',
             )
+            ->resources([
+                ProductResource::class,
+                ProductCategoryResource::class,
+            ])
             ->pages([
                 Dashboard::class,
             ])
