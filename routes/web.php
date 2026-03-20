@@ -279,6 +279,68 @@ Route::get('/clear-cache', function () {
     );
 })->name('clear-cache');
 
+// Geçici kurulum route'u (SSH yoksa): menu_items tablo kolonlarını günceller.
+Route::get('/install-menu-builder-temp', function () {
+    if (request('key') !== 'yalova-menu-2026') {
+        abort(403);
+    }
+
+    if (! \Illuminate\Support\Facades\Schema::hasTable('menu_items')) {
+        return response()->json([
+            'ok' => false,
+            'message' => 'menu_items tablosu bulunamadi.',
+        ], 404);
+    }
+
+    \Illuminate\Support\Facades\Schema::table('menu_items', function (\Illuminate\Database\Schema\Blueprint $table): void {
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'title')) {
+            $table->string('title')->nullable()->after('parent_id');
+        }
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'route_name')) {
+            $table->string('route_name')->nullable()->after('url');
+        }
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'target_type')) {
+            $table->string('target_type', 20)->default('same_tab')->after('route_name');
+        }
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'icon')) {
+            $table->string('icon')->nullable()->after('target_type');
+        }
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'css_class')) {
+            $table->string('css_class')->nullable()->after('icon');
+        }
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'menu_location')) {
+            $table->string('menu_location', 30)->default('primary')->after('css_class');
+        }
+    });
+
+    \Illuminate\Support\Facades\DB::table('menu_items')
+        ->whereNull('title')
+        ->whereNotNull('label')
+        ->update(['title' => \Illuminate\Support\Facades\DB::raw('label')]);
+
+    \Illuminate\Support\Facades\DB::table('menu_items')
+        ->whereNull('menu_location')
+        ->update(['menu_location' => 'primary']);
+
+    \Illuminate\Support\Facades\DB::table('menu_items')
+        ->whereNull('target_type')
+        ->update(['target_type' => 'same_tab']);
+
+    return response()->json([
+        'ok' => true,
+        'database' => \Illuminate\Support\Facades\DB::select('select database() as db')[0]->db ?? null,
+        'columns' => [
+            'title' => \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'title'),
+            'route_name' => \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'route_name'),
+            'target_type' => \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'target_type'),
+            'icon' => \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'icon'),
+            'css_class' => \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'css_class'),
+            'menu_location' => \Illuminate\Support\Facades\Schema::hasColumn('menu_items', 'menu_location'),
+        ],
+        'message' => 'Menu builder kolonlari kontrol edildi/eklendi.',
+    ]);
+});
+
 // use App\Models\User;
 // use Illuminate\Support\Facades\Hash;
 //

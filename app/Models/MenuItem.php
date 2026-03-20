@@ -12,8 +12,14 @@ class MenuItem extends Model
         'parent_id',
         'type',
         'label',
+        'title',
         'url',
         'link_id',
+        'route_name',
+        'target_type',
+        'icon',
+        'css_class',
+        'menu_location',
         'sort_order',
         'is_active',
     ];
@@ -33,21 +39,59 @@ class MenuItem extends Model
         return $this->hasMany(MenuItem::class, 'parent_id')->orderBy('sort_order');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeRoot($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    public function scopeLocation($query, string $location)
+    {
+        return $query->where('menu_location', $location);
+    }
+
+    public function getLabelAttribute(): string
+    {
+        return (string) ($this->title ?: ($this->attributes['label'] ?? ''));
+    }
+
     public function getHrefAttribute(): string
     {
-        return match ($this->type) {
-            'home' => route('home'),
-            'contact' => route('contact'),
-            'custom' => $this->resolveCustomUrl(),
-            'page' => $this->resolvePageUrl(),
-            'services' => route('services.index'),
-            'service_category' => $this->resolveServiceCategoryUrl(),
-            'projects' => route('projects.index'),
-            'project_category' => $this->resolveProjectCategoryUrl(),
-            'blog' => route('blog.index'),
-            'post_category' => $this->resolvePostCategoryUrl(),
-            default => '#',
-        };
+        if (! empty($this->route_name) && \Illuminate\Support\Facades\Route::has($this->route_name)) {
+            return route($this->route_name);
+        }
+
+        // Eski veri yapisindan gelen kayitlar icin geriye donuk destek.
+        if (! empty($this->type)) {
+            return match ($this->type) {
+                'home' => route('home'),
+                'contact' => route('contact'),
+                'page' => $this->resolvePageUrl(),
+                'services' => route('services.index'),
+                'service_category' => $this->resolveServiceCategoryUrl(),
+                'projects' => route('projects.index'),
+                'project_category' => $this->resolveProjectCategoryUrl(),
+                'blog' => route('blog.index'),
+                'post_category' => $this->resolvePostCategoryUrl(),
+                default => $this->resolveCustomUrl(),
+            };
+        }
+
+        return $this->resolveCustomUrl();
+    }
+
+    public function getTargetAttribute(): string
+    {
+        return $this->target_type === 'new_tab' ? '_blank' : '_self';
+    }
+
+    public function getShouldUseNoopenerAttribute(): bool
+    {
+        return $this->target_type === 'new_tab';
     }
 
     /** Custom URL'yi uygulama base URL ile birleştirir (alt dizinde çalışınca linkler bozulmasın). */
@@ -85,62 +129,5 @@ class MenuItem extends Model
     {
         $cat = PostCategory::find($this->link_id);
         return $cat ? route('blog.index.category', ['categorySlug' => $cat->slug]) : route('blog.index');
-    }
-
-    public static function getTree(): \Illuminate\Database\Eloquent\Collection
-    {
-        return static::whereNull('parent_id')
-            ->where('is_active', true)
-            ->with(['children' => fn ($q) => $q->where('is_active', true)])
-            ->orderBy('sort_order')
-            ->get();
-    }
-
-    /** Admin formu için tüm öğeleri (aktif/pasif) parent-children ağacı olarak döndürür. */
-    public static function getTreeForAdmin(): array
-    {
-        $roots = static::whereNull('parent_id')->orderBy('sort_order')->with('children')->get();
-        return $roots->map(fn (MenuItem $item) => static::itemToArray($item))->all();
-    }
-
-    protected static function itemToArray(MenuItem $item): array
-    {
-        $arr = [
-            'type' => $item->type,
-            'label' => $item->label,
-            'url' => $item->url,
-            'link_id' => $item->link_id,
-            'is_active' => $item->is_active,
-            'children' => $item->children->map(fn (MenuItem $c) => static::itemToArray($c))->values()->all(),
-        ];
-        return $arr;
-    }
-
-    /** Repeater state'inden menu_items tablosunu doldurur. */
-    public static function syncFromArray(array $items): void
-    {
-        static::query()->delete();
-        $sort = 0;
-        foreach ($items as $item) {
-            static::createFromArray($item, null, $sort++);
-        }
-    }
-
-    protected static function createFromArray(array $item, ?int $parentId, int $sortOrder): void
-    {
-        $linkId = isset($item['link_id']) && $item['link_id'] !== '' ? (int) $item['link_id'] : null;
-        $model = static::create([
-            'parent_id' => $parentId,
-            'type' => $item['type'] ?? 'custom',
-            'label' => $item['label'] ?? '',
-            'url' => $item['url'] ?? null,
-            'link_id' => $linkId,
-            'sort_order' => $sortOrder,
-            'is_active' => (bool) ($item['is_active'] ?? true),
-        ]);
-        $childSort = 0;
-        foreach ($item['children'] ?? [] as $child) {
-            static::createFromArray($child, $model->id, $childSort++);
-        }
     }
 }

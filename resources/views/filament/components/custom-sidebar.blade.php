@@ -40,6 +40,7 @@
     use App\Filament\Clusters\Web\Pages\WebMailAyarlar;
     use App\Filament\Clusters\Web\Pages\ModulNedenBiz;
     use App\Filament\Clusters\Web\Pages\ModulNelerYapiyoruz;
+    use App\Filament\Clusters\Web\Pages\ModulMenu;
     use App\Filament\Clusters\Web\Pages\ModulReferanslar;
     use App\Filament\Clusters\Web\Pages\ModulRakamlarlaBiz;
     use App\Filament\Clusters\Web\Pages\ModulTeknikDestek;
@@ -319,6 +320,7 @@
                 <span>Modüller</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
             <div x-show="webModullerOpen" x-collapse class="nav-group">
+                <a href="{{ ModulMenu::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/menu-duzenleme') ? 'is-active' : '' }}"><span>Menü Düzenleme</span></a>
                 <a href="{{ ModulNedenBiz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/neden-biz') ? 'is-active' : '' }}"><span>Neden Biz</span></a>
                 <a href="{{ ModulNelerYapiyoruz::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/neler-yapiyoruz') ? 'is-active' : '' }}"><span>Neler Yapıyoruz</span></a>
                 <a href="{{ ModulReferanslar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-moduller/ucuncu-grup/referanslar') ? 'is-active' : '' }}"><span>Referanslar</span></a>

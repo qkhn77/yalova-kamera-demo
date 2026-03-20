@@ -23,7 +23,7 @@
     <div class="our-services">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-12 col-xl-11 col-xxl-10">
+                <div class="col-12 col-xl-10 col-xxl-9">
                     @if($category->description)
                         <div class="mb-4">
                             <p>{{ $category->description }}</p>

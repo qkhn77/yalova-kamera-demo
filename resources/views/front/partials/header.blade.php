@@ -1,5 +1,5 @@
 @php
-    $menuItems = \App\Models\MenuItem::getTree();
+    $menuItems = app(\App\Services\Menu\MenuService::class)->getMenuTree('primary');
     $hasProductRoutes = \Illuminate\Support\Facades\Route::has('products.index') && \Illuminate\Support\Facades\Route::has('products.category');
     $productCategories = collect();
     if ($hasProductRoutes && \Illuminate\Support\Facades\Schema::hasTable('product_categories')) {
@@ -77,24 +77,24 @@
                                     $hasChildren = $item->children->isNotEmpty();
                                 @endphp
                                 @if ($hasChildren)
-                                    <li class="nav-item dropdown {{ $isActive ? 'active' : '' }}">
-                                        <a class="nav-link dropdown-toggle" href="{{ $href }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <li class="nav-item dropdown {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
+                                        <a class="nav-link dropdown-toggle" href="{{ $href }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
                                             {{ $item->label }}
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="{{ $href }}">{{ $item->label }} (Tümü)</a></li>
+                                            <li><a class="dropdown-item" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>{{ $item->label }} (Tümü)</a></li>
                                             @foreach($item->children as $child)
                                                 @php
                                                     $childHref = $child->href;
                                                     $childActive = $currentUrl === rtrim($childHref, '/');
                                                 @endphp
-                                                <li><a class="dropdown-item {{ $childActive ? 'active' : '' }}" href="{{ $childHref }}">{{ $child->label }}</a></li>
+                                                <li><a class="dropdown-item {{ $childActive ? 'active' : '' }} {{ $child->css_class }}" href="{{ $childHref }}" target="{{ $child->target }}" @if($child->should_use_noopener) rel="noopener noreferrer" @endif>{{ $child->label }}</a></li>
                                             @endforeach
                                         </ul>
                                     </li>
                                 @else
-                                    <li class="nav-item {{ $isActive ? 'active' : '' }}">
-                                        <a class="nav-link" href="{{ $href }}">{{ $item->label }}</a>
+                                    <li class="nav-item {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
+                                        <a class="nav-link" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>{{ $item->label }}</a>
                                     </li>
                                 @endif
                             @empty
