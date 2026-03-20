@@ -92,7 +92,13 @@
                                     $href = $item->href;
                                     $isActive = $currentUrl === rtrim($href, '/') || request()->fullUrlIs(rtrim($href, '/') . '*');
                                     $hasChildren = $item->children->isNotEmpty();
-                                    $isProductsMenuItem = $productsIndexUrl && rtrim($href, '/') === $productsIndexUrl;
+                                    $normalizedItemUrl = trim((string) ($item->url ?? ''), '/');
+                                    $normalizedHrefPath = trim((string) parse_url($href, PHP_URL_PATH), '/');
+                                    $isProductsMenuItem =
+                                        ($item->route_name ?? null) === 'products.index'
+                                        || $normalizedItemUrl === 'urunler'
+                                        || $normalizedHrefPath === 'urunler'
+                                        || mb_strtolower((string) ($item->title ?? $item->label)) === 'ürünler';
                                     $useProductsDropdown = $isProductsMenuItem && $productCategories->isNotEmpty();
                                 @endphp
                                 @if ($hasChildren || $useProductsDropdown)
