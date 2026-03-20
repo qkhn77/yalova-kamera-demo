@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ProductCategoryResource extends Resource
@@ -22,6 +23,11 @@ class ProductCategoryResource extends Resource
     protected static ?string $navigationLabel = 'Ürün Kategorileri';
     protected static ?string $modelLabel = 'Ürün kategorisi';
     protected static ?string $pluralModelLabel = 'Ürün kategorileri';
+
+    public static function canAccess(): bool
+    {
+        return Schema::hasTable('product_categories');
+    }
 
     public static function form(Form $form): Form
     {
