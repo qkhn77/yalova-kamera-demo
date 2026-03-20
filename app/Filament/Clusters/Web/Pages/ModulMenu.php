@@ -30,6 +30,11 @@ class ModulMenu extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.clusters.web.pages.modul-menu';
 
+    public function mount(): void
+    {
+        $this->ensureDefaultProductsMenuItem();
+    }
+
     public function getTitle(): string|Htmlable
     {
         return 'Menü Düzenleme';
@@ -259,6 +264,43 @@ class ModulMenu extends Page implements HasForms, HasTable
         }
 
         return $data;
+    }
+
+    protected function ensureDefaultProductsMenuItem(): void
+    {
+        if (! \Illuminate\Support\Facades\Route::has('products.index')) {
+            return;
+        }
+
+        $exists = MenuItem::query()
+            ->whereNull('parent_id')
+            ->where('menu_location', 'primary')
+            ->where(function ($query): void {
+                $query->where('route_name', 'products.index')
+                    ->orWhere('url', '/urunler')
+                    ->orWhere('url', 'urunler')
+                    ->orWhere('title', 'Ürünler');
+            })
+            ->exists();
+
+        if ($exists) {
+            return;
+        }
+
+        $maxSortOrder = (int) MenuItem::query()
+            ->whereNull('parent_id')
+            ->where('menu_location', 'primary')
+            ->max('sort_order');
+
+        MenuItem::query()->create([
+            'parent_id' => null,
+            'title' => 'Ürünler',
+            'route_name' => 'products.index',
+            'target_type' => 'same_tab',
+            'menu_location' => 'primary',
+            'sort_order' => $maxSortOrder + 1,
+            'is_active' => true,
+        ]);
     }
 }
 

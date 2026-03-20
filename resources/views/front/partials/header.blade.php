@@ -75,21 +75,29 @@
                                     $href = $item->href;
                                     $isActive = $currentUrl === rtrim($href, '/') || request()->fullUrlIs(rtrim($href, '/') . '*');
                                     $hasChildren = $item->children->isNotEmpty();
+                                    $isProductsMenuItem = $productsIndexUrl && rtrim($href, '/') === $productsIndexUrl;
+                                    $useProductsDropdown = $isProductsMenuItem && $productCategories->isNotEmpty();
                                 @endphp
-                                @if ($hasChildren)
+                                @if ($hasChildren || $useProductsDropdown)
                                     <li class="nav-item dropdown {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
                                         <a class="nav-link dropdown-toggle" href="{{ $href }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
                                             {{ $item->label }}
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>{{ $item->label }} (Tümü)</a></li>
-                                            @foreach($item->children as $child)
-                                                @php
-                                                    $childHref = $child->href;
-                                                    $childActive = $currentUrl === rtrim($childHref, '/');
-                                                @endphp
-                                                <li><a class="dropdown-item {{ $childActive ? 'active' : '' }} {{ $child->css_class }}" href="{{ $childHref }}" target="{{ $child->target }}" @if($child->should_use_noopener) rel="noopener noreferrer" @endif>{{ $child->label }}</a></li>
-                                            @endforeach
+                                            @if($hasChildren)
+                                                @foreach($item->children as $child)
+                                                    @php
+                                                        $childHref = $child->href;
+                                                        $childActive = $currentUrl === rtrim($childHref, '/');
+                                                    @endphp
+                                                    <li><a class="dropdown-item {{ $childActive ? 'active' : '' }} {{ $child->css_class }}" href="{{ $childHref }}" target="{{ $child->target }}" @if($child->should_use_noopener) rel="noopener noreferrer" @endif>{{ $child->label }}</a></li>
+                                                @endforeach
+                                            @elseif($useProductsDropdown)
+                                                @foreach($productCategories as $cat)
+                                                    <li><a class="dropdown-item" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                                                @endforeach
+                                            @endif
                                         </ul>
                                     </li>
                                 @else
