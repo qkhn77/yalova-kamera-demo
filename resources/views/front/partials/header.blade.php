@@ -106,7 +106,7 @@
                                     $useProductsDropdown = $isProductsMenuItem && $productCategories->isNotEmpty();
                                 @endphp
                                 @if ($hasChildren || $useProductsDropdown)
-                                    <li class="nav-item dropdown {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
+                                    <li class="nav-item dropdown submenu {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
                                         <a class="nav-link dropdown-toggle" href="{{ $href }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
                                             {{ $item->label }}
                                         </a>
@@ -149,7 +149,7 @@
                                     <a class="nav-link" href="{{ route('projects.index') }}">Projeler</a>
                                 </li>
                                 @if($hasProductRoutes)
-                                    <li class="nav-item dropdown {{ request()->routeIs('products*') ? 'active' : '' }}">
+                                    <li class="nav-item dropdown submenu {{ request()->routeIs('products*') ? 'active' : '' }}">
                                         <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Ürünler
                                         </a>
@@ -169,7 +169,7 @@
                                 </li>
                             @endforelse
                             @if($hasProductRoutes && $menuItems->isNotEmpty() && !$hasProductsInDynamicMenu && !$hasProductsMenuConfigured)
-                                <li class="nav-item dropdown {{ request()->routeIs('products*') ? 'active' : '' }}">
+                                <li class="nav-item dropdown submenu {{ request()->routeIs('products*') ? 'active' : '' }}">
                                     <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Ürünler
                                     </a>

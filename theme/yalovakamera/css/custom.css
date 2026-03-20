@@ -6773,3 +6773,21 @@ header.main-header .header-sticky.active{
 		max-width: 80%;
 	}
 }
+
+/*
+ * Bootstrap .dropdown-menu varsayılanı display:none; tema .main-menu ul ul için
+ * visibility/opacity + li:hover > ul ile açıyor. Çakışınca hover'da alt menü görünmez.
+ * Masaüstünde dropdown UL'yi block yapıp temanın hover kurallarına bırakıyoruz.
+ * Mobil SlickNav kopyasında Bootstrap display:none alt menüyü açılmaz bırakabiliyordu.
+ */
+@media (min-width: 992px) {
+	.main-menu .navbar-nav .nav-item.dropdown > .dropdown-menu {
+		display: block !important;
+	}
+}
+
+.slicknav_menu .navbar-nav .dropdown-menu,
+.slicknav_menu ul.dropdown-menu,
+.slicknav_nav ul.dropdown-menu {
+	display: block !important;
+}
