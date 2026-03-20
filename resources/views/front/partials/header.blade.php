@@ -19,6 +19,23 @@
         $href = rtrim((string) $item->href, '/');
         return $href === $productsIndexUrl;
     }) : false;
+    $hasProductsMenuConfigured = false;
+    if ($hasProductRoutes && \Illuminate\Support\Facades\Schema::hasTable('menu_items')) {
+        try {
+            $hasProductsMenuConfigured = \App\Models\MenuItem::query()
+                ->whereNull('parent_id')
+                ->where(function ($query): void {
+                    $query->where('route_name', 'products.index')
+                        ->orWhere('url', '/urunler')
+                        ->orWhere('url', 'urunler')
+                        ->orWhere('title', 'Ürünler')
+                        ->orWhere('label', 'Ürünler');
+                })
+                ->exists();
+        } catch (\Throwable $e) {
+            $hasProductsMenuConfigured = false;
+        }
+    }
     $menuBg = \App\Models\Setting::get('menu_bg_color', '');
     $menuText = \App\Models\Setting::get('menu_text_color', '');
     $menuHoverBg = \App\Models\Setting::get('menu_hover_bg', '');
@@ -139,7 +156,7 @@
                                     <a class="nav-link" href="{{ route('contact') }}">İletişim</a>
                                 </li>
                             @endforelse
-                            @if($hasProductRoutes && $menuItems->isNotEmpty() && !$hasProductsInDynamicMenu)
+                            @if($hasProductRoutes && $menuItems->isNotEmpty() && !$hasProductsInDynamicMenu && !$hasProductsMenuConfigured)
                                 <li class="nav-item dropdown {{ request()->routeIs('products*') ? 'active' : '' }}">
                                     <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Ürünler
