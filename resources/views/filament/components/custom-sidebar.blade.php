@@ -67,6 +67,7 @@
     $isSayfalar = str_starts_with($currentPath, $adminPrefix.'/web/sayfalar');
     $isServisler = str_starts_with($currentPath, $adminPrefix.'/web/servisler');
     $isProjeler = str_starts_with($currentPath, $adminPrefix.'/web/projeler');
+    $isUrunler = str_starts_with($currentPath, $adminPrefix.'/products') || str_starts_with($currentPath, $adminPrefix.'/product-categories');
     $isBloglar = str_starts_with($currentPath, $adminPrefix.'/web/bloglar');
     $isWebAyarlar = str_starts_with($currentPath, $adminPrefix.'/web/web-ayarlar');
     $isWebModuller = str_starts_with($currentPath, $adminPrefix.'/web/web-moduller');
@@ -91,6 +92,7 @@
         sayfalarOpen: @js($isSayfalar),
         servislerOpen: @js($isServisler),
         projelerOpen: @js($isProjeler),
+        urunlerOpen: @js($isUrunler),
         bloglarOpen: @js($isBloglar),
         webAyarlarOpen: @js($isWebAyarlar),
         webModullerOpen: @js($isWebModuller),
@@ -333,8 +335,13 @@
                 <a href="{{ WebServisKategori::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/servisler/web-servis-kategori') ? 'is-active' : '' }}"><span>Servis Kategori</span></a>
             </div>
             @if($hasProductAdminRoutes)
-                <a href="{{ route('filament.admin.resources.products.index') }}" class="nav-item {{ request()->is($adminPrefix.'/products*') ? 'is-active' : '' }}"><span>Ürün Listesi</span></a>
-                <a href="{{ route('filament.admin.resources.product-categories.index') }}" class="nav-item {{ request()->is($adminPrefix.'/product-categories*') ? 'is-active' : '' }}"><span>Ürün Kategorileri</span></a>
+                <button type="button" class="nav-item {{ $isUrunler ? 'is-active' : '' }}" x-on:click="urunlerOpen = !urunlerOpen" :aria-expanded="urunlerOpen">
+                    <span>Ürünler</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </button>
+                <div x-show="urunlerOpen" x-collapse class="nav-group">
+                    <a href="{{ route('filament.admin.resources.products.index') }}" class="nav-item {{ request()->is($adminPrefix.'/products*') ? 'is-active' : '' }}"><span>Ürün Listesi</span></a>
+                    <a href="{{ route('filament.admin.resources.product-categories.index') }}" class="nav-item {{ request()->is($adminPrefix.'/product-categories*') ? 'is-active' : '' }}"><span>Ürün Kategorileri</span></a>
+                </div>
             @endif
             <button type="button" class="nav-item {{ $isProjeler ? 'is-active' : '' }}" x-on:click="projelerOpen = !projelerOpen" :aria-expanded="projelerOpen">
                 <span>Projeler</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
