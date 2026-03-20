@@ -13,7 +13,14 @@
 
      <!-- Video Start -->
           <div class="hero-bg-video">
-              <video autoplay muted loop id="myVideo">
+              <video
+                  id="myVideo"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  poster="{{ asset('theme/yalovakamera/images/hero-image.png') }}"
+              >
                  <source src="/theme/yalovakamera/images/hero-bg-video.mp4" type="video/mp4">
               </video>
          </div>
@@ -55,7 +62,15 @@
                 <div class="col-lg-6">
                     <div class="hero-image">
                         <figure>
-                            <img src="{{ asset('theme/yalovakamera/images/hero-image.png') }}" alt="Yalova Kamera Sistemleri">
+                            <img
+                                src="{{ asset('theme/yalovakamera/images/hero-image.png') }}"
+                                alt="Yalova Kamera Sistemleri"
+                                width="635"
+                                height="699"
+                                loading="eager"
+                                decoding="async"
+                                fetchpriority="high"
+                            >
                         </figure>
                     </div>
                 </div>
@@ -73,7 +88,7 @@
 
                         <div class="best-service-item wow fadeInUp">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-best-service-1.svg') }}" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-best-service-1.svg') }}" alt="" loading="lazy" decoding="async">
                             </div>
                             <div class="best-service-item-content">
                                 <h3>İç Mekân Kameraları</h3>
@@ -82,7 +97,7 @@
 
                         <div class="best-service-item wow fadeInUp" data-wow-delay="0.2s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-best-service-2.svg') }}" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-best-service-2.svg') }}" alt="" loading="lazy" decoding="async">
                             </div>
                             <div class="best-service-item-content">
                                 <h3>7/24 Alarm Müdahalesi</h3>
@@ -91,7 +106,7 @@
 
                         <div class="best-service-item wow fadeInUp" data-wow-delay="0.4s">
                             <div class="icon-box">
-                                <img src="{{ asset('theme/yalovakamera/images/icon-best-service-3.svg') }}" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/icon-best-service-3.svg') }}" alt="" loading="lazy" decoding="async">
                             </div>
                             <div class="best-service-item-content">
                                 <h3>Profesyonel Sistem Kurulumu</h3>
@@ -114,17 +129,17 @@
 
                         <div class="about-img-1">
                             <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/about-img-1.jpg') }}" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/about-img-1.jpg') }}" alt="" loading="lazy" decoding="async">
                             </figure>
 
                             <div class="company-experience-circle">
-                                <img src="{{ asset('theme/yalovakamera/images/experience-circle.svg') }}" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/experience-circle.svg') }}" alt="" loading="lazy" decoding="async">
                             </div>
                         </div>
 
                         <div class="about-img-2">
                             <figure class="image-anime reveal">
-                                <img src="{{ asset('theme/yalovakamera/images/about-img-2.jpg') }}" alt="">
+                                <img src="{{ asset('theme/yalovakamera/images/about-img-2.jpg') }}" alt="" loading="lazy" decoding="async">
                             </figure>
                         </div>
 
@@ -146,13 +161,13 @@
                         <div class="about-experience-box wow fadeInUp" data-wow-delay="0.6s">
                             <div class="about-experience-image">
                                 <figure class="image-anime reveal">
-                                    <img src="{{ asset('theme/yalovakamera/images/about-experience-image.jpg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/about-experience-image.jpg') }}" alt="" loading="lazy" decoding="async">
                                 </figure>
                             </div>
 
                             <div class="about-experience-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-experience.svg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-experience.svg') }}" alt="" loading="lazy" decoding="async">
                                 </div>
                                 <div class="about-experience-content">
                                     <h3><span class="counter">10</span>+ Yıl Deneyim</h3>
@@ -163,7 +178,7 @@
                         <div class="about-us-body wow fadeInUp" data-wow-delay="0.8s">
                             <div class="about-contact-box">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-contact.svg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-about-contact.svg') }}" alt="" loading="lazy" decoding="async">
                                 </div>
                                 <div class="about-contact-box-content">
                                     <p>Hemen Arayın</p>
@@ -312,7 +327,7 @@
                         <div class="cta-box-body wow fadeInUp" data-wow-delay="0.6s">
                             <div class="cta-box-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-phone.svg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-phone.svg') }}" alt="" loading="lazy" decoding="async">
                                 </div>
                                 <div class="cta-box-item-content">
                                     <p>Telefon</p>
@@ -322,7 +337,7 @@
 
                             <div class="cta-box-item">
                                 <div class="icon-box">
-                                    <img src="{{ asset('theme/yalovakamera/images/icon-mail.svg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/icon-mail.svg') }}" alt="" loading="lazy" decoding="async">
                                 </div>
                                 <div class="cta-box-item-content">
                                     <p>E-posta</p>
@@ -335,7 +350,7 @@
 
                 <div class="col-lg-6">
                     <div class="cta-box-image">
-                        <img src="{{ asset('theme/yalovakamera/images/cta-box-image.png') }}" alt="">
+                        <img src="{{ asset('theme/yalovakamera/images/cta-box-image.png') }}" alt="" loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -365,7 +380,7 @@
                         <div class="post-featured-image">
                             <a href="{{ route('blog.index') }}" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="{{ asset('theme/yalovakamera/images/post-1.jpg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/post-1.jpg') }}" alt="" loading="lazy" decoding="async">
                                 </figure>
                             </a>
                             <div class="post-item-meta">
@@ -389,7 +404,7 @@
                         <div class="post-featured-image">
                             <a href="{{ route('blog.index') }}" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="{{ asset('theme/yalovakamera/images/post-2.jpg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/post-2.jpg') }}" alt="" loading="lazy" decoding="async">
                                 </figure>
                             </a>
                             <div class="post-item-meta">
@@ -413,7 +428,7 @@
                         <div class="post-featured-image">
                             <a href="{{ route('blog.index') }}" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="{{ asset('theme/yalovakamera/images/post-3.jpg') }}" alt="">
+                                    <img src="{{ asset('theme/yalovakamera/images/post-3.jpg') }}" alt="" loading="lazy" decoding="async">
                                 </figure>
                             </a>
                             <div class="post-item-meta">
@@ -435,5 +450,18 @@
         </div>
     </div>
     <!-- Our Blog Section End -->
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var v = document.getElementById('myVideo');
+            if (!v) return;
+            // Mobilde LCP'yi yavaşlatmamak icin video autoplay yerine sadece desktop'ta başlat.
+            if (window.innerWidth >= 992) {
+                v.play().catch(function () {});
+            }
+        });
+    </script>
+@endpush
 
 @endsection

@@ -4,9 +4,15 @@
 	var $window = $(window); 
 	var $body = $('body'); 
 
-	/* Preloader Effect */
-	$window.on('load', function(){
-		$(".preloader").fadeOut(600);
+	/* Preloader Effect
+	 * PageSpeed'te FCP/LCP'yi geciktirmemek icin preloader'i "load" yerine DOM hazır olunca kapatıyoruz.
+	 */
+	$(document).ready(function () {
+		if ($(".preloader").length) {
+			setTimeout(function () {
+				$(".preloader").fadeOut(300);
+			}, 200);
+		}
 	});
 
 	/* Sticky Header */	

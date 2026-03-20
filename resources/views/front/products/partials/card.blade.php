@@ -7,7 +7,12 @@
     <div class="service-image">
         <a href="{{ route('products.show', $product->slug) }}">
             <figure class="image-anime">
-                <img src="{{ $image }}" alt="{{ $product->name }}">
+                <img
+                    src="{{ $image }}"
+                    alt="{{ $product->name }}"
+                    loading="lazy"
+                    decoding="async"
+                >
             </figure>
         </a>
         @if($product->is_featured)
