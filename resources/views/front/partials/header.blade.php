@@ -59,14 +59,13 @@
 </style>
 @endif
 <style>
-    /* Ürünler alt kategori listesi çok uzarsa hem desktop hem mobilde kullanılabilir kalsın */
-    .main-header .navbar .dropdown-menu {
+    /* Alt menü (2. grup) uzun liste olursa taşmayı kontrol et */
+    .main-menu ul ul{
         max-height: 60vh;
         overflow-y: auto;
     }
     @media (max-width: 991px) {
-        .responsive-menu .dropdown-menu,
-        .slicknav_nav .dropdown-menu {
+        .slicknav_nav ul{
             max-height: 45vh;
             overflow-y: auto;
         }
@@ -95,43 +94,61 @@
                                     $href = $item->href;
                                     $isActive = $currentUrl === rtrim($href, '/') || request()->fullUrlIs(rtrim($href, '/') . '*');
                                     $hasChildren = $item->children->isNotEmpty();
+
                                     $normalizedItemUrl = trim((string) ($item->url ?? ''), '/');
                                     $normalizedHrefPath = trim((string) parse_url($href, PHP_URL_PATH), '/');
-                                    $isProductsMenuItem =
+                                    $isProductsRootItem =
                                         ($item->route_name ?? null) === 'products.index'
                                         || ($productsIndexPath !== '' && $normalizedHrefPath === $productsIndexPath)
                                         || $normalizedItemUrl === 'urunler'
                                         || $normalizedHrefPath === 'urunler'
                                         || mb_strtolower((string) ($item->title ?? $item->label)) === 'ürünler';
-                                    $useProductsDropdown = $isProductsMenuItem && $productCategories->isNotEmpty();
+
+                                    $showProductsCategories = $hasProductRoutes && $isProductsRootItem;
+                                    $shouldHaveSubmenu = $hasChildren || $showProductsCategories;
                                 @endphp
-                                @if ($hasChildren || $useProductsDropdown)
-                                    <li class="nav-item dropdown submenu {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
-                                        <a class="nav-link dropdown-toggle" href="{{ $href }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
+
+                                @if($shouldHaveSubmenu)
+                                    <li class="nav-item submenu {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
+                                        <a class="nav-link" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
                                             {{ $item->label }}
                                         </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>{{ $item->label }} (Tümü)</a></li>
-                                            {{-- Hem admin alt menüleri hem ürün kategorileri: hasChildren varken @elseif ile kategoriler atlanıyordu; ikisini birlikte göster. --}}
+                                        <ul>
                                             @if($hasChildren)
                                                 @foreach($item->children as $child)
                                                     @php
                                                         $childHref = $child->href;
                                                         $childActive = $currentUrl === rtrim($childHref, '/');
                                                     @endphp
-                                                    <li><a class="dropdown-item {{ $childActive ? 'active' : '' }} {{ $child->css_class }}" href="{{ $childHref }}" target="{{ $child->target }}" @if($child->should_use_noopener) rel="noopener noreferrer" @endif>{{ $child->label }}</a></li>
+                                                    <li class="nav-item {{ $childActive ? 'active' : '' }} {{ $child->css_class }}">
+                                                        <a class="nav-link" href="{{ $childHref }}" target="{{ $child->target }}" @if($child->should_use_noopener) rel="noopener noreferrer" @endif>
+                                                            {{ $child->label }}
+                                                        </a>
+                                                    </li>
                                                 @endforeach
                                             @endif
-                                            @if($useProductsDropdown)
+
+                                            @if($showProductsCategories)
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="{{ route('products.index') }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
+                                                        Tüm Ürünler
+                                                    </a>
+                                                </li>
                                                 @foreach($productCategories as $cat)
-                                                    <li><a class="dropdown-item" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="{{ route('products.category', $cat->slug) }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
+                                                            {{ $cat->name }}
+                                                        </a>
+                                                    </li>
                                                 @endforeach
                                             @endif
                                         </ul>
                                     </li>
                                 @else
                                     <li class="nav-item {{ $isActive ? 'active' : '' }} {{ $item->css_class }}">
-                                        <a class="nav-link" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>{{ $item->label }}</a>
+                                        <a class="nav-link" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>
+                                            {{ $item->label }}
+                                        </a>
                                     </li>
                                 @endif
                             @empty
@@ -149,14 +166,16 @@
                                     <a class="nav-link" href="{{ route('projects.index') }}">Projeler</a>
                                 </li>
                                 @if($hasProductRoutes)
-                                    <li class="nav-item dropdown submenu {{ request()->routeIs('products*') ? 'active' : '' }}">
-                                        <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Ürünler
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="{{ route('products.index') }}">Tüm Ürünler</a></li>
+                                    <li class="nav-item submenu {{ request()->routeIs('products*') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('products.index') }}">Ürünler</a>
+                                        <ul>
+                                            <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('products.index') }}">Tüm Ürünler</a>
+                                            </li>
                                             @foreach($productCategories as $cat)
-                                                <li><a class="dropdown-item" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a>
+                                                </li>
                                             @endforeach
                                         </ul>
                                     </li>
@@ -168,15 +187,19 @@
                                     <a class="nav-link" href="{{ route('contact') }}">İletişim</a>
                                 </li>
                             @endforelse
-                            @if($hasProductRoutes && $menuItems->isNotEmpty() && !$hasProductsInDynamicMenu && !$hasProductsMenuConfigured)
-                                <li class="nav-item dropdown submenu {{ request()->routeIs('products*') ? 'active' : '' }}">
-                                    <a class="nav-link dropdown-toggle" href="{{ route('products.index') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Ürünler
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('products.index') }}">Tüm Ürünler</a></li>
+
+                            {{-- Admin'de ürünler menüsü hiç tanımlanmadıysa (pasif/aktif fark etmez), ufak bir fallback --}}
+                            @if($hasProductRoutes && $menuItems->isNotEmpty() && !$hasProductsMenuConfigured)
+                                <li class="nav-item submenu {{ request()->routeIs('products*') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('products.index') }}">Ürünler</a>
+                                    <ul>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('products.index') }}">Tüm Ürünler</a>
+                                        </li>
                                         @foreach($productCategories as $cat)
-                                            <li><a class="dropdown-item" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a>
+                                            </li>
                                         @endforeach
                                     </ul>
                                 </li>
