@@ -21,40 +21,44 @@
 
     <div class="our-services">
         <div class="container">
-            @if($featuredProducts->isNotEmpty())
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h3 class="mb-3">Öne Çıkan Ürünler</h3>
-                    </div>
-                    @foreach($featuredProducts as $product)
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            @include('front.products.partials.card', ['product' => $product])
+            <div class="row justify-content-center">
+                <div class="col-12 col-xl-11 col-xxl-10">
+                    @if($featuredProducts->isNotEmpty())
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3 class="mb-3">Öne Çıkan Ürünler</h3>
+                            </div>
+                            @foreach($featuredProducts as $product)
+                                <div class="col-lg-3 col-md-6 mb-3">
+                                    @include('front.products.partials.card', ['product' => $product])
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    @endif
+
+                    @include('front.products.partials.filters', [
+                        'action' => route('products.index'),
+                        'categories' => $categories,
+                        'brands' => $brands,
+                    ])
+
+                    <div class="row">
+                        @forelse($products as $product)
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                @include('front.products.partials.card', ['product' => $product])
+                            </div>
+                        @empty
+                            <div class="col-12 text-center py-5">
+                                <h4>Sonuç bulunamadı</h4>
+                                <p>Arama kriterlerinizi değiştirip tekrar deneyin.</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <div class="mt-4">
+                        {{ $products->links() }}
+                    </div>
                 </div>
-            @endif
-
-            @include('front.products.partials.filters', [
-                'action' => route('products.index'),
-                'categories' => $categories,
-                'brands' => $brands,
-            ])
-
-            <div class="row">
-                @forelse($products as $product)
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        @include('front.products.partials.card', ['product' => $product])
-                    </div>
-                @empty
-                    <div class="col-12 text-center py-5">
-                        <h4>Sonuç bulunamadı</h4>
-                        <p>Arama kriterlerinizi değiştirip tekrar deneyin.</p>
-                    </div>
-                @endforelse
-            </div>
-
-            <div class="mt-4">
-                {{ $products->links() }}
             </div>
         </div>
     </div>

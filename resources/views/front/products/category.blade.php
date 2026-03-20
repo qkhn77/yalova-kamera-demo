@@ -22,32 +22,36 @@
 
     <div class="our-services">
         <div class="container">
-            @if($category->description)
-                <div class="mb-4">
-                    <p>{{ $category->description }}</p>
+            <div class="row justify-content-center">
+                <div class="col-12 col-xl-11 col-xxl-10">
+                    @if($category->description)
+                        <div class="mb-4">
+                            <p>{{ $category->description }}</p>
+                        </div>
+                    @endif
+
+                    @include('front.products.partials.filters', [
+                        'action' => route('products.category', $category->slug),
+                        'categories' => $categories,
+                        'brands' => $brands,
+                    ])
+
+                    <div class="row">
+                        @forelse($products as $product)
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                @include('front.products.partials.card', ['product' => $product])
+                            </div>
+                        @empty
+                            <div class="col-12 text-center py-5">
+                                <h4>Bu kategoride ürün bulunamadı</h4>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <div class="mt-4">
+                        {{ $products->links() }}
+                    </div>
                 </div>
-            @endif
-
-            @include('front.products.partials.filters', [
-                'action' => route('products.category', $category->slug),
-                'categories' => $categories,
-                'brands' => $brands,
-            ])
-
-            <div class="row">
-                @forelse($products as $product)
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        @include('front.products.partials.card', ['product' => $product])
-                    </div>
-                @empty
-                    <div class="col-12 text-center py-5">
-                        <h4>Bu kategoride ürün bulunamadı</h4>
-                    </div>
-                @endforelse
-            </div>
-
-            <div class="mt-4">
-                {{ $products->links() }}
             </div>
         </div>
     </div>
