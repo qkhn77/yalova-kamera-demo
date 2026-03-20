@@ -293,6 +293,68 @@ Route::get('/clear-all-cache-temp', function () {
     return nl2br("Cache temizlendi.\n" . Artisan::output());
 });
 
+// Geçici kurulum route'u (SSH yoksa): ürün tablolarını doğru canlı DB'de oluşturur.
+Route::get('/install-products-temp', function () {
+    if (request('key') !== 'yalova-products-2026') {
+        abort(403);
+    }
+
+    \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+
+    if (! \Illuminate\Support\Facades\Schema::hasTable('product_categories')) {
+        \Illuminate\Support\Facades\Schema::create('product_categories', function (\Illuminate\Database\Schema\Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->string('seo_title')->nullable();
+            $table->text('seo_description')->nullable();
+            $table->boolean('is_active')->default(true)->index();
+            $table->unsignedInteger('sort_order')->default(0)->index();
+            $table->foreignId('parent_id')->nullable()->constrained('product_categories')->nullOnDelete();
+            $table->timestamps();
+            $table->index(['parent_id', 'is_active']);
+        });
+    }
+
+    if (! \Illuminate\Support\Facades\Schema::hasTable('products')) {
+        \Illuminate\Support\Facades\Schema::create('products', function (\Illuminate\Database\Schema\Blueprint $table): void {
+            $table->id();
+            $table->foreignId('category_id')->constrained('product_categories')->cascadeOnDelete();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('short_description')->nullable();
+            $table->longText('description')->nullable();
+            $table->string('sku')->nullable()->index();
+            $table->string('brand')->nullable()->index();
+            $table->decimal('price', 12, 2)->nullable();
+            $table->decimal('discounted_price', 12, 2)->nullable();
+            $table->string('stock_status', 20)->nullable()->index();
+            $table->string('image')->nullable();
+            $table->longText('gallery')->nullable();
+            $table->longText('technical_specs')->nullable();
+            $table->boolean('is_active')->default(true)->index();
+            $table->boolean('is_featured')->default(false)->index();
+            $table->unsignedInteger('sort_order')->default(0)->index();
+            $table->string('seo_title')->nullable();
+            $table->text('seo_description')->nullable();
+            $table->timestamps();
+            $table->index(['category_id', 'is_active']);
+            $table->index(['category_id', 'is_featured']);
+        });
+    }
+
+    \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
+    return response()->json([
+        'database' => \Illuminate\Support\Facades\DB::select('select database() as db')[0]->db ?? null,
+        'has_product_categories' => \Illuminate\Support\Facades\Schema::hasTable('product_categories'),
+        'has_products' => \Illuminate\Support\Facades\Schema::hasTable('products'),
+        'message' => 'Products tablolari kontrol edildi/olusturuldu.',
+    ]);
+});
+
 
 // use App\Models\User;
 // use Illuminate\Support\Facades\Hash;
