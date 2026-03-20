@@ -15,6 +15,9 @@
         }
     }
     $productsIndexUrl = $hasProductRoutes ? rtrim(route('products.index'), '/') : null;
+    $productsIndexPath = $hasProductRoutes
+        ? trim((string) parse_url(route('products.index'), PHP_URL_PATH), '/')
+        : '';
     $hasProductsInDynamicMenu = $productsIndexUrl ? $menuItems->contains(function ($item) use ($productsIndexUrl) {
         $href = rtrim((string) $item->href, '/');
         return $href === $productsIndexUrl;
@@ -96,6 +99,7 @@
                                     $normalizedHrefPath = trim((string) parse_url($href, PHP_URL_PATH), '/');
                                     $isProductsMenuItem =
                                         ($item->route_name ?? null) === 'products.index'
+                                        || ($productsIndexPath !== '' && $normalizedHrefPath === $productsIndexPath)
                                         || $normalizedItemUrl === 'urunler'
                                         || $normalizedHrefPath === 'urunler'
                                         || mb_strtolower((string) ($item->title ?? $item->label)) === 'ürünler';
@@ -108,6 +112,7 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="{{ $href }}" target="{{ $item->target }}" @if($item->should_use_noopener) rel="noopener noreferrer" @endif>{{ $item->label }} (Tümü)</a></li>
+                                            {{-- Hem admin alt menüleri hem ürün kategorileri: hasChildren varken @elseif ile kategoriler atlanıyordu; ikisini birlikte göster. --}}
                                             @if($hasChildren)
                                                 @foreach($item->children as $child)
                                                     @php
@@ -116,7 +121,8 @@
                                                     @endphp
                                                     <li><a class="dropdown-item {{ $childActive ? 'active' : '' }} {{ $child->css_class }}" href="{{ $childHref }}" target="{{ $child->target }}" @if($child->should_use_noopener) rel="noopener noreferrer" @endif>{{ $child->label }}</a></li>
                                                 @endforeach
-                                            @elseif($useProductsDropdown)
+                                            @endif
+                                            @if($useProductsDropdown)
                                                 @foreach($productCategories as $cat)
                                                     <li><a class="dropdown-item" href="{{ route('products.category', $cat->slug) }}">{{ $cat->name }}</a></li>
                                                 @endforeach
