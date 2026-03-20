@@ -75,9 +75,7 @@
     $isAyarlar = str_starts_with($currentPath, $adminPrefix.'/ayarlar');
     $isKullaniciAyarlari = str_starts_with($currentPath, $adminPrefix.'/ayarlar/kullanici-ayarlari');
     $hasProductAdminRoutes = \Illuminate\Support\Facades\Route::has('filament.admin.resources.products.index')
-        && \Illuminate\Support\Facades\Route::has('filament.admin.resources.product-categories.index')
-        && \Illuminate\Support\Facades\Schema::hasTable('products')
-        && \Illuminate\Support\Facades\Schema::hasTable('product_categories');
+        && \Illuminate\Support\Facades\Route::has('filament.admin.resources.product-categories.index');
 @endphp
 
 <div
