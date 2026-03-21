@@ -52,7 +52,7 @@ class YoneticiGirisDenetleyici extends Controller
         Auth::login($kullanici, $request->boolean('beni_hatirla'));
         $request->session()->regenerate();
 
-        return redirect()->intended(PanelYonlendirme::anaSayfaUrl());
+        return PanelYonlendirme::guvenliIntendedIlePanel($request);
     }
 
     /**

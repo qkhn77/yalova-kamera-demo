@@ -92,7 +92,7 @@ class TenantAuthController extends Controller
             (int) $firmaKullanici->id
         );
 
-        return redirect()->intended(PanelYonlendirme::anaSayfaUrl());
+        return PanelYonlendirme::guvenliIntendedIlePanel($request);
     }
 
     /**
