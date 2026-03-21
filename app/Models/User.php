@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Database\Scopes\KullaniciSoftDeletingScope;
+use App\Support\KullaniciTablosuYardimcisi;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,7 +14,11 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable;
+
+    use SoftDeletes {
+        performDeleteOnModel as protected softDeletesPerformDeleteOnModel;
+    }
 
     protected $fillable = [
         'name',
@@ -42,6 +48,26 @@ class User extends Authenticatable implements FilamentUser
     public function firmaKullanicilari(): HasMany
     {
         return $this->hasMany(FirmaKullanici::class, 'kullanici_id');
+    }
+
+    /**
+     * Varsayılan SoftDeletingScope yerine kolon yokken sorguyu kırmayan scope.
+     */
+    public static function bootSoftDeletes(): void
+    {
+        static::addGlobalScope(new KullaniciSoftDeletingScope);
+    }
+
+    /**
+     * Kolon yokken soft delete güncellemesi SQL hatası vermesin; kalıcı silme kullanılır.
+     */
+    protected function performDeleteOnModel()
+    {
+        if (! KullaniciTablosuYardimcisi::usersDeletedAtKolonuVarMi()) {
+            return parent::performDeleteOnModel();
+        }
+
+        return $this->softDeletesPerformDeleteOnModel();
     }
 
     public function canAccessPanel(Panel $panel): bool

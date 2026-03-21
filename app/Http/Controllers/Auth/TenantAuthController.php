@@ -7,6 +7,7 @@ use App\Models\Firma;
 use App\Models\FirmaKullanici;
 use App\Models\User;
 use App\Services\TenantContextService;
+use App\Support\KullaniciTablosuYardimcisi;
 use App\Support\PanelYonlendirme;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -101,9 +102,12 @@ class TenantAuthController extends Controller
     {
         $tablo = (new User)->getTable();
 
-        return User::query()
-            ->withoutGlobalScopes()
-            ->whereNull($tablo.'.deleted_at')
+        $sorgu = User::query()
+            ->withoutGlobalScopes();
+
+        KullaniciTablosuYardimcisi::kullaniciSilinmemisFiltresiUygula($sorgu, $tablo);
+
+        return $sorgu
             ->where(function ($sorgu) use ($girisKimlik): void {
                 $sorgu->where('kullanici_adi', $girisKimlik)
                     ->orWhere('email', $girisKimlik);

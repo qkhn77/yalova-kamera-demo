@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\TenantContextService;
+use App\Support\KullaniciTablosuYardimcisi;
 use App\Support\PanelYonlendirme;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,9 +63,12 @@ class YoneticiGirisDenetleyici extends Controller
     {
         $tablo = (new User)->getTable();
 
-        return User::query()
-            ->withoutGlobalScopes()
-            ->whereNull($tablo.'.deleted_at')
+        $sorgu = User::query()
+            ->withoutGlobalScopes();
+
+        KullaniciTablosuYardimcisi::kullaniciSilinmemisFiltresiUygula($sorgu, $tablo);
+
+        return $sorgu
             ->where(function ($sorgu) use ($kimlik): void {
                 $sorgu->where('kullanici_adi', $kimlik)
                     ->orWhere('email', $kimlik);
