@@ -7,8 +7,10 @@ use Filament\Http\Middleware\Authenticate as Middleware;
 /**
  * Filament panelinde yerleşik login yok; kimlik doğrulanmamış istekler yönlendirilir.
  *
- * Çift giriş: varsayılan hedef firma girişi (`tenant.login`). Sistem yöneticileri
- * doğrudan `/yonetici-giris` üzerinden oturum açar; yine de panel koruması aynı guard ile çalışır.
+ * Çift giriş:
+ * - Firma kullanıcıları: `/giris` (tenant.login). Panel sonrası TenantContextMiddleware aktif firma ister.
+ * - Süper admin: `/yonetici-giris` (yonetici.login); giriş formunda firma girişine link vardır.
+ * Misafir `/admin` isteği önce buraya düşer; Laravel AuthenticationException ile `url.intended` saklanır.
  */
 class FilamentAuthenticate extends Middleware
 {

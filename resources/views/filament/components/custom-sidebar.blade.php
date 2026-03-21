@@ -55,6 +55,7 @@
     use App\Models\Firma;
     use App\Models\FirmaKullanici;
     use App\Filament\Resources\PlanYonetimKaynagi;
+    use App\Support\SaaSemaYardimcisi;
 
     $adminPrefix = \App\Providers\Filament\AdminPanelProvider::adminPath();
     $currentPath = request()->path();
@@ -100,9 +101,15 @@
         || $can('urunler', 'urun_kategori.goruntule');
 
     $firmaAyarlariGorunur = $aktifFirmaId
+        && SaaSemaYardimcisi::firmalarTablosuVarMi()
         && ($__firmaCtx = Firma::query()->find($aktifFirmaId))
         && $aktifKullanici?->can('update', $__firmaCtx);
-    $firmaIciKullanicilarGorunur = $aktifKullanici?->can('viewAny', FirmaKullanici::class) ?? false;
+    $firmaIciKullanicilarGorunur = SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()
+        && ($aktifKullanici?->can('viewAny', FirmaKullanici::class) ?? false);
+
+    $sistemFirmalarMenusu = $superAdminMi && SaaSemaYardimcisi::firmalarTablosuVarMi();
+    $sistemPlanlarMenusu = $superAdminMi && SaaSemaYardimcisi::planlarTablosuVarMi();
+    $sistemYonetimiMenusuGorunur = $sistemFirmalarMenusu || $sistemPlanlarMenusu;
 @endphp
 
 <div
@@ -239,7 +246,7 @@
             </span>
         </a>
 
-        @if($superAdminMi)
+        @if($sistemYonetimiMenusuGorunur)
         <div class="section-gap" aria-hidden="true"></div>
         <button
             type="button"
@@ -254,14 +261,18 @@
             <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
         </button>
         <div x-show="sistemYonetimiOpen" x-collapse class="nav-group">
+            @if($sistemFirmalarMenusu)
             <a
                 href="{{ FirmaYonetimKaynagi::getUrl() }}"
                 class="nav-item {{ str_starts_with($currentPath, $adminPrefix.'/sistem-firmalar') ? 'is-active' : '' }}"
             ><span>Firmalar</span></a>
+            @endif
+            @if($sistemPlanlarMenusu)
             <a
                 href="{{ PlanYonetimKaynagi::getUrl() }}"
                 class="nav-item {{ str_starts_with($currentPath, $adminPrefix.'/sistem-planlar') ? 'is-active' : '' }}"
             ><span>Planlar</span></a>
+            @endif
         </div>
         @endif
 

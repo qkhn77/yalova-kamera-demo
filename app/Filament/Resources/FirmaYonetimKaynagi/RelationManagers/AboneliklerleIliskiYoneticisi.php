@@ -73,9 +73,9 @@ class AboneliklerleIliskiYoneticisi extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label('Abonelik ekle')
-                    ->using(function (array $veri, Table $tablo): FirmaAboneligi {
-                        $iliski = $tablo->getRelationship();
-                        $kayit = new FirmaAboneligi($veri);
+                    ->using(function (array $data, Table $table): FirmaAboneligi {
+                        $iliski = $table->getRelationship();
+                        $kayit = new FirmaAboneligi($data);
                         $iliski->save($kayit);
                         $kayit->refresh();
                         DenetimYardimcisi::kaydet(
@@ -93,17 +93,17 @@ class AboneliklerleIliskiYoneticisi extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->label('Düzenle')
-                    ->using(function (array $veri, Model $kayit, Table $tablo): void {
-                        /** @var FirmaAboneligi $kayit */
-                        $kayit->update($veri);
-                        $kayit->refresh();
+                    ->using(function (array $data, Model $record, Table $table): void {
+                        /** @var FirmaAboneligi $record */
+                        $record->update($data);
+                        $record->refresh();
                         DenetimYardimcisi::kaydet(
                             'abonelik_guncellendi',
                             FirmaAboneligi::class,
-                            (int) $kayit->getKey(),
-                            (int) $kayit->firma_id,
+                            (int) $record->getKey(),
+                            (int) $record->firma_id,
                             null,
-                            $kayit->only(['plan_id', 'durum', 'baslangic_tarihi', 'bitis_tarihi', 'otomatik_yenileme'])
+                            $record->only(['plan_id', 'durum', 'baslangic_tarihi', 'bitis_tarihi', 'otomatik_yenileme'])
                         );
                     }),
             ])

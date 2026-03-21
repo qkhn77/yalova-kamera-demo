@@ -6,6 +6,7 @@ use App\Filament\Resources\PlanYonetimKaynagi\Pages;
 use App\Filament\Resources\PlanYonetimKaynagi\RelationManagers;
 use App\Models\Plan;
 use App\Models\User;
+use App\Support\SaaSemaYardimcisi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -48,17 +49,17 @@ class PlanYonetimKaynagi extends Resource
 
     public static function canAccess(): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::planlarTablosuVarMi();
     }
 
     public static function canViewAny(): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::planlarTablosuVarMi();
     }
 
     public static function canView(Model $kayit): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::planlarTablosuVarMi();
     }
 
     public static function form(Form $form): Form
@@ -117,6 +118,14 @@ class PlanYonetimKaynagi extends Resource
 
     public static function getRelations(): array
     {
+        if (! SaaSemaYardimcisi::planlarTablosuVarMi()) {
+            return [];
+        }
+
+        if (! SaaSemaYardimcisi::planModulleriTablosuVarMi() || ! SaaSemaYardimcisi::modullerTablosuVarMi()) {
+            return [];
+        }
+
         return [
             RelationManagers\PlanModulleriIliskisi::class,
         ];
@@ -133,16 +142,16 @@ class PlanYonetimKaynagi extends Resource
 
     public static function canCreate(): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::planlarTablosuVarMi();
     }
 
     public static function canEdit(Model $kayit): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::planlarTablosuVarMi();
     }
 
     public static function canDelete(Model $kayit): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::planlarTablosuVarMi();
     }
 }

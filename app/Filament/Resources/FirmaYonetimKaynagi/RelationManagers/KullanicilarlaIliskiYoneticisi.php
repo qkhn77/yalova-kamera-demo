@@ -61,9 +61,9 @@ class KullanicilarlaIliskiYoneticisi extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->label('Düzenle')
-                    ->using(function (array $veri, Model $kayit): void {
+                    ->using(function (array $data, Model $kayit): void {
                         /** @var FirmaKullanici $kayit */
-                        $kayit->update($veri);
+                        $kayit->update($data);
                         $kayit->refresh();
                         DenetimYardimcisi::kaydet(
                             'firma_kullanicisi_guncellendi',

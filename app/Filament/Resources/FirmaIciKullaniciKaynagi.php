@@ -9,6 +9,7 @@ use App\Models\Rol;
 use App\Models\User;
 use App\Services\TenantContextService;
 use App\Support\FirmaIciRolKisitlayici;
+use App\Support\SaaSemaYardimcisi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
@@ -46,6 +47,10 @@ class FirmaIciKullaniciKaynagi extends Resource
 
     public static function canAccess(): bool
     {
+        if (! SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()) {
+            return false;
+        }
+
         return Auth::check() && Auth::user()->can('viewAny', FirmaKullanici::class);
     }
 
@@ -210,6 +215,10 @@ class FirmaIciKullaniciKaynagi extends Resource
 
     public static function getRelations(): array
     {
+        if (! SaaSemaYardimcisi::tabloVarMi('kullanici_yetkileri')) {
+            return [];
+        }
+
         return [
             RelationManagers\OzelYetkilerleIliskiYoneticisi::class,
         ];
@@ -226,21 +235,37 @@ class FirmaIciKullaniciKaynagi extends Resource
 
     public static function canViewAny(): bool
     {
+        if (! SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()) {
+            return false;
+        }
+
         return Auth::check() && Auth::user()->can('viewAny', FirmaKullanici::class);
     }
 
     public static function canCreate(): bool
     {
+        if (! SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()) {
+            return false;
+        }
+
         return Auth::check() && Auth::user()->can('create', FirmaKullanici::class);
     }
 
     public static function canEdit(Model $kayit): bool
     {
+        if (! SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()) {
+            return false;
+        }
+
         return Auth::check() && Auth::user()->can('update', $kayit);
     }
 
     public static function canDelete(Model $kayit): bool
     {
+        if (! SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()) {
+            return false;
+        }
+
         return Auth::check() && Auth::user()->can('delete', $kayit);
     }
 

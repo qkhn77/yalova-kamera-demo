@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\Firma;
 use App\Services\FirmaAyarDeposu;
+use App\Support\SaaSemaYardimcisi;
 use App\Services\TenantContextService;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -34,6 +35,10 @@ class FirmaAyarlariSayfasi extends Page implements HasForms
 
     public static function canAccess(): bool
     {
+        if (! SaaSemaYardimcisi::firmalarTablosuVarMi()) {
+            return false;
+        }
+
         $kullanici = Auth::user();
         if (! $kullanici) {
             return false;

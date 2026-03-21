@@ -7,6 +7,7 @@ use App\Filament\Resources\FirmaYonetimKaynagi\RelationManagers;
 use App\Models\Firma;
 use App\Models\User;
 use App\Support\DenetimYardimcisi;
+use App\Support\SaaSemaYardimcisi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -53,17 +54,17 @@ class FirmaYonetimKaynagi extends Resource
 
     public static function canAccess(): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::firmalarTablosuVarMi();
     }
 
     public static function canViewAny(): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::firmalarTablosuVarMi();
     }
 
     public static function canView(Model $kayit): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::firmalarTablosuVarMi();
     }
 
     public static function form(Form $form): Form
@@ -144,36 +145,36 @@ class FirmaYonetimKaynagi extends Resource
                         Forms\Components\DatePicker::make('baslangic')->label('Başlangıç'),
                         Forms\Components\DatePicker::make('bitis')->label('Bitiş'),
                     ])
-                    ->query(function (Builder $sorgu, array $veri): Builder {
-                        return $sorgu
-                            ->when($veri['baslangic'] ?? null, fn (Builder $q, $t) => $q->whereDate('created_at', '>=', $t))
-                            ->when($veri['bitis'] ?? null, fn (Builder $q, $t) => $q->whereDate('created_at', '<=', $t));
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['baslangic'] ?? null, fn (Builder $q, $t) => $q->whereDate('created_at', '>=', $t))
+                            ->when($data['bitis'] ?? null, fn (Builder $q, $t) => $q->whereDate('created_at', '<=', $t));
                     }),
                 Tables\Filters\Filter::make('firma_kodu')
                     ->label('Firma kodu')
                     ->form([
                         Forms\Components\TextInput::make('deger')->label('Kod içerir'),
                     ])
-                    ->query(function (Builder $sorgu, array $veri): Builder {
-                        $d = $veri['deger'] ?? null;
+                    ->query(function (Builder $query, array $data): Builder {
+                        $d = $data['deger'] ?? null;
                         if (! filled($d)) {
-                            return $sorgu;
+                            return $query;
                         }
 
-                        return $sorgu->where('firma_kodu', 'like', '%'.$d.'%');
+                        return $query->where('firma_kodu', 'like', '%'.$d.'%');
                     }),
                 Tables\Filters\Filter::make('firma_adi')
                     ->label('Firma adı')
                     ->form([
                         Forms\Components\TextInput::make('deger')->label('Ad içerir'),
                     ])
-                    ->query(function (Builder $sorgu, array $veri): Builder {
-                        $d = $veri['deger'] ?? null;
+                    ->query(function (Builder $query, array $data): Builder {
+                        $d = $data['deger'] ?? null;
                         if (! filled($d)) {
-                            return $sorgu;
+                            return $query;
                         }
 
-                        return $sorgu->where('ad', 'like', '%'.$d.'%');
+                        return $query->where('ad', 'like', '%'.$d.'%');
                     }),
             ])
             ->actions([
@@ -233,11 +234,22 @@ class FirmaYonetimKaynagi extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            RelationManagers\KullanicilarlaIliskiYoneticisi::class,
-            RelationManagers\ModullerleIliskiYoneticisi::class,
-            RelationManagers\AboneliklerleIliskiYoneticisi::class,
-        ];
+        if (! SaaSemaYardimcisi::firmalarTablosuVarMi()) {
+            return [];
+        }
+
+        $iliskiler = [];
+        if (SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()) {
+            $iliskiler[] = RelationManagers\KullanicilarlaIliskiYoneticisi::class;
+        }
+        if (SaaSemaYardimcisi::firmaModulleriTablosuVarMi() && SaaSemaYardimcisi::modullerTablosuVarMi()) {
+            $iliskiler[] = RelationManagers\ModullerleIliskiYoneticisi::class;
+        }
+        if (SaaSemaYardimcisi::firmaAbonelikleriTablosuVarMi() && SaaSemaYardimcisi::planlarTablosuVarMi()) {
+            $iliskiler[] = RelationManagers\AboneliklerleIliskiYoneticisi::class;
+        }
+
+        return $iliskiler;
     }
 
     public static function getPages(): array
@@ -251,12 +263,12 @@ class FirmaYonetimKaynagi extends Resource
 
     public static function canCreate(): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::firmalarTablosuVarMi();
     }
 
     public static function canEdit(Model $kayit): bool
     {
-        return static::sadeceSistemYoneticisi();
+        return static::sadeceSistemYoneticisi() && SaaSemaYardimcisi::firmalarTablosuVarMi();
     }
 
     public static function canDelete(Model $kayit): bool

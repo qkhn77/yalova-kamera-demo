@@ -8,6 +8,7 @@ use App\Models\FirmaKullanici;
 use App\Models\Modul;
 use App\Services\ModulErisimService;
 use App\Services\TenantContextService;
+use App\Support\SaaSemaYardimcisi;
 use Carbon\Carbon;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,10 @@ class KiraciOzetWidget extends Widget
             return false;
         }
 
+        if (! SaaSemaYardimcisi::firmalarTablosuVarMi()) {
+            return false;
+        }
+
         return app(TenantContextService::class)->aktifFirmaId() !== null;
     }
 
@@ -46,9 +51,35 @@ class KiraciOzetWidget extends Widget
     {
         $fid = (int) (app(TenantContextService::class)->aktifFirmaId() ?? 0);
         if ($fid <= 0) {
-            return ['satirlar' => []];
+            return [
+                'firma' => null,
+                'aktifModuller' => [],
+                'saltOkunurModuller' => [],
+                'kapaliModuller' => [],
+                'kullaniciSayisi' => 0,
+                'abonelik' => null,
+            ];
         }
 
+        try {
+            return $this->kiraciOzetVerisiniOlustur($fid);
+        } catch (\Throwable) {
+            return [
+                'firma' => null,
+                'aktifModuller' => [],
+                'saltOkunurModuller' => [],
+                'kapaliModuller' => [],
+                'kullaniciSayisi' => 0,
+                'abonelik' => null,
+            ];
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function kiraciOzetVerisiniOlustur(int $fid): array
+    {
         $firma = Firma::query()->find($fid);
         $servis = app(ModulErisimService::class);
 
@@ -56,36 +87,45 @@ class KiraciOzetWidget extends Widget
         $saltOkunurModuller = [];
         $kapaliModuller = [];
 
-        foreach (Modul::query()->where('aktif_mi', true)->orderBy('siralama')->get() as $modul) {
-            $kod = (string) $modul->kod;
-            $durum = $servis->modulDurumu($fid, $kod);
-            if ($durum === 'aktif') {
-                $aktifModuller[] = $modul->ad;
-            } elseif ($durum === 'salt_okunur') {
-                $saltOkunurModuller[] = $modul->ad;
-            } else {
-                $kapaliModuller[] = $modul->ad;
+        if (SaaSemaYardimcisi::modullerTablosuVarMi()) {
+            $modulSorgusu = Modul::query()->where('aktif_mi', true)->orderBy('siralama');
+            foreach ($modulSorgusu->get() as $modul) {
+                $kod = (string) $modul->kod;
+                $durum = $servis->modulDurumu($fid, $kod);
+                if ($durum === 'aktif') {
+                    $aktifModuller[] = $modul->ad;
+                } elseif ($durum === 'salt_okunur') {
+                    $saltOkunurModuller[] = $modul->ad;
+                } else {
+                    $kapaliModuller[] = $modul->ad;
+                }
             }
         }
 
-        $kullaniciSayisi = FirmaKullanici::query()
-            ->withoutGlobalScopes()
-            ->where('firma_id', $fid)
-            ->whereNull('deleted_at')
-            ->count();
+        $kullaniciSayisi = 0;
+        if (SaaSemaYardimcisi::firmaKullanicilariTablosuVarMi()) {
+            $kullaniciSayisi = FirmaKullanici::query()
+                ->withoutGlobalScopes()
+                ->where('firma_id', $fid)
+                ->whereNull('deleted_at')
+                ->count();
+        }
 
-        $bugun = Carbon::today()->toDateString();
-        $abonelik = FirmaAboneligi::query()
-            ->withoutGlobalScopes()
-            ->where('firma_id', $fid)
-            ->where('durum', 'aktif')
-            ->whereDate('baslangic_tarihi', '<=', $bugun)
-            ->where(function ($sorgu) use ($bugun): void {
-                $sorgu->whereNull('bitis_tarihi')
-                    ->orWhereDate('bitis_tarihi', '>=', $bugun);
-            })
-            ->with('plan')
-            ->first();
+        $abonelik = null;
+        if (SaaSemaYardimcisi::firmaAbonelikleriTablosuVarMi()) {
+            $bugun = Carbon::today()->toDateString();
+            $abonelik = FirmaAboneligi::query()
+                ->withoutGlobalScopes()
+                ->where('firma_id', $fid)
+                ->where('durum', 'aktif')
+                ->whereDate('baslangic_tarihi', '<=', $bugun)
+                ->where(function ($sorgu) use ($bugun): void {
+                    $sorgu->whereNull('bitis_tarihi')
+                        ->orWhereDate('bitis_tarihi', '>=', $bugun);
+                })
+                ->when(SaaSemaYardimcisi::planlarTablosuVarMi(), fn ($q) => $q->with('plan'))
+                ->first();
+        }
 
         return [
             'firma' => $firma,

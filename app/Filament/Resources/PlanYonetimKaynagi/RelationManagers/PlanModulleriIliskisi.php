@@ -53,9 +53,9 @@ class PlanModulleriIliskisi extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label('Modül bağla')
-                    ->using(function (array $veri, Table $tablo): PlanModulu {
-                        $iliski = $tablo->getRelationship();
-                        $kayit = new PlanModulu($veri);
+                    ->using(function (array $data, Table $table): PlanModulu {
+                        $iliski = $table->getRelationship();
+                        $kayit = new PlanModulu($data);
                         $iliski->save($kayit);
                         $kayit->refresh();
                         DenetimYardimcisi::kaydet(
@@ -73,11 +73,11 @@ class PlanModulleriIliskisi extends RelationManager
             ->actions([
                 Tables\Actions\DeleteAction::make()
                     ->label('Kaldır')
-                    ->using(function (Model $kayit): bool {
-                        /** @var PlanModulu $kayit */
-                        $ozet = ['plan_id' => $kayit->plan_id, 'modul_id' => $kayit->modul_id];
-                        $anahtar = (int) $kayit->getKey();
-                        $silindi = (bool) $kayit->delete();
+                    ->using(function (Model $record): bool {
+                        /** @var PlanModulu $record */
+                        $ozet = ['plan_id' => $record->plan_id, 'modul_id' => $record->modul_id];
+                        $anahtar = (int) $record->getKey();
+                        $silindi = (bool) $record->delete();
                         if ($silindi) {
                             DenetimYardimcisi::kaydet(
                                 'plan_modulu_kaldirildi',

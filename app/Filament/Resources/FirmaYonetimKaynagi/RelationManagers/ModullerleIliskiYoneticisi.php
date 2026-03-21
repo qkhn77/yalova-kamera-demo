@@ -82,9 +82,9 @@ class ModullerleIliskiYoneticisi extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label('Modül ekle')
-                    ->using(function (array $veri, Table $tablo): FirmaModulu {
-                        $iliski = $tablo->getRelationship();
-                        $kayit = new FirmaModulu($veri);
+                    ->using(function (array $data, Table $table): FirmaModulu {
+                        $iliski = $table->getRelationship();
+                        $kayit = new FirmaModulu($data);
                         $iliski->save($kayit);
                         $kayit->refresh();
                         DenetimYardimcisi::kaydet(
@@ -114,17 +114,17 @@ class ModullerleIliskiYoneticisi extends RelationManager
                         Forms\Components\DatePicker::make('baslangic_tarihi')->label('Başlangıç'),
                         Forms\Components\DatePicker::make('bitis_tarihi')->label('Bitiş'),
                     ])
-                    ->using(function (array $veri, Model $kayit, Table $tablo): void {
-                        /** @var FirmaModulu $kayit */
-                        $kayit->update($veri);
-                        $kayit->refresh();
+                    ->using(function (array $data, Model $record, Table $table): void {
+                        /** @var FirmaModulu $record */
+                        $record->update($data);
+                        $record->refresh();
                         DenetimYardimcisi::kaydet(
                             'firma_modulu_degisti',
                             FirmaModulu::class,
-                            (int) $kayit->getKey(),
-                            (int) $kayit->firma_id,
+                            (int) $record->getKey(),
+                            (int) $record->firma_id,
                             null,
-                            $kayit->only(['durum', 'baslangic_tarihi', 'bitis_tarihi'])
+                            $record->only(['durum', 'baslangic_tarihi', 'bitis_tarihi'])
                         );
                     }),
             ])
