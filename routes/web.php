@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Auth\TenantAuthController;
+use App\Http\Controllers\Auth\YoneticiGirisDenetleyici;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SitemapController;
 use App\Models\BilgiSayfa;
@@ -15,6 +17,26 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
+Route::middleware('guest')->group(function (): void {
+    Route::get('/giris', [TenantAuthController::class, 'girisFormu'])->name('tenant.login');
+    Route::post('/giris', [TenantAuthController::class, 'giris'])->name('tenant.login.attempt');
+
+    Route::get('/yonetici-giris', [YoneticiGirisDenetleyici::class, 'girisFormu'])->name('yonetici.login');
+    Route::post('/yonetici-giris', [YoneticiGirisDenetleyici::class, 'giris'])
+        ->middleware('throttle:10,1')
+        ->name('yonetici.login.attempt');
+
+    Route::get('/firma-kodumu-bul', [TenantAuthController::class, 'firmaKoduBulFormu'])
+        ->name('tenant.firma-kodu-bul.form');
+    Route::post('/firma-kodumu-bul', [TenantAuthController::class, 'firmaKoduBul'])
+        ->middleware('throttle:5,1')
+        ->name('tenant.firma-kodu-bul');
+});
+
+Route::post('/cikis', [TenantAuthController::class, 'cikis'])
+    ->middleware('auth')
+    ->name('tenant.logout');
 
 Route::get('/', function () {
     $services = Service::with('category')

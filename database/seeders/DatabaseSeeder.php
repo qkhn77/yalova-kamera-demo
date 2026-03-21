@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\MenuSeeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,16 +13,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        if (app()->environment(['local', 'testing'])) {
+            $ekAlanlar = [];
+            if (Schema::hasColumn('users', 'kullanici_adi')) {
+                $ekAlanlar['kullanici_adi'] = 'test_user';
+            }
+            if (Schema::hasColumn('users', 'ad_soyad')) {
+                $ekAlanlar['ad_soyad'] = 'Test User';
+            }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            User::withoutGlobalScopes()->firstOrCreate(
+                ['email' => 'test@example.com'],
+                array_merge(
+                    ['name' => 'Test User', 'password' => 'password'],
+                    $ekAlanlar
+                )
+            );
+        }
+
+        $this->call([
+            ServiceSeeder::class,
+            ProjectSeeder::class,
+            PageSeeder::class,
+            MenuSeeder::class,
         ]);
 
-        $this->call(ServiceSeeder::class);
-        $this->call(ProjectSeeder::class);
-        $this->call(PageSeeder::class);
-        $this->call(MenuSeeder::class);
+        // SaaS çekirdek seed asla buradan çalıştırılmaz (üretim güvenliği).
+        // php artisan db:seed --class=SaasDatabaseSeeder
     }
 }

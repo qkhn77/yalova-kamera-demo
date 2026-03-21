@@ -2,8 +2,27 @@
 
 namespace App\Providers;
 
+use App\Models\Firma;
+use App\Models\FirmaAboneligi;
+use App\Models\FirmaKullanici;
+use App\Models\FirmaModulu;
+use App\Models\Modul;
+use App\Models\Plan;
+use App\Models\KullaniciYetki;
+use App\Models\PlanModulu;
+use App\Models\User;
+use App\Policies\FirmaIciKullaniciPolitikasi;
+use App\Policies\FirmaPolicy;
+use App\Policies\KullaniciOzelYetkiPolitikasi;
+use App\Policies\KullaniciPolicy;
+use App\Policies\ModulPolicy;
+use App\Policies\SadeceSuperAdminPolitikasi;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Events\Logout;
+use App\Services\TenantContextService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +34,22 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Tüm çıkış yollarında (web /cikis, Filament vb.) tenant oturumu tek sefer temizlensin.
+        Event::listen(Logout::class, function (): void {
+            app(TenantContextService::class)->temizle();
+        });
+
+        Gate::policy(Firma::class, FirmaPolicy::class);
+        Gate::policy(User::class, KullaniciPolicy::class);
+        Gate::policy(Modul::class, ModulPolicy::class);
+
+        Gate::policy(Plan::class, SadeceSuperAdminPolitikasi::class);
+        Gate::policy(PlanModulu::class, SadeceSuperAdminPolitikasi::class);
+        Gate::policy(FirmaAboneligi::class, SadeceSuperAdminPolitikasi::class);
+        Gate::policy(FirmaModulu::class, SadeceSuperAdminPolitikasi::class);
+        Gate::policy(FirmaKullanici::class, FirmaIciKullaniciPolitikasi::class);
+        Gate::policy(KullaniciYetki::class, KullaniciOzelYetkiPolitikasi::class);
+
         if (! app()->runningInConsole()) {
 
             // 🔥 EN KRİTİK SATIR (admin CSS/JS problemi burada çözülür)

@@ -49,6 +49,12 @@
 
     use App\Filament\Clusters\Ayarlar\Pages\Kullanicilar;
     use App\Filament\Clusters\Ayarlar\Pages\KullaniciGruplari;
+    use App\Filament\Pages\FirmaAyarlariSayfasi;
+    use App\Filament\Resources\FirmaIciKullaniciKaynagi;
+    use App\Filament\Resources\FirmaYonetimKaynagi;
+    use App\Models\Firma;
+    use App\Models\FirmaKullanici;
+    use App\Filament\Resources\PlanYonetimKaynagi;
 
     $adminPrefix = \App\Providers\Filament\AdminPanelProvider::adminPath();
     $currentPath = request()->path();
@@ -75,8 +81,28 @@
 
     $isAyarlar = str_starts_with($currentPath, $adminPrefix.'/ayarlar');
     $isKullaniciAyarlari = str_starts_with($currentPath, $adminPrefix.'/ayarlar/kullanici-ayarlari');
+    $isFirmaIciKullanicilar = str_starts_with($currentPath, $adminPrefix.'/firma-ici-kullanicilar');
+    $isFirmaAyarlariSayfasi = request()->is($adminPrefix.'/firma-ayarlari');
+    $isSistemYonetimi = str_starts_with($currentPath, $adminPrefix.'/sistem-firmalar')
+        || str_starts_with($currentPath, $adminPrefix.'/sistem-planlar');
     $hasProductAdminRoutes = \Illuminate\Support\Facades\Route::has('filament.admin.resources.products.index')
         && \Illuminate\Support\Facades\Route::has('filament.admin.resources.product-categories.index');
+
+    $aktifKullanici = auth()->user();
+    $superAdminMi = $aktifKullanici
+        && ((bool) ($aktifKullanici->super_admin_mi ?? false) || (bool) ($aktifKullanici->is_admin ?? false));
+    $aktifFirmaId = app(\App\Services\TenantContextService::class)->aktifFirmaId();
+    $sidebarService = app(\App\Services\SidebarService::class);
+    $can = fn (?string $modulKodu, ?string $yetkiKodu): bool => $sidebarService->menuGorunurMu($aktifKullanici, $aktifFirmaId, $modulKodu, $yetkiKodu);
+    $bolum = fn (string $anahtar): bool => $sidebarService->sidebarBolumGorunurMu($aktifKullanici, $aktifFirmaId, $anahtar);
+
+    $urunlerMenuGorunur = $can('urunler', 'urun.goruntule')
+        || $can('urunler', 'urun_kategori.goruntule');
+
+    $firmaAyarlariGorunur = $aktifFirmaId
+        && ($__firmaCtx = Firma::query()->find($aktifFirmaId))
+        && $aktifKullanici?->can('update', $__firmaCtx);
+    $firmaIciKullanicilarGorunur = $aktifKullanici?->can('viewAny', FirmaKullanici::class) ?? false;
 @endphp
 
 <div
@@ -99,6 +125,7 @@
         webModullerOpen: @js($isWebModuller),
         ayarlarOpen: @js($isAyarlar),
         kullaniciAyarlariOpen: @js($isKullaniciAyarlari),
+        sistemYonetimiOpen: @js($isSistemYonetimi),
     }"
     class="custom-sidebar"
 >
@@ -212,6 +239,33 @@
             </span>
         </a>
 
+        @if($superAdminMi)
+        <div class="section-gap" aria-hidden="true"></div>
+        <button
+            type="button"
+            class="nav-item {{ $isSistemYonetimi ? 'is-active' : '' }}"
+            x-on:click="sistemYonetimiOpen = !sistemYonetimiOpen"
+            :aria-expanded="sistemYonetimiOpen"
+        >
+            <span class="nav-item-start">
+                <x-filament::icon icon="heroicon-o-server-stack" class="nav-item-icon" />
+                <span>Sistem yönetimi</span>
+            </span>
+            <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </button>
+        <div x-show="sistemYonetimiOpen" x-collapse class="nav-group">
+            <a
+                href="{{ FirmaYonetimKaynagi::getUrl() }}"
+                class="nav-item {{ str_starts_with($currentPath, $adminPrefix.'/sistem-firmalar') ? 'is-active' : '' }}"
+            ><span>Firmalar</span></a>
+            <a
+                href="{{ PlanYonetimKaynagi::getUrl() }}"
+                class="nav-item {{ str_starts_with($currentPath, $adminPrefix.'/sistem-planlar') ? 'is-active' : '' }}"
+            ><span>Planlar</span></a>
+        </div>
+        @endif
+
+        @if($bolum('muhasebe'))
         <div class="section-gap" aria-hidden="true"></div>
 
         {{-- Muhasebe --}}
@@ -255,7 +309,9 @@
                 <a href="{{ BankaSatis::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/muhasebe/satis/banka-satis') ? 'is-active' : '' }}"><span>Banka Satış</span></a>
             </div>
         </div>
+        @endif
 
+        @if($bolum('teknik_servis'))
         <div class="section-gap" aria-hidden="true"></div>
 
         {{-- Teknik Servis --}}
@@ -296,7 +352,9 @@
                 <a href="{{ GenelAyarlar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/teknik-servis/ayarlar/genel-ayarlar') ? 'is-active' : '' }}"><span>Genel Ayarlar</span></a>
             </div>
         </div>
+        @endif
 
+        @if($bolum('web'))
         <div class="section-gap" aria-hidden="true"></div>
 
         {{-- Web --}}
@@ -336,13 +394,17 @@
                 <a href="{{ WebServisListesi::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/servisler/web-servis-listesi') ? 'is-active' : '' }}"><span>Servis Listesi</span></a>
                 <a href="{{ WebServisKategori::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/servisler/web-servis-kategori') ? 'is-active' : '' }}"><span>Servis Kategori</span></a>
             </div>
-            @if($hasProductAdminRoutes)
+            @if($hasProductAdminRoutes && $urunlerMenuGorunur)
                 <button type="button" class="nav-item {{ $isUrunler ? 'is-active' : '' }}" x-on:click="urunlerOpen = !urunlerOpen" :aria-expanded="urunlerOpen">
                     <span>Ürünler</span><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                 </button>
                 <div x-show="urunlerOpen" x-collapse class="nav-group">
-                    <a href="{{ route('filament.admin.resources.products.index') }}" class="nav-item {{ request()->is($adminPrefix.'/products*') ? 'is-active' : '' }}"><span>Ürün Listesi</span></a>
-                    <a href="{{ route('filament.admin.resources.product-categories.index') }}" class="nav-item {{ request()->is($adminPrefix.'/product-categories*') ? 'is-active' : '' }}"><span>Ürün Kategorileri</span></a>
+                    @if($can('urunler', 'urun.goruntule'))
+                        <a href="{{ route('filament.admin.resources.products.index') }}" class="nav-item {{ request()->is($adminPrefix.'/products*') ? 'is-active' : '' }}"><span>Ürün Listesi</span></a>
+                    @endif
+                    @if($can('urunler', 'urun_kategori.goruntule'))
+                        <a href="{{ route('filament.admin.resources.product-categories.index') }}" class="nav-item {{ request()->is($adminPrefix.'/product-categories*') ? 'is-active' : '' }}"><span>Ürün Kategorileri</span></a>
+                    @endif
                 </div>
             @endif
             <button type="button" class="nav-item {{ $isProjeler ? 'is-active' : '' }}" x-on:click="projelerOpen = !projelerOpen" :aria-expanded="projelerOpen">
@@ -368,7 +430,9 @@
                 <a href="{{ WebMailAyarlar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/web/web-ayarlar/web-mail-ayarlar') ? 'is-active' : '' }}"><span>Mail Ayarları</span></a>
             </div>
         </div>
+        @endif
 
+        @if($bolum('ayarlar'))
         <div class="section-gap" aria-hidden="true"></div>
 
         {{-- Ayarlar --}}
@@ -387,6 +451,13 @@
                 <a href="{{ Kullanicilar::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/ayarlar/kullanici-ayarlari/kullanicilar') ? 'is-active' : '' }}"><span>Kullanıcılar</span></a>
                 <a href="{{ KullaniciGruplari::getUrl() }}" class="nav-item {{ request()->is($adminPrefix.'/ayarlar/kullanici-ayarlari/kullanici-gruplari') ? 'is-active' : '' }}"><span>Kullanıcı Grupları</span></a>
             </div>
+            @if($firmaIciKullanicilarGorunur)
+                <a href="{{ FirmaIciKullaniciKaynagi::getUrl('index') }}" class="nav-item {{ $isFirmaIciKullanicilar ? 'is-active' : '' }}"><span>Firma kullanıcıları</span></a>
+            @endif
+            @if($firmaAyarlariGorunur)
+                <a href="{{ FirmaAyarlariSayfasi::getUrl() }}" class="nav-item {{ $isFirmaAyarlariSayfasi ? 'is-active' : '' }}"><span>Firma ayarları</span></a>
+            @endif
         </div>
+        @endif
     </nav>
 </div>

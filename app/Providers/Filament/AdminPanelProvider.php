@@ -3,10 +3,14 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
+use App\Filament\Pages\FirmaAyarlariSayfasi;
+use App\Filament\Resources\FirmaIciKullaniciKaynagi;
+use App\Filament\Resources\FirmaYonetimKaynagi;
+use App\Filament\Resources\PlanYonetimKaynagi;
 use App\Filament\Resources\ProductCategoryResource;
 use App\Filament\Resources\ProductResource;
 use App\Models\Setting;
-use Filament\Http\Middleware\Authenticate;
+use App\Http\Middleware\FilamentAuthenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -20,6 +24,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Support\Facades\Auth;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -39,7 +44,23 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path(self::adminPath())
-            ->login()
+            ->login(null)
+            ->homeUrl(function (): string {
+                $kullanici = Auth::user();
+
+                if (! $kullanici) {
+                    return route('tenant.login');
+                }
+
+                $superAdminMi = (bool) ($kullanici->super_admin_mi ?? false) || (bool) ($kullanici->is_admin ?? false);
+                if ($superAdminMi) {
+                    return url(self::adminPath());
+                }
+
+                $aktifFirmaId = app(\App\Services\TenantContextService::class)->aktifFirmaId();
+
+                return $aktifFirmaId ? url(self::adminPath()) : route('tenant.login');
+            })
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -50,9 +71,13 @@ class AdminPanelProvider extends PanelProvider
             ->resources([
                 ProductResource::class,
                 ProductCategoryResource::class,
+                FirmaYonetimKaynagi::class,
+                PlanYonetimKaynagi::class,
+                FirmaIciKullaniciKaynagi::class,
             ])
             ->pages([
                 Dashboard::class,
+                FirmaAyarlariSayfasi::class,
             ])
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
@@ -67,6 +92,7 @@ class AdminPanelProvider extends PanelProvider
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
+                \App\Http\Middleware\FilamentTenantContextMiddleware::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
@@ -74,7 +100,7 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                Authenticate::class,
+                FilamentAuthenticate::class,
             ]);
     }
 }

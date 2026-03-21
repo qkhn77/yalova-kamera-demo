@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Support\HasTenantVisibility;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Filament\Forms;
@@ -13,9 +14,16 @@ use Illuminate\Support\Str;
 
 class ProductResource extends Resource
 {
+    use HasTenantVisibility;
+
     protected static ?string $model = Product::class;
 
     protected static bool $shouldRegisterNavigation = false;
+    protected static ?string $modulKodu = 'urunler';
+    protected static ?string $goruntuleYetkiKodu = 'urun.goruntule';
+    protected static ?string $olusturYetkiKodu = 'urun.olustur';
+    protected static ?string $guncelleYetkiKodu = 'urun.guncelle';
+    protected static ?string $silYetkiKodu = 'urun.sil';
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
     protected static ?string $navigationGroup = 'Web';

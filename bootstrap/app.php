@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+        $middleware->alias([
+            'aktif.firma' => \App\Http\Middleware\AktifFirmaMiddleware::class,
+            'modul.erisim' => \App\Http\Middleware\ModulErisimMiddleware::class,
+            'salt.okunur' => \App\Http\Middleware\SaltOkunurMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
